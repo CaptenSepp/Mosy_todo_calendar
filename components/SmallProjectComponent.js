@@ -18,7 +18,8 @@ const styles = StyleSheet.create({
     projectItem:{
       minWidth: 100,
       borderRadius: 30,
-      margin: 5,
+      marginVertical: 10,
+      marginHorizontal: 5,
       paddingVertical: 3,
       paddingHorizontal:15,
       justifyContent: 'center',
@@ -38,6 +39,7 @@ const styles = StyleSheet.create({
       paddingVertical: 10,
       fontSize: 17,
       fontWeight: 'bold',
+      
   },
   }
   );

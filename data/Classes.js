@@ -1,8 +1,8 @@
 export class Task {
-    constructor(id, name, category, description, starttime, endtime, isFinished) {
+    constructor(id, name, projectId, description, starttime, endtime, isFinished) {
       this.id = id;
       this.name = name;
-      this.category = category;
+      this.projectId = projectId;
       this.description = description;
       this.starttime = starttime;
       this.endtime = endtime;
@@ -11,8 +11,9 @@ export class Task {
   };
 
   export class Project {
-    constructor(id, name,description, color) {
+    constructor(id,projectId, name,description, color) {
       this.id = id;
+      this.projectId = projectId;
       this.name = name;
       this.description = description
       this.color = color;
