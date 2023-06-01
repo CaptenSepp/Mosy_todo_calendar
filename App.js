@@ -5,6 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 
 import TaskScreen from "./screens/TaskScreen";
 import NewEditTaskScreen from "./screens/NewEditTaskScreen";
+import CalendarScreen from "./screens/CalendarScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -20,7 +21,7 @@ export default function App() {
       <Tab.Navigator>
         <Tab.Screen name = "TaskScreen" component={TaskScreen} /> 
         {/*<Tab.Screen name="NewTask" component={NewEditTaskScreen} /*/}
-        <Tab.Screen name="Calendar" component={Empty} />
+        <Tab.Screen name="Calendar" component={CalendarScreen} />
         <Tab.Screen name="ProjectScreen" component={Empty} />
       </Tab.Navigator>
     </NavigationContainer>
