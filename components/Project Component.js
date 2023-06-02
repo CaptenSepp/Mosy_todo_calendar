@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View, Animated } from 'react-native';
 import { Colors } from '../styles/Colors';
 
-import { colorHandler } from "../screens/ProjectScreen";
+import { colorHandler } from "../functions";
 
 const FoldOutComponent = props => {
   const [expanded, setExpanded] = useState(false);

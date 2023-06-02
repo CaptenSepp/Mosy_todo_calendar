@@ -6,16 +6,9 @@ import projectData from "../data/ProjectData";
 import ProjectComponent from "../components/Project Component";
 import PlusButton from "../components/PlusButton";
 
-import { Colors } from "../styles/Colors";
 
-export const colorHandler = (color) => {
-  const colorValues = Colors[color];
-  if (colorValues) {
-    const { primary, secondary, light } = colorValues;
-    return { primary, secondary, light };
-  }
-  return null;
-};
+
+
 
 const addLastElement = (data) =>{
   const endValue = {id: data.length+1,projectId: "addButton"};
