@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View, Animated } from 'react-native';
 import { Colors } from '../styles/Colors';
-import { Ionicons } from '@expo/vector-icons';
+
+import { colorHandler } from "../screens/ProjectScreen";
 
 const FoldOutComponent = props => {
   const [expanded, setExpanded] = useState(false);
@@ -41,9 +42,10 @@ const FoldOutComponent = props => {
 };
 
 const InnerContainer = props => {
+  
   return (
     <View>
-      <View style={[styles.innerContainer, { minHeight: 100 }]}>
+      <View style={[styles.innerContainer, { minHeight: 100 }, {backgroundColor: colorHandler(props.color)['light']} ]}>
         <Text style={styles.innerNormalText}> {props.description}</Text>
       </View>
       <View style={styles.bottomButtonContainer}>
@@ -65,7 +67,8 @@ export default ProjectComponent = props => {
       color={props.color}
       isFinished={props.isFinished}
       foldedOutContent={<InnerContainer
-        description={props.description} />} />
+        description={props.description}
+        color={props.color} />} />
   );
 };
 

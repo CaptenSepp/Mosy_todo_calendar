@@ -2,10 +2,7 @@ import React from "react";
 import { FlatList, StyleSheet, View, } from 'react-native';
 
 import projectData from "../data/ProjectData";
-import taskData from "../data/TaskData";
 
-import SmallProjectComponent from "../components/SmallProjectComponent";
-import TaskComponent from "../components/TaskComponent";
 import ProjectComponent from "../components/Project Component";
 import PlusButton from "../components/PlusButton";
 
@@ -26,10 +23,9 @@ const addLastElement = (data) =>{
   return updatedData
 }
 
-modifiedTaskData = addLastElement(taskData); 
 modifiedProjectData = addLastElement(projectData); 
 
-const renderTaskItem = ({ item }) => {
+const renderProjectItem = ({ item }) => {
   
   if(item.projectId == "addButton"){
     return(<PlusButton/>)
@@ -43,21 +39,9 @@ const renderTaskItem = ({ item }) => {
     ;}
 };
 
-const renderProjectItem = ({ item }) => {
-  
-  if(item.projectId== "addButton"){
-    return(<PlusButton />)
-  }else{
-  return (
-    <SmallProjectComponent
-      name={item.name}
-      id={item.id}
-      colors={colorHandler(item.color)}
-    />)
-    ;}
-};
 
-export default TaskScreen = () => {
+
+export default ProjectScreen = () => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.listContainer}>
@@ -65,7 +49,7 @@ export default TaskScreen = () => {
           contentContainerStyle={styles.contentContainer}
           style={styles.list}
           data={modifiedProjectData}
-          renderItem={renderTaskItem}
+          renderItem={renderProjectItem}
           showsVerticalScrollIndicator={false} />
       </View>
 
