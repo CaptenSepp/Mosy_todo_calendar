@@ -1,31 +1,51 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View, Animated } from 'react-native';
 import { Colors } from '../styles/Colors';
+import { NavigationContainer } from "@react-navigation/native";
 
 import { colorHandler } from "../functions";
 
 const FoldOutComponent = props => {
   const [expanded, setExpanded] = useState(false);
   const animatedHeight = useState(new Animated.Value(0))[0];
+  const animatedOpacity = useState(new Animated.Value(0))[0];
 
   const toggleExpand = () => {
-    Animated.timing(animatedHeight, {
-      toValue: expanded ? 0 : 150, // Adjust expanded and collapsed heights as needed
-      duration: 200,
-      useNativeDriver: false,
-    }).start();
-    setExpanded(!expanded);
-  };
-
-  const handleLayout = (event) => {
-    const { height } = event.nativeEvent.layout;
-    if (!expanded) {
-      animatedHeight.setValue(height);
+    if (expanded) {
+      // Collapse animation
+      Animated.parallel([
+        Animated.timing(animatedHeight, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: false,
+        }),
+        Animated.timing(animatedOpacity, {
+          toValue: 0,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+      ]).start(() => setExpanded(false));
+    } else {
+      // Expand animation
+      setExpanded(true);
+      Animated.parallel([
+        Animated.timing(animatedHeight, {
+          toValue: 150, // Adjust the expanded height as needed
+          duration: 200,
+          useNativeDriver: false,
+        }),
+        Animated.timing(animatedOpacity, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+      ]).start();
     }
   };
 
   return (
-    <View style={[styles.ProjectContainer, {backgroundColor: props.color}  ]} >
+  
+    <View style={[styles.ProjectContainer, {backgroundColor: colorHandler(props.color).primary}  ]} >
       <TouchableOpacity onPress={toggleExpand} >
         <View style={styles.topContainer}>
           <Text style={[styles.headerText]}>{props.title}</Text>
@@ -33,9 +53,11 @@ const FoldOutComponent = props => {
       </TouchableOpacity>
 
       <Animated.View style={{ height: animatedHeight }}>
-        <View onLayout={handleLayout}>
-          {expanded ? props.foldedOutContent : props.collapsedContent}
-        </View>
+        <Animated.View style={{ opacity: animatedOpacity }}>
+          <View>
+            {expanded ? props.foldedOutContent : props.collapsedContent}
+          </View>
+        </Animated.View>
       </Animated.View>
     </View>
   );
@@ -45,7 +67,7 @@ const InnerContainer = props => {
   
   return (
     <View>
-      <View style={[styles.innerContainer, { minHeight: 100 }, {backgroundColor: colorHandler(props.color)['light']} ]}>
+      <View style={[styles.innerContainer, { minHeight: 100 }, {backgroundColor: colorHandler(props.color).light} ]}>
         <Text style={styles.innerNormalText}> {props.description}</Text>
       </View>
       <View style={styles.bottomButtonContainer}>
