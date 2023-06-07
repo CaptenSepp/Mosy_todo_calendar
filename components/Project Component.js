@@ -36,7 +36,7 @@ const FoldOutComponent = props => {
         }),
         Animated.timing(animatedOpacity, {
           toValue: 1,
-          duration: 200,
+          duration: 100,
           useNativeDriver: true,
         }),
       ]).start();
