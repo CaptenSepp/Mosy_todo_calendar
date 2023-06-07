@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
 
     alignItems: 'center',
-    backgroundColor: Colors.BackgroundPrimary,
+    backgroundColor: Colors.backgroundBody,
 
   },
   list: {

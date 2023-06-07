@@ -19,7 +19,9 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
         console.log("isEdit: " + isEdit);
         
         const project = projectData.find((project) => project.projectId === id);
-        console.log("project: " + project.name);
+        console.log("project: " + project.name, project.description);
+
+        //setTitle(project.name);
     } else {
         console.log("isEdit: false");
     }

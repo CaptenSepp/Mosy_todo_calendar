@@ -13,12 +13,13 @@ export default ProjectNavigator = () => {
             initialRouteName="Project"
             screenOptions={{
                 headerShown: true,
-                headerStyle: { height: 140, backgroundColor: Colors.BackgroundHeader },
+                headerStyle: { height: 140, backgroundColor: Colors.backgroundHeader },
                 headerTitleAlign: "center",
                 headerTitleStyle: {
                     fontWeight: "bold",
-                    fontSize: 32,
-                    color:  Colors.primary ,
+                    fontSize: 38,
+                    color:  Colors.headerLabel ,
+                    paddingBottom: 20,
                 },
             }}>
 

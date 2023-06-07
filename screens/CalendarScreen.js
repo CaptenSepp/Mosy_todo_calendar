@@ -13,10 +13,10 @@ const dummyEvents = {
           summary: 'Merge Timeline Calendar to React Native Calendars',
         },
       ],
-      '2023-06-02': [
+      '2023-06-01': [
         {
-          start: '2023-06-02 08:00:00',
-          end: '2023-06-02 20:00:00',
+          start: '2023-06-01 08:00:00',
+          end: '2023-06-01 20:00:00',
           title: 'TestEvent',
           summary: 'Description',
         },
@@ -30,7 +30,7 @@ export default CalendarScreen = () =>{
         <View style = {styles.mainContainer}>
             
             <CalendarProvider 
-                date='2023-06-01'
+                date='2023-06-06'
                 showTodayButton
                 >
                 <ExpandableCalendar

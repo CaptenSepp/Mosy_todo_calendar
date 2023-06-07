@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 10,
     justifyContent: 'space-between',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
 
   },
   headerText: {
@@ -130,9 +130,9 @@ const styles = StyleSheet.create({
 
   },
   innerNormalText: {
-    fontSize: 15,
+    fontSize: 16,
     paddingVertical: 3,
-    color: 'gray'
+    color: Colors.textdarker,
   },
   bottomButtonContainer: {
     flexDirection: 'row',

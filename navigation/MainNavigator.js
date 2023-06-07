@@ -19,9 +19,9 @@ export default MainNavigator = () => {
             <Tab.Navigator
                 screenOptions={({ route }) => ({
                     headerShown: true,
-                    tabBarActiveTintColor: Colors.primary,
-                    tabBarInactiveTintColor: Colors.BackgroundPrimary,
-                    tabBarStyle: { height: 75, backgroundColor: Colors.BackgroundTab},
+                    tabBarActiveTintColor: Colors.tabbarActive,
+                    tabBarInactiveTintColor: Colors.tabbarInactive,
+                    tabBarStyle: { height: 75, backgroundColor: Colors.backgroundTabbar},
                     tabBarLabelStyle: { fontSize: 18, marginBottom: 5 },
                     tabBarIconStyle: { marginTop: 5 },
                 })}>
