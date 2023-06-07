@@ -71,16 +71,17 @@ const InnerContainer = props => {
         <Text style={styles.innerNormalText}> {props.description}</Text>
       </View>
       <View style={styles.bottomButtonContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={props.onEdit}>
           <Text style={styles.buttonText}>Edit</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={props.onDelete}>
           <Text style={styles.buttonText}>Delete</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 };
+
 
 export default ProjectComponent = props => {
   return (
@@ -90,7 +91,9 @@ export default ProjectComponent = props => {
       isFinished={props.isFinished}
       foldedOutContent={<InnerContainer
         description={props.description}
-        color={props.color} />} />
+        color={props.color}
+        onDelete={() => props.onDelete(props.title)}
+        onEdit={() => props.onEdit(props.title)} />} />
   );
 };
 

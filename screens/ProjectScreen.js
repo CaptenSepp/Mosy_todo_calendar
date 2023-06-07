@@ -7,7 +7,17 @@ import ProjectComponent from "../components/Project Component";
 import PlusButton from "../components/PlusButton";
 
 
+const deleteHandler = (title, id) => {
+  console.log("Delete: " + title + ' (ID: ' + id + ')');
+};
 
+const editHandler = (title, id) => {
+  console.log("Edit: " + title + ' (ID: ' + id + ')' );
+};
+
+const addHandler = () => {
+  console.log("Add Project");
+};
 
 
 const addLastElement = (data) =>{
@@ -21,13 +31,16 @@ modifiedProjectData = addLastElement(projectData);
 const renderProjectItem = ({ item }) => {
   
   if(item.projectId == "addButton"){
-    return(<PlusButton/>)
+    return(
+      <PlusButton OnPress={addHandler} />)
   }else{
     return (
       <ProjectComponent
         title={item.name}
         color={item.color}
         description={item.description} 
+        onDelete={() => deleteHandler(item.name, item.projectId)}
+        onEdit={() => editHandler(item.name, item.projectId)}
       />)
     ;}
 };
