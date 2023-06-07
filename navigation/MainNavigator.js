@@ -5,8 +5,10 @@ import { Colors } from '../styles/Colors';
 
 import CalendarScreen from "../screens/CalendarScreen";
 
-import ProjectNavigator from "./ProjectNavigator";
 import TaskNavigator from './TaskNavigator';
+import CalendarNavigator from './CalendarNavigator';
+import ProjectNavigator from "./ProjectNavigator";
+
 
 import { FontAwesome5, MaterialCommunityIcons  } from '@expo/vector-icons';
 
@@ -41,9 +43,10 @@ export default MainNavigator = () => {
                 {/* Calendar Screen */}
                 <Tab.Screen
                 name="Calendar"
-                component={CalendarScreen}
+                component={CalendarNavigator}
                 options={{
                     tabBarLabel: 'Calendar',
+                    headerShown: false,
                     tabBarIcon: ({ color, size }) => (
                     <FontAwesome5 style={{ alignSelf: 'center' }} name={'calendar-check'} size={32} color={color} /> 
                     ),
