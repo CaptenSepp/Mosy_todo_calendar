@@ -21,5 +21,15 @@ export const Colors = {
         secondary: '#FFE76B',
         light: '#FFF3B5'
     },
+
+    primary: '#2978c2',
+    secondary: '#4ecdc4',
+    text: '#1e1e1e',
+    textSecondary: '#676767',
+
+    BackgroundHeader: '#adccea',
+    BackgroundTab: '#15202b',
+    BackgroundPrimary: '#ebf5ff',
+    BackgroundSecondary: '#f5f5f5',
 }
 

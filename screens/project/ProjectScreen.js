@@ -1,0 +1,84 @@
+import React from "react";
+import { FlatList, StyleSheet, View } from 'react-native';
+import { Colors } from "../../styles/Colors";
+
+import projectData from "../../data/ProjectData";
+
+import ProjectComponent from "../../components/Project Component";
+import PlusButton from "../../components/PlusButton";
+
+export default ProjectScreen = ({ navigation }) => {
+
+  
+  const deleteHandler = (title, id ) => {
+    console.log("Delete: " + title + ' (ID: ' + id + ')');
+    alert("Delete: " + title + ' (ID: ' + id + ')');
+  };
+
+  const editHandler = (title, id ) => {
+    console.log("Edit: " + title + ' (ID: ' + id + ')' );
+    navigation.navigate('EditProject', {id: id});
+  };
+
+  const addHandler = () => {
+    console.log("Add Project");
+    navigation.navigate('AddProject');
+  };
+
+
+  const addLastElement = (data) =>{
+    const endValue = {id: data.length+1,projectId: "addButton"};
+    const updatedData = [...data, endValue];
+    return updatedData
+  }
+
+  modifiedProjectData = addLastElement(projectData); 
+
+  const renderProjectItem = ({ item }) => {
+    if(item.projectId == "addButton"){
+      return(
+        <PlusButton OnPress={addHandler} />)
+    }else{
+      return (
+        <ProjectComponent
+          title={item.name}
+          color={item.color}
+          description={item.description} 
+          onDelete={() => deleteHandler(item.name, item.projectId)}
+          onEdit={() => editHandler( item.name, item.projectId)}
+        />)
+      ;}
+  };
+
+  return (
+    <View style={styles.listContainer}>
+      <FlatList
+        data={modifiedProjectData}
+        contentContainerStyle={styles.contentContainer}
+        style={styles.list}
+        showsVerticalScrollIndicator={false}
+        renderItem={renderProjectItem} />
+    </View>
+
+  );
+};
+
+const styles = StyleSheet.create({
+  listContainer: {
+    flex: 1,
+    paddingTop: 20,
+    paddingVertical: 5,
+
+    alignItems: 'center',
+    backgroundColor: Colors.BackgroundPrimary,
+
+  },
+  list: {
+    width: '90%',
+  },
+  contentContainer: {
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
+    alignSelf: 'stretch'
+  },
+});
