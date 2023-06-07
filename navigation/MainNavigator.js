@@ -3,10 +3,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Colors } from '../styles/Colors';
 
-import TaskScreen from "../screens/TaskScreen";
 import CalendarScreen from "../screens/CalendarScreen";
 
 import ProjectNavigator from "./ProjectNavigator";
+import TaskNavigator from './TaskNavigator';
 
 import { FontAwesome5, MaterialCommunityIcons  } from '@expo/vector-icons';
 
@@ -28,9 +28,10 @@ export default MainNavigator = () => {
                 {/* Task Screen */}
                 <Tab.Screen
                 name = "TaskScreen"
-                component={TaskScreen}
+                component={TaskNavigator}
                 options={{
                     tabBarLabel: 'Tasks',
+                    headerShown: false,
                     tabBarIcon: ({ color, size }) => (
                     <FontAwesome5 style={{ alignSelf: 'center' }} name={'tasks'} size={32} color={color} /> 
                     ),

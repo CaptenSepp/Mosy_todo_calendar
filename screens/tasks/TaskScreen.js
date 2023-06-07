@@ -1,14 +1,14 @@
 import React from "react";
 import { FlatList, StyleSheet, View, } from 'react-native';
 
-import projectData from "../data/ProjectData";
-import taskData from "../data/TaskData";
+import projectData from "../../data/ProjectData";
+import taskData from "../../data/TaskData";
 
-import SmallProjectComponent from "../components/SmallProjectComponent";
-import TaskComponent from "../components/TaskComponent";
-import PlusButton from "../components/PlusButton";
+import SmallProjectComponent from "../../components/SmallProjectComponent";
+import TaskComponent from "../../components/TaskComponent";
+import PlusButton from "../../components/PlusButton";
 
-import { Colors } from "../styles/Colors";
+import { Colors } from "../../styles/Colors";
 
 export const colorHandler = (color) => {
   const colorValues = Colors[color];

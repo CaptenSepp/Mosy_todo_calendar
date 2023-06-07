@@ -66,8 +66,8 @@ export default ProjectScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   listContainer: {
     flex: 1,
-    paddingTop: 20,
-    paddingVertical: 5,
+    paddingTop: 8,
+    paddingVertical: 3,
 
     alignItems: 'center',
     backgroundColor: Colors.backgroundBody,
