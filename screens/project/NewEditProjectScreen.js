@@ -1,12 +1,28 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { Project } from "../../data/Classes";
+import projectData from "../../data/ProjectData";
 
-export default NewEditProjectScreen = ( props) => {
-    const [title, setTitle] = useState(props.title);
+export default NewEditProjectScreen =  ({ route, navigation }) => {
+    
+
+    const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [date, setDate] = useState('');
     const [startTime, setStartTime] = useState('');
     const [stopTime, setStopTime] = useState('');
+
+    // if params are passed, it is an edit, otherwise it is a new project
+    if (route.params != null) {
+        const { id } = route.params;
+        const isEdit = id != null;
+        console.log("isEdit: " + isEdit);
+        
+        const project = projectData.find((project) => project.projectId === id);
+        console.log("project: " + project.name);
+    } else {
+        console.log("isEdit: false");
+    }
 
     return (
         <View style={styles.container}>

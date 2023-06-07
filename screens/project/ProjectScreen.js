@@ -15,9 +15,9 @@ export default ProjectScreen = ({ navigation }) => {
     alert("Delete: " + title + ' (ID: ' + id + ')');
   };
 
-  const editHandler = (title, id ) => {
-    console.log("Edit: " + title + ' (ID: ' + id + ')' );
-    navigation.navigate('EditProject', {id: id});
+  const editHandler = (title, projectId ) => {
+    console.log("Edit: " + title + ' (ID: ' + projectId + ')' );
+    navigation.navigate('EditProject', {id: projectId});
   };
 
   const addHandler = () => {
