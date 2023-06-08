@@ -28,6 +28,14 @@ export default TaskScreen = ({navigation}) => {
     navigation.navigate('ProjectTab',{ screen: 'AddProject'});
   };
 
+  const editTaskHandler = (id ) => {
+    navigation.navigate('EditTask', {id: id});
+  };
+
+  const deleteTaskHandler = (id ) => {
+    console.log('Delete Task: '+id);
+  };
+
   const renderTaskItem = ({ item }) => {
    
     if(item.projectId == "addButton"){
@@ -38,13 +46,15 @@ export default TaskScreen = ({navigation}) => {
 
       return (
         <TaskComponent
+          id = {item.id}
           title={item.name}
           description={item.description}
           starttime={item.starttime}
           stoptime={item.endtime}
           isFinished={item.isFinished}
           colors = {colors}
-          
+          editHandler = {editTaskHandler}
+          deleteHandler = {deleteTaskHandler}
         />)
       ;}
   };

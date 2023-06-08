@@ -68,10 +68,10 @@ const InnerContainer = props => {
         </View>
       </View>
       <View style={styles.bottomButtonContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress = {() =>props.editHandler(props.id)}>
           <Text style={styles.buttonText}>Edit</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress = {() =>props.deleteHandler(props.id)}>
           <Text style={styles.buttonText}>Delete</Text>
         </TouchableOpacity>
       </View>
@@ -80,17 +80,21 @@ const InnerContainer = props => {
 };
 
 export default TaskComponent = props => {
+  
   return (
     <FoldOutComponent
       title={props.title}
       isFinished={props.isFinished}
       colors = {props.colors}
       foldedOutContent={<InnerContainer
+        id = {props.id}
         content={'Content'}
         description={props.description}
         timeEstimation={props.starttime}
         timeBlockDuration={props.stoptime}
-        colors = {props.colors} />} />
+        colors = {props.colors} 
+        editHandler = {props.editHandler}
+        deleteHandler = {props.deleteHandler}/>} />
   );
 };
 
