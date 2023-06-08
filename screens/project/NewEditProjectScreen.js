@@ -1,17 +1,67 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { Project } from "../../data/Classes";
+import { StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard } from 'react-native';
 import projectData from "../../data/ProjectData";
+import { Colors } from "../../styles/Colors";
+
+
+const InputBox = props =>{
+    return(
+    <View style={styles.inputContainer}>
+        <TextInput
+            style={props.inputStyle}
+            placeholder= {props.placeholder}
+            value={props.value}
+            onChangeText={props.onChangeText}
+            editable = {props.editable}
+            multiline = {props.multiline}
+        />
+    </View>
+    );
+};
+
+const ColorPicker = props => {
+    const filteredColors = Object.entries(Colors).reduce((acc, [colorName, color]) => {
+        if (color.hasOwnProperty('primary') && color.hasOwnProperty('secondary') && color.hasOwnProperty('light')) {
+          acc.push({
+            name: colorName,
+            primary: color.primary,
+          });
+        }
+        return acc;
+      }, []);
+      
+    const firstRow = filteredColors.slice(0,4);
+    const secondRow = filteredColors.slice(4);
+
+    return(
+        <View style={styles.thirdContainer}>
+            <Text style ={styles.headerText}>Pick Color</Text>
+            <View style = {{flexDirection: 'row',justifyContent: 'flex-start'}}>
+            {firstRow.map((color, index) => (
+                <TouchableOpacity>
+                <View key={index} style= {[styles.colorCircle,{backgroundColor: color.primary}]}/>  
+                </TouchableOpacity> 
+        ))}
+            </View>
+            <View style = {{flexDirection: 'row',justifyContent: 'flex-start'}} >
+        {secondRow.map((color, index) => (
+                <TouchableOpacity>
+                <View key={index} style= {[styles.colorCircle,{backgroundColor: color.primary}]}/>
+                </TouchableOpacity>
+        ))}
+            </View>
+        </View>
+    );
+}
+
+
 
 export default NewEditProjectScreen =  ({ route, navigation }) => {
     
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [date, setDate] = useState('');
-    const [startTime, setStartTime] = useState('');
-    const [stopTime, setStopTime] = useState('');
-
+ 
     // if params are passed, it is an edit, otherwise it is a new project
     if (route.params != null) {
         const { id } = route.params;
@@ -27,62 +77,30 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
     }
 
     return (
+        <TouchableWithoutFeedback onPress ={() => Keyboard.dismiss()}>
         <View style={styles.container}>
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Enter title"
-                    value={title}
-                    onChangeText={setTitle}
+            <InputBox 
+                value = {title}
+                onChangeText = {setTitle}
+                placeholder = 'Enter title...'
+                inputStyle = {styles.input}
                 />
-            </View>
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Enter description"
-                    value={description}
-                    onChangeText={setDescription}
+            <InputBox
+                value = {description}
+                onChangeText = {setDescription}
+                placeholder = 'Enter Description...'
+                inputStyle = {[styles.input,{minHeight: 150, paddingTop:10}]}
+                editable
+                multiline
                 />
-            </View>
-            <View style={styles.thirdContainer}>
-                <View style={styles.columnContainer}>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.labelText}>Date:</Text>
-                        <View style={styles.space}></View>
-                        <TextInput
-                            style={styles.input2} //*made orange to visible
-                            placeholder="01.01.2000"
-                            value={date}
-                            onChangeText={setDate}
-                        />
-                    </View>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.labelText}>Start:</Text>
-                        <View style={styles.space}></View>
-                        <TextInput
-                            style={styles.input2}
-                            placeholder="00:00"
-                            value={startTime}
-                            onChangeText={setStartTime}
-                        />
-
-                    </View>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.labelText}>Stop:</Text>
-                        <View style={styles.space}></View>
-                        <TextInput
-                            style={styles.input2}
-                            placeholder="00:00"
-                            value={stopTime}
-                            onChangeText={setStopTime}
-                        />
-
-                    </View>
-
-                </View>
-
+            <ColorPicker/>
+            <View style = {styles.bottomContainer}>
+            <TouchableOpacity style={styles.addButton}>
+                <Text style = {styles.addText}> Add</Text>
+            </TouchableOpacity>
             </View>
         </View>
+        </TouchableWithoutFeedback>
     );
 };
 
@@ -90,49 +108,87 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        // backgroundColor: '#ffffff',
+        backgroundColor: '#ffffff',
     },
     inputContainer: {
         marginBottom: 10,
     },
     input: {
-        backgroundColor: '#E9DDD7',
-        borderRadius: 15,
-        borderColor: "#D0C6C0",
+        backgroundColor: '#E9E9E9',
+        borderRadius: 10,
+        borderColor: "#ACACAC",
+        borderWidth: 1,
         padding: 10,
         fontSize: 16,
+    
     },
-    input2: {
-        borderRadius: 5,
-        padding: 10,
+    input2: { 
         fontSize: 16,
+        minWidth: 43,
     },
     thirdContainer: {
-        backgroundColor: '#E9DDD7',
-        flexDirection: 'row',
-        padding: 10,
-        marginTop: 20,
-        borderRadius: 15,
+        backgroundColor: '#E9E9E9',
+        flexDirection: 'column',
+        paddingHorizontal: 10,
+        paddingVertical: 10,
+        marginTop: 10,
+        borderRadius: 10,
         fontSize: 16,
     },
     columnContainer: {
         flex: 1,
+        paddingVertical: 5
     },
     rowContainer: {
-        // flex: 1,
         flexDirection: 'row',
+        paddingHorizontal: 5,
+        paddingVertical: 5,
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'space-between',    
     },
     labelText: {
         fontSize: 16,
-        marginBottom: 10,
         fontWeight: 'bold',
     },
-
     space: {
         flex: 1,
+    },
+    bottomContainer:{
+        
+        flex: 1,
+        justifyContent: 'flex-end'
+    },
+    addButton:{
+        alignSelf: 'center',
+        marginTop: 0
+    },
+    addText:{
+        color: 'darkgray',
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+    pickerContainer:{
+        
+        padding: 5,
+        borderRadius: 8,
+        backgroundColor: '#bababa',
+    },
+    headerText:{
+        fontSize: 16,
+        fontWeight: 'bold',
+        //paddingVertical: 5,
+        marginLeft: 5,
+        marginBottom: 5
 
+    },
+    colorCircle:{
+        borderRadius: 30,
+        height:40,
+        width:40,
+        marginRight: 10,
+        marginVertical: 5,
+
+
+        
     }
 });
-
