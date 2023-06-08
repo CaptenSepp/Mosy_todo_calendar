@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { StyleSheet, Text, TouchableOpacity, View, Animated } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { Ionicons } from '@expo/vector-icons';
+
+
 
 const FoldOutComponent = props => {
   const [expanded, setExpanded] = useState(false);
