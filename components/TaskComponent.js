@@ -26,7 +26,7 @@ const FoldOutComponent = props => {
   };
 
   return (
-    <View style={styles.taskContainer} >
+    <View style={[styles.taskContainer,{backgroundColor: props.colors.secondary}]} >
       <TouchableOpacity onPress={toggleExpand} >
         <View style={styles.topContainer}>
 
@@ -50,10 +50,10 @@ const FoldOutComponent = props => {
 const InnerContainer = props => {
   return (
     <View>
-      <View style={[styles.innerContainer, { minHeight: 100 }]}>
+      <View style={[styles.innerContainer, { minHeight: 100 , backgroundColor: props.colors.light}]}>
         <Text style={styles.innerNormalText}> {props.description}</Text>
       </View>
-      <View style={styles.innerContainer}>
+      <View style={[styles.innerContainer,{backgroundColor: props.colors.light}]}>
         <View style={{ alignSelf: 'stretch', flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.innerHeaderText}>Date</Text>
           <Text style={styles.innerHeaderText}>01.01.2000</Text>
@@ -84,11 +84,13 @@ export default TaskComponent = props => {
     <FoldOutComponent
       title={props.title}
       isFinished={props.isFinished}
+      colors = {props.colors}
       foldedOutContent={<InnerContainer
         content={'Content'}
         description={props.description}
         timeEstimation={props.starttime}
-        timeBlockDuration={props.stoptime} />} />
+        timeBlockDuration={props.stoptime}
+        colors = {props.colors} />} />
   );
 };
 

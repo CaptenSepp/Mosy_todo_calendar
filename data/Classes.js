@@ -14,7 +14,7 @@ export class Task {
     constructor(projectId, name,description, color) {
       this.projectId = projectId;
       this.name = name;
-      this.description = description
+      this.description = description;
       this.color = color;
     }
   };

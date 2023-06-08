@@ -8,3 +8,9 @@ export const colorHandler = (color) => {
     }
     return null;
   };
+
+ export const addLastElement = (data) =>{
+    const endValue = {id: data.length+1,projectId: "addButton"};
+    const updatedData = [...data, endValue];
+    return updatedData
+  };

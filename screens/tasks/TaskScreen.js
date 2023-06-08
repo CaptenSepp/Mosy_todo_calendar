@@ -1,70 +1,58 @@
 import React, { useContext, useState } from "react";
 import { FlatList, StyleSheet, View, } from 'react-native';
 
-//import projectData from "../../data/ProjectData";
-//import taskData from "../../data/TaskData";
-
 import SmallProjectComponent from "../../components/SmallProjectComponent";
 import TaskComponent from "../../components/TaskComponent";
 import PlusButton from "../../components/PlusButton";
 
-import { Colors } from "../../styles/Colors";
+import { addLastElement, colorHandler } from "../../functions";
+
 import { DataContext } from "../../data/DataContext";
 
 
-
-export const colorHandler = (color) => {
-  const colorValues = Colors[color];
-  if (colorValues) {
-    const { primary, secondary, light } = colorValues;
-    return { primary, secondary, light };
-  }
-  return null;
-};
-
-const addLastElement = (data) =>{
-  const endValue = {id: data.length+1,projectId: "addButton"};
-  const updatedData = [...data, endValue];
-  return updatedData
-}
-
-const renderTaskItem = ({ item }) => {
-  
-  if(item.projectId == "addButton"){
-    return(<PlusButton/>)
-  }else{
-    return (
-      <TaskComponent
-        title={item.name}
-        description={item.description}
-        starttime={item.starttime}
-        stoptime={item.endtime}
-        isFinished={item.isFinished}
-      />)
-    ;}
-};
-
-const renderProjectItem = ({ item }) => {
-  
-  if(item.projectId== "addButton"){
-    return(<PlusButton />)
-  }else{
-  return (
-    <SmallProjectComponent
-      name={item.name}
-      id={item.id}
-      colors={colorHandler(item.color)}
-    />)
-    ;}
-};
-
 export default TaskScreen = () => {
   const [data,setData] = useContext(DataContext);
-  const [selectedProject, setSelectedtProject] = useState("c1");
+  const [selectedProject, setSelectedProject] = useState("c1");
 
   const shownTasks = data.taskData.filter(task => task.projectId === selectedProject);
+  
   modifiedTaskData = addLastElement(shownTasks); 
   modifiedProjectData = addLastElement(data.projectData); 
+
+  const renderTaskItem = ({ item }) => {
+   
+    if(item.projectId == "addButton"){
+      return(<PlusButton/>)
+    }else{
+    const currentProject = data.projectData.find(project =>project.projectId == item.projectId) ;
+    const colors = colorHandler(currentProject.color); 
+
+      return (
+        <TaskComponent
+          title={item.name}
+          description={item.description}
+          starttime={item.starttime}
+          stoptime={item.endtime}
+          isFinished={item.isFinished}
+          colors = {colors}
+          
+        />)
+      ;}
+  };
+  
+  const renderProjectItem = ({ item }) => {
+    if(item.projectId== "addButton"){
+      return(<PlusButton />)
+    }else{
+    return (
+      <SmallProjectComponent
+        name={item.name}
+        id={item.projectId}
+        colors={colorHandler(item.color)}
+        onPress={setSelectedProject}
+      />)
+      ;}
+  };
 
   return (
     <View style={styles.mainContainer}>
@@ -75,7 +63,8 @@ export default TaskScreen = () => {
           style = {styles.topListStyle}
           contentContainer = {styles.horizontalContainer}
           renderItem={renderProjectItem}
-          showsHorizontalScrollIndicator={false} />
+          showsHorizontalScrollIndicator={false}
+           />
       </View>
       <View style={styles.listContainer}>
         <FlatList
@@ -85,7 +74,6 @@ export default TaskScreen = () => {
           renderItem={renderTaskItem}
           showsVerticalScrollIndicator={false} />
       </View>
-
     </View>
   );
 };
@@ -99,7 +87,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     paddingVertical: 3,
-    //backgroundColor: 'lightgray',
   },
   listContainer: {
     flex: 1,

@@ -4,9 +4,9 @@ import { TouchableOpacity, View, Text , StyleSheet} from "react-native";
 
 
 export default SmallProjectComponent = props =>{
-    //console.log(props.category)
+    
 return(
-    <TouchableOpacity onPress = {props.onPress/*() =>console.log("Project " + props.id)*/}>
+    <TouchableOpacity onPress = {() => props.onPress(props.id)}>
         <View style = {[styles.projectItem,{backgroundColor: props.colors.primary}]}>
             <Text style = {styles.headerText}> {props.name}</Text>
         </View>
