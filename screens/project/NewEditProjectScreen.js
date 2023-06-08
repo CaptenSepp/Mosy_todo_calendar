@@ -20,6 +20,7 @@ const InputBox = props =>{
 };
 
 const ColorPicker = props => {
+    
     const filteredColors = Object.entries(Colors).reduce((acc, [colorName, color]) => {
         if (color.hasOwnProperty('primary') && color.hasOwnProperty('secondary') && color.hasOwnProperty('light')) {
           acc.push({
@@ -30,23 +31,23 @@ const ColorPicker = props => {
         return acc;
       }, []);
       
-    const firstRow = filteredColors.slice(0,4);
-    const secondRow = filteredColors.slice(4);
-
+    const firstRow = filteredColors.slice(0,filteredColors.length/2);
+    const secondRow = filteredColors.slice(filteredColors.length/2);
+    
     return(
         <View style={styles.thirdContainer}>
             <Text style ={styles.headerText}>Pick Color</Text>
             <View style = {{flexDirection: 'row',justifyContent: 'flex-start'}}>
             {firstRow.map((color, index) => (
-                <TouchableOpacity>
-                <View key={index} style= {[styles.colorCircle,{backgroundColor: color.primary}]}/>  
+                <TouchableOpacity key={index} onPress = {() =>props.onPress(color.name)}>
+                <View  style= {[styles.colorCircle,{backgroundColor: color.primary,borderWidth: props.selectedColor === color.name ? 4 : 0}]}/>  
                 </TouchableOpacity> 
         ))}
             </View>
             <View style = {{flexDirection: 'row',justifyContent: 'flex-start'}} >
         {secondRow.map((color, index) => (
-                <TouchableOpacity>
-                <View key={index} style= {[styles.colorCircle,{backgroundColor: color.primary}]}/>
+                <TouchableOpacity key={index} onPress = {() =>props.onPress(color.name)}>
+                <View  style= {[styles.colorCircle,{backgroundColor: color.primary,borderWidth: props.selectedColor === color.name ? 4 : 0}]}/>
                 </TouchableOpacity>
         ))}
             </View>
@@ -61,6 +62,8 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const [selectedColor,setSelectedColor] = useState('blue');
+    
  
     // if params are passed, it is an edit, otherwise it is a new project
     if (route.params != null) {
@@ -93,7 +96,10 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
                 editable
                 multiline
                 />
-            <ColorPicker/>
+            <ColorPicker 
+                selectedColor = {selectedColor}
+                onPress = {setSelectedColor}
+                />
             <View style = {styles.bottomContainer}>
             <TouchableOpacity style={styles.addButton}>
                 <Text style = {styles.addText}> Add</Text>
@@ -187,6 +193,7 @@ const styles = StyleSheet.create({
         width:40,
         marginRight: 10,
         marginVertical: 5,
+        borderColor: 'black'
 
 
         
