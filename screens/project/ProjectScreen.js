@@ -6,6 +6,7 @@ import ProjectComponent from "../../components/Project Component";
 import PlusButton from "../../components/PlusButton";
 
 import { DataContext } from "../../data/DataContext";
+import { addLastElement } from "../../functions";
 
 export default ProjectScreen = ({ navigation }) => {
   const [data,setData] = useContext(DataContext);
@@ -23,16 +24,10 @@ export default ProjectScreen = ({ navigation }) => {
   const addHandler = () => {
     console.log("Add Project");
     navigation.navigate('AddProject');
+    
   };
 
 
-  const addLastElement = (data) =>{
-    const endValue = {id: data.length+1,projectId: "addButton"};
-    const updatedData = [...data, endValue];
-    return updatedData
-  }
-
-  
   modifiedProjectData = addLastElement(data.projectData); 
 
   const renderProjectItem = ({ item }) => {

@@ -10,7 +10,7 @@ import { addLastElement, colorHandler } from "../../functions";
 import { DataContext } from "../../data/DataContext";
 
 
-export default TaskScreen = () => {
+export default TaskScreen = ({navigation}) => {
   const [data,setData] = useContext(DataContext);
   const [selectedProject, setSelectedProject] = useState("c1");
 
@@ -19,10 +19,19 @@ export default TaskScreen = () => {
   modifiedTaskData = addLastElement(shownTasks); 
   modifiedProjectData = addLastElement(data.projectData); 
 
+
+  const addTaskHandler = () =>{
+    navigation.navigate('AddTask');
+  };
+
+  const addProjectHandler = () =>{
+    navigation.navigate('ProjectTab',{ screen: 'AddProject'});
+  };
+
   const renderTaskItem = ({ item }) => {
    
     if(item.projectId == "addButton"){
-      return(<PlusButton/>)
+      return(<PlusButton OnPress = {addTaskHandler}/>)
     }else{
     const currentProject = data.projectData.find(project =>project.projectId == item.projectId) ;
     const colors = colorHandler(currentProject.color); 
@@ -42,7 +51,7 @@ export default TaskScreen = () => {
   
   const renderProjectItem = ({ item }) => {
     if(item.projectId== "addButton"){
-      return(<PlusButton />)
+      return(<PlusButton OnPress ={addProjectHandler}/>)
     }else{
     return (
       <SmallProjectComponent
