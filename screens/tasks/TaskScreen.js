@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { FlatList, StyleSheet, View, } from 'react-native';
 
-import projectData from "../../data/ProjectData";
-import taskData from "../../data/TaskData";
+//import projectData from "../../data/ProjectData";
+//import taskData from "../../data/TaskData";
 
 import SmallProjectComponent from "../../components/SmallProjectComponent";
 import TaskComponent from "../../components/TaskComponent";
 import PlusButton from "../../components/PlusButton";
 
 import { Colors } from "../../styles/Colors";
+import { DataContext } from "../../data/DataContext";
+
+
 
 export const colorHandler = (color) => {
   const colorValues = Colors[color];
@@ -24,9 +27,6 @@ const addLastElement = (data) =>{
   const updatedData = [...data, endValue];
   return updatedData
 }
-
-modifiedTaskData = addLastElement(taskData); 
-modifiedProjectData = addLastElement(projectData); 
 
 const renderTaskItem = ({ item }) => {
   
@@ -59,6 +59,13 @@ const renderProjectItem = ({ item }) => {
 };
 
 export default TaskScreen = () => {
+  const [data,setData] = useContext(DataContext);
+  const [selectedProject, setSelectedtProject] = useState("c1");
+
+  const shownTasks = data.taskData.filter(task => task.projectId === selectedProject);
+  modifiedTaskData = addLastElement(shownTasks); 
+  modifiedProjectData = addLastElement(data.projectData); 
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.topContainer}>

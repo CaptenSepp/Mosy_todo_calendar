@@ -1,14 +1,14 @@
-import React from "react";
+import React, {useContext} from "react";
 import { FlatList, StyleSheet, View } from 'react-native';
 import { Colors } from "../../styles/Colors";
-
-import projectData from "../../data/ProjectData";
 
 import ProjectComponent from "../../components/Project Component";
 import PlusButton from "../../components/PlusButton";
 
-export default ProjectScreen = ({ navigation }) => {
+import { DataContext } from "../../data/DataContext";
 
+export default ProjectScreen = ({ navigation }) => {
+  const [data,setData] = useContext(DataContext);
   
   const deleteHandler = (title, id ) => {
     console.log("Delete: " + title + ' (ID: ' + id + ')');
@@ -32,7 +32,8 @@ export default ProjectScreen = ({ navigation }) => {
     return updatedData
   }
 
-  modifiedProjectData = addLastElement(projectData); 
+  
+  modifiedProjectData = addLastElement(data.projectData); 
 
   const renderProjectItem = ({ item }) => {
     if(item.projectId == "addButton"){
