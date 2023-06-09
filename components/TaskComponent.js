@@ -8,20 +8,38 @@ import { Ionicons } from '@expo/vector-icons';
 const FoldOutComponent = props => {
   const [expanded, setExpanded] = useState(false);
   const animatedHeight = useState(new Animated.Value(0))[0];
+  const animatedOpacity = useState(new Animated.Value(0))[0];
 
   const toggleExpand = () => {
-    Animated.timing(animatedHeight, {
-      toValue: expanded ? 0 : 265, // Adjust expanded and collapsed heights as needed
-      duration: 200,
-      useNativeDriver: false,
-    }).start();
-    setExpanded(!expanded);
-  };
-
-  const handleLayout = (event) => {
-    const { height } = event.nativeEvent.layout;
-    if (!expanded) {
-      animatedHeight.setValue(height);
+    if (expanded) {
+      // Collapse animation
+      Animated.parallel([
+        Animated.timing(animatedHeight, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: false,
+        }),
+        Animated.timing(animatedOpacity, {
+          toValue: 0,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+      ]).start(() => setExpanded(false));
+    } else {
+      // Expand animation
+      setExpanded(true);
+      Animated.parallel([
+        Animated.timing(animatedHeight, {
+          toValue: 265, // Adjust the expanded height as needed
+          duration: 200,
+          useNativeDriver: false,
+        }),
+        Animated.timing(animatedOpacity, {
+          toValue: 1,
+          duration: 100,
+          useNativeDriver: true,
+        }),
+      ]).start();
     }
   };
 
@@ -38,10 +56,11 @@ const FoldOutComponent = props => {
       </TouchableOpacity>
 
       <Animated.View style={{ height: animatedHeight }}>
-        <View onLayout={handleLayout}>
-          {expanded ? props.foldedOutContent : props.collapsedContent}
-
-        </View>
+        <Animated.View style={{ opacity: animatedOpacity }}>
+          <View>
+            {expanded ? props.foldedOutContent : props.collapsedContent}
+          </View>
+        </Animated.View>
       </Animated.View>
     </View>
   );
