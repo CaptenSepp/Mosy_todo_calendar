@@ -10,7 +10,7 @@ export const colorHandler = (color) => {
   };
 
  export const addLastElement = (data) =>{
-    const endValue = {id: data.length+1,projectId: "addButton"};
+    const endValue = {id: data.length+1948394,projectId: "addButton"};
     const updatedData = [...data, endValue];
     return updatedData
   };

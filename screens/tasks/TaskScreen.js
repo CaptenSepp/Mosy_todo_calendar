@@ -27,15 +27,15 @@ export default TaskScreen = ({navigation}) => {
   }
 
   const addTaskHandler = () =>{
-    navigation.navigate('AddTask');
+    navigation.navigate('AddTask', {isEdit: false,projectId: selectedProject});
   };
 
   const addProjectHandler = () =>{
     navigation.navigate('ProjectTab',{ screen: 'AddProject'});
   };
 
-  const editTaskHandler = (id ) => {
-    navigation.navigate('EditTask', {id: id});
+  const editTaskHandler = (id) => {
+    navigation.navigate('EditTask', {isEdit: true,taskId: id});
   };
 
   const deleteTaskHandler = (id ) => {
@@ -55,6 +55,7 @@ export default TaskScreen = ({navigation}) => {
           id = {item.id}
           title={item.name}
           description={item.description}
+          date = {item.date}
           starttime={item.starttime}
           stoptime={item.endtime}
           isFinished={item.isFinished}
@@ -90,6 +91,7 @@ export default TaskScreen = ({navigation}) => {
           contentContainer = {styles.horizontalContainer}
           renderItem={renderProjectItem}
           showsHorizontalScrollIndicator={false}
+          
            />
       </View>
       <View style={styles.listContainer}>
@@ -98,7 +100,7 @@ export default TaskScreen = ({navigation}) => {
           style={styles.list}
           data={modifiedTaskData}
           renderItem={renderTaskItem}
-          showsVerticalScrollIndicator={false} />
+          showsVerticalScrollIndicator={false}/>
       </View>
     </View>
   );
