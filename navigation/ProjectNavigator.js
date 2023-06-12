@@ -21,7 +21,6 @@ export default ProjectNavigator = () => {
                     color:  Colors.headerLabel ,
                     paddingBottom: 20,
                 },
-                animation: "slide_from_bottom",
             }}>
 
             <ProjectStack.Screen name="ProjectList" component={ProjectScreen} 
@@ -29,14 +28,12 @@ export default ProjectNavigator = () => {
                     headerShown: true,
                     headerTitle: "Projects",
                     headerTintColor: Colors.headerLabel,
-                    headerAnimationPreset: "fade",
                 }}/>
             <ProjectStack.Screen name="AddProject" component={NewEditProjectScreen}
                 options={{
                     headerShown: true,
                     headerTitle: "Add Project",
                     headerTintColor: Colors.headerLabel,
-                    animation: "slide_from_bottom",
                 }}/>
             <ProjectStack.Screen name="EditProject" component={NewEditProjectScreen} 
                 options={{
