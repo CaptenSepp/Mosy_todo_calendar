@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard } from 'react-native';
-import projectData from "../../data/ProjectData";
+import {projectData} from "../../data/ProjectData";
 import { Colors } from "../../styles/Colors";
 
 

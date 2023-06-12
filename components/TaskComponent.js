@@ -75,15 +75,15 @@ const InnerContainer = props => {
       <View style={[styles.innerContainer,{backgroundColor: props.colors.light}]}>
         <View style={{ alignSelf: 'stretch', flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.innerHeaderText}>Date</Text>
-          <Text style={styles.innerHeaderText}>01.01.2000</Text>
+          <Text style={styles.innerHeaderText}>{props.date}</Text>
         </View>
         <View style={{ alignSelf: 'stretch', flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.innerHeaderText}>Start-Time</Text>
-          <Text style={styles.innerHeaderText}>{props.timeEstimation}</Text>
+          <Text style={styles.innerHeaderText}>{props.startTime}</Text>
         </View>
         <View style={{ alignSelf: 'stretch', flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.innerHeaderText}>Stop-Time</Text>
-          <Text style={styles.innerHeaderText}>{props.timeBlockDuration}</Text>
+          <Text style={styles.innerHeaderText}>{props.stopTime}</Text>
         </View>
       </View>
       <View style={styles.bottomButtonContainer}>
@@ -109,8 +109,9 @@ export default TaskComponent = props => {
         id = {props.id}
         content={'Content'}
         description={props.description}
-        timeEstimation={props.starttime}
-        timeBlockDuration={props.stoptime}
+        startTime={props.starttime}
+        stopTime={props.stoptime}
+        date = {props.date}
         colors = {props.colors} 
         editHandler = {props.editHandler}
         deleteHandler = {props.deleteHandler}/>} />

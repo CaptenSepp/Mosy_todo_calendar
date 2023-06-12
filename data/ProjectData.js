@@ -1,6 +1,7 @@
 import {Project} from "./Classes";
+export const PROJECTIDCOUNTER = 8;
 
-const projectData = [
+export const projectData = [
     new Project('c1','Hausarbeiten','Welche Arbeiten muss ich machen', 'blue'),
     new Project('c2','Einkauf','Was muss ich einkaufen' ,'red'),
     new Project('c3','Lernen','Was muss ich lernen', 'orange'),
@@ -12,4 +13,3 @@ const projectData = [
 
     
 ];
-export default projectData;
