@@ -1,6 +1,8 @@
 import React, {useState} from "react";
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, StatusBar } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import { CalendarProvider, ExpandableCalendar, TimelineEventProps, TimelineList} from "react-native-calendars";
+import { Colors } from "../styles/Colors";
 
 
 const dummyEvents = {
@@ -25,32 +27,37 @@ const dummyEvents = {
   };
   
 export default CalendarScreen = () =>{
-    
-    return(
-        <View style = {styles.mainContainer}>
-            
-            <CalendarProvider 
-                date='2023-06-06'
-                showTodayButton
-                >
-                <ExpandableCalendar
-                    style = {styles.calendar}/>
-                <TimelineList
-                events = {dummyEvents.events}
-                
-                showNowIndicator
-                timelineProps={{
-                    format24h: true,
-                    unavailableHours: [
-                      { start: 0, end: 6 },
-                      { start: 22, end: 24 },
-                    ],
-                    overlapEventsSpacing: 8,
-                    rightEdgeSpacing: 24,
-                  }}/>
-            </CalendarProvider>
-        </View>
+  
+  function FocusAwareStatusBar(props) {
+    const isFocused = useIsFocused();
+    return isFocused ? <StatusBar {...props} /> : null;
+  }
 
+  return(
+      <View style = {styles.mainContainer}>
+        <FocusAwareStatusBar barStyle="light-content" backgroundColor={Colors.backgroundHeader} />
+        
+        <CalendarProvider 
+            date='2023-06-06'
+            showTodayButton
+            >
+            <ExpandableCalendar
+                style = {styles.calendar}/>
+            <TimelineList
+            events = {dummyEvents.events}
+            
+            showNowIndicator
+            timelineProps={{
+                format24h: true,
+                unavailableHours: [
+                  { start: 0, end: 6 },
+                  { start: 22, end: 24 },
+                ],
+                overlapEventsSpacing: 8,
+                rightEdgeSpacing: 24,
+              }}/>
+          </CalendarProvider>
+      </View>
     );
 };
 

@@ -1,5 +1,7 @@
 import React, { useContext, useState } from "react";
-import { FlatList, StyleSheet, View, } from 'react-native';
+import { FlatList, StyleSheet, View, StatusBar } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
+import { Colors } from "../../styles/Colors";
 
 import SmallProjectComponent from "../../components/SmallProjectComponent";
 import TaskComponent from "../../components/TaskComponent";
@@ -19,6 +21,10 @@ export default TaskScreen = ({navigation}) => {
   modifiedTaskData = addLastElement(shownTasks); 
   modifiedProjectData = addLastElement(data.projectData); 
 
+  function FocusAwareStatusBar(props) {
+    const isFocused = useIsFocused();
+    return isFocused ? <StatusBar {...props} /> : null;
+  }
 
   const addTaskHandler = () =>{
     navigation.navigate('AddTask');
@@ -75,6 +81,7 @@ export default TaskScreen = ({navigation}) => {
 
   return (
     <View style={styles.mainContainer}>
+      <FocusAwareStatusBar barStyle="light-content" backgroundColor={Colors.backgroundHeader} />
       <View style={styles.topContainer}>
         <FlatList
           horizontal

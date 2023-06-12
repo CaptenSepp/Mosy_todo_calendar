@@ -13,7 +13,7 @@ export default TaskNavigator = () => {
             initialRouteName="Task"
             screenOptions={{
                 headerShown: true,
-                headerStyle: { height: 140, backgroundColor: Colors.backgroundHeader },
+                headerStyle: { height: 70, backgroundColor: Colors.backgroundHeader },
                 headerTitleAlign: "center",
                 headerTitleStyle: {
                     fontWeight: "bold",
@@ -32,11 +32,13 @@ export default TaskNavigator = () => {
                 options={{
                     headerShown: true,
                     headerTitle: "Add Task",
+                    headerTintColor: Colors.headerLabel,	
                 }}/>
             <TaskStack.Screen name="EditTask" component={newEditTaskScreen} 
                 options={{
                     headerShown: true,
                     headerTitle: "Edit Task",
+                    headerTintColor: Colors.headerLabel,	
                 }}/>
 
         </TaskStack.Navigator>

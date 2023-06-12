@@ -1,5 +1,6 @@
 import React, {useContext} from "react";
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View, StatusBar } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import { Colors } from "../../styles/Colors";
 
 import ProjectComponent from "../../components/Project Component";
@@ -9,6 +10,12 @@ import { DataContext } from "../../data/DataContext";
 import { addLastElement } from "../../functions";
 
 export default ProjectScreen = ({ navigation }) => {
+
+  function FocusAwareStatusBar(props) {
+    const isFocused = useIsFocused();
+    return isFocused ? <StatusBar {...props} /> : null;
+  }
+  
   const [data,setData] = useContext(DataContext);
   
   const deleteHandler = (title, id ) => {
@@ -48,6 +55,7 @@ export default ProjectScreen = ({ navigation }) => {
 
   return (
     <View style={styles.listContainer}>
+      <FocusAwareStatusBar barStyle="light-content" backgroundColor={Colors.backgroundHeader} />
       <FlatList
         data={modifiedProjectData}
         contentContainerStyle={styles.contentContainer}

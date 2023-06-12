@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard, StatusBar } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
+
 import projectData from "../../data/ProjectData";
 import { Colors } from "../../styles/Colors";
 
@@ -59,6 +61,10 @@ const ColorPicker = props => {
 
 export default NewEditProjectScreen =  ({ route, navigation }) => {
     
+    function FocusAwareStatusBar(props) {
+        const isFocused = useIsFocused();
+        return isFocused ? <StatusBar {...props} /> : null;
+    }
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -82,6 +88,7 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
     return (
         <TouchableWithoutFeedback onPress ={() => Keyboard.dismiss()}>
         <View style={styles.container}>
+            <FocusAwareStatusBar barStyle="light-content" backgroundColor = { Colors.backgroundHeader } />
             <InputBox 
                 value = {title}
                 onChangeText = {setTitle}

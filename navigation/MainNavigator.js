@@ -15,6 +15,8 @@ import { FontAwesome5, MaterialCommunityIcons  } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
+const iconSize = 26;
+
 export default MainNavigator = () => {
     return (
         <NavigationContainer>
@@ -23,8 +25,8 @@ export default MainNavigator = () => {
                     headerShown: true,
                     tabBarActiveTintColor: Colors.tabbarActive,
                     tabBarInactiveTintColor: Colors.tabbarInactive,
-                    tabBarStyle: { height: 75, backgroundColor: Colors.backgroundTabbar},
-                    tabBarLabelStyle: { fontSize: 18, marginBottom: 5 },
+                    tabBarStyle: { height: 65, backgroundColor: Colors.backgroundTabbar},
+                    tabBarLabelStyle: { fontSize: 12, marginBottom: 10, fontWeight: 'bold' },
                     tabBarIconStyle: { marginTop: 5 },
                 })}>
                 {/* Task Screen */}
@@ -35,7 +37,7 @@ export default MainNavigator = () => {
                     tabBarLabel: 'Tasks',
                     headerShown: false,
                     tabBarIcon: ({ color, size }) => (
-                    <FontAwesome5 style={{ alignSelf: 'center' }} name={'tasks'} size={32} color={color} /> 
+                    <FontAwesome5 style={{ alignSelf: 'center' }} name={'tasks'} size={ iconSize } color={color} /> 
                     ),
                 }} /> 
                 {/*<Tab.Screen name="NewTask" component={NewEditTaskScreen} /*/}
@@ -48,7 +50,7 @@ export default MainNavigator = () => {
                     tabBarLabel: 'Calendar',
                     headerShown: false,
                     tabBarIcon: ({ color, size }) => (
-                    <FontAwesome5 style={{ alignSelf: 'center' }} name={'calendar-check'} size={32} color={color} /> 
+                    <FontAwesome5 style={{ alignSelf: 'center' }} name={'calendar-check'} size={ iconSize } color={color} /> 
                     ),
                 }} />
 
@@ -60,7 +62,7 @@ export default MainNavigator = () => {
                     tabBarLabel: 'Projects',
                     headerShown: false,
                     tabBarIcon: ({ color, size }) => (
-                    <MaterialCommunityIcons style={{ alignSelf: 'center' }} name={'bookshelf'} size={32} color={color} /> 
+                    <MaterialCommunityIcons style={{ alignSelf: 'center', paddingBottom: 0 }} name={'bookshelf'} size={ iconSize +8 } color={color} /> 
                     ),
                 }} />
 

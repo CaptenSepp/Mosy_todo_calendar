@@ -12,7 +12,7 @@ export default TaskNavigator = () => {
             initialRouteName="Task"
             screenOptions={{
                 headerShown: true,
-                headerStyle: { height: 140, backgroundColor: Colors.backgroundHeader },
+                headerStyle: { height: 70, backgroundColor: Colors.backgroundHeader },
                 headerTitleAlign: "center",
                 headerTitleStyle: {
                     fontWeight: "bold",
