@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import CalendarScreen from "../screens/CalendarScreen";
 
 import { Colors } from "../styles/Colors";
+import { DefaultStyles } from "../styles/DefaultStyles";
 
 const CalendarStack = createStackNavigator();
 
@@ -12,7 +13,7 @@ export default TaskNavigator = () => {
             initialRouteName="Task"
             screenOptions={{
                 headerShown: true,
-                headerStyle: { height: 70, backgroundColor: Colors.backgroundHeader },
+                headerStyle: DefaultStyles.header,
                 headerTitleAlign: "center",
                 headerTitleStyle: {
                     fontWeight: "bold",

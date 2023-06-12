@@ -4,6 +4,7 @@ import TaskScreen from "../screens/tasks/TaskScreen";
 import newEditTaskScreen from "../screens/tasks/NewEditTaskScreen";
 
 import { Colors } from "../styles/Colors";
+import { DefaultStyles } from "../styles/DefaultStyles";
 
 const TaskStack = createStackNavigator();
 
@@ -13,7 +14,7 @@ export default TaskNavigator = () => {
             initialRouteName="Task"
             screenOptions={{
                 headerShown: true,
-                headerStyle: { height: 70, backgroundColor: Colors.backgroundHeader },
+                headerStyle: DefaultStyles.header,
                 headerTitleAlign: "center",
                 headerTitleStyle: {
                     fontWeight: "bold",

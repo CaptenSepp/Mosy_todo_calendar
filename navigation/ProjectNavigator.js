@@ -4,6 +4,7 @@ import ProjectScreen from "../screens/project/ProjectScreen";
 import NewEditProjectScreen from "../screens/project/NewEditProjectScreen";
 
 import { Colors } from "../styles/Colors";
+import { DefaultStyles } from "../styles/DefaultStyles";
 
 const ProjectStack = createStackNavigator();
 
@@ -13,7 +14,7 @@ export default ProjectNavigator = () => {
             initialRouteName="Project"
             screenOptions={{
                 headerShown: true,
-                headerStyle: { height: 70, backgroundColor: Colors.backgroundHeader },
+                headerStyle:  DefaultStyles.header ,
                 headerTitleAlign: "center",
                 headerTitleStyle: {
                     fontWeight: "bold",

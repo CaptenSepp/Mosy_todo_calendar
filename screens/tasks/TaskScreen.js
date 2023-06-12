@@ -111,7 +111,9 @@ const styles = StyleSheet.create({
   topContainer: {
     justifyContent:'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: Colors.backgroundBody,
+    borderBottomColor: Colors.light,
+    borderBottomWidth: .5,
     paddingVertical: 3,
   },
   listContainer: {
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
 
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: Colors.backgroundBody,
 
   },
   horizontalContainer:{
@@ -132,7 +134,7 @@ const styles = StyleSheet.create({
   },
   list: {
     width: '90%',
-    backgroundColor: 'white'
+    backgroundColor: Colors.backgroundBody,
     //backgroundColor: 'lightgray',
   },
   contentContainer: {

@@ -58,7 +58,7 @@ export const Colors = {
 
     headerLabel: '#707ca5',
     backgroundHeader: '#172331',
-    backgroundBody: '#ffffff',
+    backgroundBody: '#fffffc',
     backgroundTabbar: '#172331',
     tabbarActive: '#707ca5',
     tabbarInactive: '#f7e5db',
