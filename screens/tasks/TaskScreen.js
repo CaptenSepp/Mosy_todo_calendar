@@ -76,6 +76,7 @@ export default TaskScreen = ({navigation}) => {
         id={item.projectId}
         colors={colorHandler(item.color)}
         onPress={setSelectedProject}
+        selectedProject = {selectedProject}
       />)
       ;}
   };
@@ -128,7 +129,8 @@ const styles = StyleSheet.create({
   },
   horizontalContainer:{
     padding: 5,
-    width: '100%'
+    width: '100%',
+    //justifyContent: 'space-evenl'
     //flex: 1,
   },
   topListStyle:{
