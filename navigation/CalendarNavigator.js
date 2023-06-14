@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import CalendarScreen from "../screens/CalendarScreen";
+import CalendarScreen from "../screens/calendar/CalendarScreen";
 
 import { Colors } from "../styles/Colors";
 import { DefaultStyles } from "../styles/DefaultStyles";
@@ -18,16 +18,16 @@ export default TaskNavigator = () => {
                 headerTitleStyle: {
                     fontWeight: "bold",
                     fontSize: 38,
-                    color:  Colors.headerLabel ,
+                    color: Colors.headerLabel,
                     paddingBottom: 20,
                 },
             }}>
 
-            <CalendarStack.Screen name="Calendar" component={CalendarScreen} 
+            <CalendarStack.Screen name="Calendar" component={CalendarScreen}
                 options={{
                     headerShown: true,
                     headerTitle: "Calendar",
-                }}/>
+                }} />
 
         </CalendarStack.Navigator>
     );
