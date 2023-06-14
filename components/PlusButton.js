@@ -2,6 +2,8 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import { Colors } from '../styles/Colors';
+
 export default PlusButton = props => {
 
     return (
@@ -27,10 +29,11 @@ const styles = StyleSheet.create({
         marginHorizontal: 5,
         
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        elevation: 5,
     },
     icon:{
-        
-        marginLeft: 3
+        marginLeft: 3,
+        color: Colors.textdarker
     }
 });

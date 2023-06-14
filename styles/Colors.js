@@ -2,44 +2,44 @@ import { StyleSheet } from 'react-native';
 
 export const Colors = {
     blue:{
-        primary: '#245985',
-        secondary: '#3a709b',
-        light: '#88aac6'
+        primary: '#4498dd',
+        secondary: '#62a9e3',
+        light: '#d4ecff'
     },
     red:{
-        primary: '#AF2824',
-        secondary: '#CD4743',
-        light: '#dd8987'
+        primary: '#ff5d57',
+        secondary: '#fc7874',
+        light: '#ffdad8'
     },
     orange:{
-        primary: '#d67215',
-        secondary: '#dc7e30',
-        light: '#f0c4a3'
+        primary: '#ff9d41',
+        secondary: '#ffaa5b',
+        light: '#ffe8d2'
     },
     yellow:{
-        primary: '#debd14',
-        secondary: '#CD9343',
-        light: '#ecdb8a'
+        primary: '#fdcf3a',
+        secondary: '#ffd54b',
+        light: '#fef2c8'
     },
     green:{
-        primary: '#1C8A23',
-        secondary: '#26AC49',
-        light: '#9ce5af'
+        primary: '#94c750',
+        secondary: '#a3de56',
+        light: '#e4ffc2'
     },
     seagreen:{
-        primary: '#2ACF80',
-        secondary: '#4DDA96',
-        light: '#a8f5d0'
+        primary: '#34dab9',
+        secondary: '#55eecf',
+        light: '#cefff5'
     },
     cyan: {
-        primary: '#06cdd4',
-        secondary: '#5ee6eb',
-        light: '#9eeef1'
+        primary: '#09dee9',
+        secondary: '#41f0f9',
+        light: '#c7fcff'
     },
     pink:{
-        primary: '#c40edc',
-        secondary: '#cb3cdd',
-        light: '#edb4f4'
+        primary: '#ff2592',
+        secondary: '#ff68b4',
+        light: '#ffc8e4'
     },
 
 
@@ -57,11 +57,11 @@ export const Colors = {
     textlight: '#d5dbcc',
 
     headerLabel: '#707ca5',
-    backgroundHeader: '#172331',
+    backgroundHeader: '#162432',
     backgroundBody: '#fffffc',
-    backgroundTabbar: '#172331',
+    backgroundTabbar: '#162432',
     tabbarActive: '#707ca5',
-    tabbarInactive: '#f7e5db',
+    tabbarInactive: '#c7cbda',
 }
 
 // https://huemint.com/bootstrap-plus/#palette=f7e5db-ffffff-172331-3c3f5c-707ca5-9aadd6-13b5bf-008486-ab9477

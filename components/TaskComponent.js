@@ -147,18 +147,20 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontSize: 18,
     fontWeight: 'bold',
+    color: Colors.textdarker
 
   },
   innerHeaderText: {
     fontSize: 15,
     fontWeight: 'bold',
     paddingVertical: 3,
+    color: Colors.textdark
 
   },
   innerNormalText: {
     fontSize: 15,
     paddingVertical: 3,
-    color: 'gray'
+    color: Colors.textdark
   },
   bottomButtonContainer: {
     flexDirection: 'row',
@@ -169,6 +171,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontWeight: 'bold',
-    fontSize: 15
+    fontSize: 15,
+    color: Colors.textdarker,
   }
 });

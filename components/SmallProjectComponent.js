@@ -1,6 +1,8 @@
 import React from "react";
 import { TouchableOpacity, View, Text , StyleSheet} from "react-native";
 
+import { Colors } from "../styles/Colors";
+
 
 
 export default SmallProjectComponent = props =>{
@@ -38,7 +40,7 @@ const styles = StyleSheet.create({
       elevation: 5,
   },
   headerText:{
-      color: 'white',
+      color: Colors.white,
       fontSize: 17,
       fontWeight: 'bold',
   },

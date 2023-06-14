@@ -15,7 +15,7 @@ export default ProjectScreen = ({ navigation }) => {
     const isFocused = useIsFocused();
     return isFocused ? <StatusBar {...props} /> : null;
   }
-  
+
   const [data,setData] = useContext(DataContext);
   
   const deleteHandler = (title, id ) => {
