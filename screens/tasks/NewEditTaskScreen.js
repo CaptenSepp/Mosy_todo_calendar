@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard, StatusBar } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard, StatusBar, Alert } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
 import { Colors } from "../../styles/Colors";
@@ -40,7 +40,19 @@ const NewEditTaskScreen = ({route,navigation}) => {
     function FocusAwareStatusBar(props) {
         const isFocused = useIsFocused();
         return isFocused ? <StatusBar {...props} /> : null;
-      }
+    }
+
+    React.useEffect(() => {
+    // Prevent going back 
+    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+    e.preventDefault();
+    Alert.alert('Discard changes?', 'You have unsaved changes. Are you sure to discard them and leave the screen?',
+                [{text: 'Cancel', style: 'cancel', onPress: () => {e.preventDefault();}},
+                {text: 'Discard', style: 'destructive', onPress: () => navigation.dispatch(e.data.action)}])
+    });
+
+    return unsubscribe;
+    }, [navigation]);  
 
     const {isEdit} = route.params;
     const {taskId} = route.params;
