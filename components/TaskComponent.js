@@ -49,7 +49,7 @@ const FoldOutComponent = props => {
         <View style={styles.topContainer}>
 
           <Text style={[styles.headerText, props.isFinished ? { textDecorationLine: 'line-through' } : null]}>{props.title}</Text>
-          <TouchableOpacity style={{ justifyContent: 'center' }}>
+          <TouchableOpacity style={{ justifyContent: 'center' }} onPress={() => props.checkHandler(props.id)}>
             {props.isFinished === false ? <Ionicons style={{ alignSelf: 'center' }} name={'ellipse-outline'} size={32} color={'black'} /> : <Ionicons style={{ alignSelf: 'center' }} name={'checkmark-circle-outline'} size={32} color={'black'} />}
           </TouchableOpacity>
         </View>
@@ -105,6 +105,8 @@ export default TaskComponent = props => {
       title={props.title}
       isFinished={props.isFinished}
       colors = {props.colors}
+      id = {props.id}
+      checkHandler = {props.checkHandler}
       foldedOutContent={<InnerContainer
         id = {props.id}
         content={'Content'}

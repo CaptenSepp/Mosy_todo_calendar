@@ -10,6 +10,7 @@ import PlusButton from "../../components/PlusButton";
 import { addLastElement, colorHandler } from "../../functions";
 
 import { DataContext } from "../../data/DataContext";
+import { Task } from "../../data/Classes";
 import Timer from "../../components/timerComponent";
 
 
@@ -34,7 +35,7 @@ export default TaskScreen = ({navigation}) => {
   };
 
   const addProjectHandler = () =>{
-    navigation.navigate('ProjectTab',{ screen: 'AddProject'});
+    navigation.navigate('ProjectTab',{ screen: 'AddProject',params:{isEdit:false}});
   };
 
   const editTaskHandler = (id) => {
@@ -43,6 +44,30 @@ export default TaskScreen = ({navigation}) => {
 
   const deleteTaskHandler = (id ) => {
     console.log('Delete Task: '+id);
+  };
+
+  const checkHandler = (id) =>{
+
+    const updatedTasks = data.taskData; 
+    // find index of data you want to edit
+    const taskIndex = data.taskData.findIndex(task => task.id === id);
+    // get Task at index
+    const originalTask = data.taskData[taskIndex];
+    const isFinished = !originalTask.isFinished
+    // overwrite Task with new data
+    const updatedTask = {
+        ...originalTask, // copy all properties from the original object
+        isFinished: isFinished 
+      };  
+      
+      updatedTasks[taskIndex] = updatedTask;
+    // save data in Context
+    setData(data => ({
+      projectData: data.projectData, 
+      taskData:updatedTasks,
+      taskIdCounter: data.taskIdCounter,
+      projectIdCounter: data.projectIdCounter}))
+
   };
 
   const renderTaskItem = ({ item }) => {
@@ -66,6 +91,7 @@ export default TaskScreen = ({navigation}) => {
           colors = {colors}
           editHandler = {editTaskHandler}
           deleteHandler = {deleteTaskHandler}
+          checkHandler = {checkHandler}
         />)
       ;}
   };
