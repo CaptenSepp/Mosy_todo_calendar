@@ -64,16 +64,18 @@ const NewEditTaskScreen = ({route,navigation}) => {
     const [startTime, setStartTime] = useState('');
     const [stopTime, setStopTime] = useState('');
     
+    // get data you want to edit
     const currentData = data.taskData.find(task => task.id === taskId);
-
     const [editedData, setEditedData] = useState(currentData);
 
     const addHandler = (title,description,projectId,date,startTime,endTime) =>{
-        console.log(data.taskIdCounter);
+        // check for EditScreen or NewScreen
         if(!isEdit ){
             let newIdCounter = data.taskIdCounter + 1;
             let newTasks = data.taskData;
+            // put new data at the end of array
             newTasks.push(new Task(newIdCounter, title, projectId, description,date ,startTime,endTime,false));
+            // save the data in Context
             setData(data => ({
                 projectData: data.projectData, 
                 taskData: newTasks, 
@@ -82,10 +84,13 @@ const NewEditTaskScreen = ({route,navigation}) => {
             navigation.goBack();
         }else{
             const updatedTasks = data.taskData; 
+            // find index of data you want to edit
             const taskIndex = data.taskData.findIndex(task => task.id === taskId);
+            // overwrite Task with new data
             if (taskIndex !== -1) {
                 updatedTasks[taskIndex] = new Task(taskId, editedData.name, editedData.projectId, editedData.description, editedData.date, editedData.starttime, editedData.endtime, editedData.isFinished);
               }
+              // save data in Context
             setData(data => ({
                 projectData: data.projectData, 
                 taskData:updatedTasks,
@@ -102,8 +107,11 @@ const NewEditTaskScreen = ({route,navigation}) => {
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle="light-content" backgroundColor = { Colors.backgroundHeader } />
             <InputBox 
-                value = {isEdit == true? editedData.name : title }
-                onChangeText = {isEdit == true?(text) => setEditedData({ ...editedData, name: text }): setTitle}
+                
+                value = {/* check if the screen isEdit: if yes fill in the existing data*/
+                        isEdit == true? editedData.name : title }
+                onChangeText = {/* check if the screen isEdit: if yes set editedData to existing Data*/
+                                isEdit == true?(text) => setEditedData({ ...editedData, name: text }): setTitle}
                 placeholder = 'Enter title...'
                 inputStyle = {styles.input}
                 />

@@ -14,6 +14,7 @@ const Empty = () => {
 };
 
 export default function App() {
+  // set initial data for Context use
   const [data, setData] = useState({
     projectData: projectData, 
     taskData: taskData, 
