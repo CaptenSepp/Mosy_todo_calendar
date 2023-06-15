@@ -22,7 +22,7 @@ const InputBox = props =>{
 };
 
 const ColorPicker = props => {
-    
+    //get all projectColors from Colors.js  
     const filteredColors = Object.entries(Colors).reduce((acc, [colorName, color]) => {
         if (color.hasOwnProperty('primary') && color.hasOwnProperty('secondary') && color.hasOwnProperty('light')) {
           acc.push({
@@ -32,7 +32,7 @@ const ColorPicker = props => {
         }
         return acc;
       }, []);
-      
+    // split array in two to display it in two rows  
     const firstRow = filteredColors.slice(0,filteredColors.length/2);
     const secondRow = filteredColors.slice(filteredColors.length/2);
     
@@ -40,7 +40,8 @@ const ColorPicker = props => {
         <View style={styles.thirdContainer}>
             <Text style ={styles.headerText}>Pick Color</Text>
             <View style = {{flexDirection: 'row',justifyContent: 'flex-start'}}>
-            {firstRow.map((color, index) => (
+            {//display static list of colors (circle Color if it is selected)
+            firstRow.map((color, index) => (
                 <TouchableOpacity key={index} onPress = {() =>props.onPress(color.name)}>
                 <View  style= {[styles.colorCircle,{backgroundColor: color.primary,borderWidth: props.selectedColor === color.name ? 4 : 0}]}/>  
                 </TouchableOpacity> 
@@ -77,7 +78,7 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
     
         return unsubscribe;
     }, [navigation]);    
-
+    
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [selectedColor,setSelectedColor] = useState('blue');

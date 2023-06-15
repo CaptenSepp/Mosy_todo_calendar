@@ -10,22 +10,25 @@ import PlusButton from "../../components/PlusButton";
 import { addLastElement, colorHandler } from "../../functions";
 
 import { DataContext } from "../../data/DataContext";
+import Timer from "../../components/timerComponent";
 
 
 export default TaskScreen = ({navigation}) => {
   const [data,setData] = useContext(DataContext);
   const [selectedProject, setSelectedProject] = useState("c1");
 
+  // get Tasks from the selected Project
   const shownTasks = data.taskData.filter(task => task.projectId === selectedProject);
-  
+
+  // add plus Button to the end of the data
   modifiedTaskData = addLastElement(shownTasks); 
   modifiedProjectData = addLastElement(data.projectData); 
-
+  
   function FocusAwareStatusBar(props) {
     const isFocused = useIsFocused();
     return isFocused ? <StatusBar {...props} /> : null;
   }
-
+  
   const addTaskHandler = () =>{
     navigation.navigate('AddTask', {isEdit: false,projectId: selectedProject});
   };
@@ -43,12 +46,13 @@ export default TaskScreen = ({navigation}) => {
   };
 
   const renderTaskItem = ({ item }) => {
-   
+    // check if projectId is add Button
     if(item.projectId == "addButton"){
       return(<PlusButton OnPress = {addTaskHandler}/>)
     }else{
-    const currentProject = data.projectData.find(project =>project.projectId == item.projectId) ;
-    const colors = colorHandler(currentProject.color); 
+    // get colors of current Project
+    const currentProject = data.projectData.find(project =>project.projectId == item.projectId);
+    const colors = colorHandler(currentProject.color);
 
       return (
         <TaskComponent
