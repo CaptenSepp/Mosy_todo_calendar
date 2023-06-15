@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard, StatusBar, Alert } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
 import {projectData} from "../../data/ProjectData";
 import { Colors } from "../../styles/Colors";
+import { Project } from "../../data/Classes";
+import { DataContext } from "../../data/DataContext";
 
 
 const InputBox = props =>{
@@ -61,6 +63,18 @@ const ColorPicker = props => {
 
 
 export default NewEditProjectScreen =  ({ route, navigation }) => {
+
+    const [data,setData] = useContext(DataContext);
+    const {isEdit} = route.params;
+    const {projectId} = route.params;
+
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [selectedColor,setSelectedColor] = useState('blue');
+
+    // get data to edit
+    const currentData = data.projectData.find(project => project.projectId === projectId);
+    const [editedData, setEditedData] = useState(currentData);
     
     function FocusAwareStatusBar(props) {
         const isFocused = useIsFocused();
@@ -68,8 +82,8 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
     }
 
     React.useEffect(() => {
-        // Prevent going back 
-        const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+    // Prevent going back 
+    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
         e.preventDefault();
         Alert.alert('Discard changes?', 'You have unsaved changes. Are you sure to discard them and leave the screen?',
                     [{text: 'Cancel', style: 'cancel', onPress: () => {e.preventDefault();}},
@@ -77,52 +91,68 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
         });
     
         return unsubscribe;
-    }, [navigation]);    
-    
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [selectedColor,setSelectedColor] = useState('blue');
-    
- 
-    // if params are passed, it is an edit, otherwise it is a new project
-    if (route.params != null) {
-        const { id } = route.params;
-        const isEdit = id != null;
-        console.log("isEdit: " + isEdit);
-        
-        const project = projectData.find((project) => project.projectId === id);
-        console.log("project: " + project.name, project.description);
+    }, [navigation]); 
 
-        //setTitle(project.name);
-    } else {
-        console.log("isEdit: false");
-    }
+    const addHandler = (title, description, color) =>{
+        // check if Edit or NewScreen
+        if(!isEdit ){
+            let newIdCounter = data.projectIdCounter + 1;
+            let newProjects = data.projectData;
+            // put new data at the end of array
+            newProjects.push(new Project(newIdCounter, title, description,color));
+            // save the data in Context
+            setData(data => ({
+                projectData: newProjects, 
+                taskData: data.taskData, 
+                taskIdCounter: data.taskIdCounter,
+                projectIdCounter: newIdCounter}));
+            navigation.goBack();
+        }else{
+            const updatedProjects = data.projectData; 
+            // find index of data you want to edit
+            const projectIndex = data.projectData.findIndex(project => project.projectId === projectId);
+            // overwrite Task with new data
+            if (projectIndex !== -1) {
+                updatedProjects[projectIndex] = new Project(projectId, editedData.name, editedData.description, editedData.color);
+              }
+              // save data in Context
+            setData(data => ({
+                projectData: updatedProjects, 
+                taskData: data.taskData,
+                taskIdCounter: data.taskIdCounter,
+                projectIdCounter: data.projectIdCounter}));
+            navigation.goBack();
+        }
+
+    };
+    
+    
 
     return (
         <TouchableWithoutFeedback onPress ={() => Keyboard.dismiss()}>
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle="light-content" backgroundColor = { Colors.backgroundHeader } />
             <InputBox 
-                value = {title}
-                onChangeText = {setTitle}
+                value={isEdit? editedData.name: title}
+                onChangeText={isEdit? (text) => setEditedData({...editedData,name: text}): setTitle}
                 placeholder = 'Enter title...'
                 inputStyle = {styles.input}
                 />
             <InputBox
-                value = {description}
-                onChangeText = {setDescription}
+                value = {isEdit? editedData.description:description}
+                onChangeText = {isEdit?(text) => setEditedData({...editedData,description: text}): setDescription}
                 placeholder = 'Enter Description...'
                 inputStyle = {[styles.input,{minHeight: 150, paddingTop:10}]}
                 editable
                 multiline
                 />
             <ColorPicker 
-                selectedColor = {selectedColor}
-                onPress = {setSelectedColor}
+                selectedColor = {isEdit? editedData.color: selectedColor}
+                onPress = {isEdit?(text) => setEditedData({...editedData,color: text}): setSelectedColor}
                 />
             <View style = {styles.bottomContainer}>
-            <TouchableOpacity style={styles.addButton}>
-                <Text style = {styles.addText}> Add</Text>
+            <TouchableOpacity style={styles.addButton} onPress = {() => addHandler(title,description,selectedColor)}>
+                <Text style = {styles.addText} > {isEdit? "Save" : "Add"}</Text>
             </TouchableOpacity>
             </View>
         </View>
