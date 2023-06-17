@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { StyleSheet, View, StatusBar } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { CalendarProvider, ExpandableCalendar, TimelineEventProps, TimelineList } from "react-native-calendars";
 import { Colors } from "../../styles/Colors";
+import { DataContext } from "../../data/DataContext";
+import { tasksToEvents } from "../../functions";
+import { colorHandler } from "../../functions";
 
 
 const dummyEvents = {
@@ -15,18 +18,61 @@ const dummyEvents = {
         summary: 'Merge Timeline Calendar to React Native Calendars',
       },
     ],
-    '2023-06-01': [
-      {
-        start: '2023-06-01 08:00:00',
-        end: '2023-06-01 20:00:00',
-        title: 'TestEvent',
-        summary: 'Description',
-      },
-    ],
   },
 };
 
 export default CalendarScreen = () => {
+
+  const [data] = useContext(DataContext);
+
+  const tasksToEvents = (tasks) =>{
+  
+    const formatDate = (date) =>{
+      //format date from dd-mm-yyyy to yyyy-mm-dd
+      const parts = date.split("-");
+      const formattedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
+      return formattedDate
+    };
+
+    const taskToEvent = (task,color) => {
+      const formattedDate = formatDate(task.date);
+      // Assigning properties to the eventObject
+      const eventObject = {
+          id: task.id,
+          start: formattedDate + ' ' + task.starttime,
+          end: formattedDate + ' ' + task.endtime,
+          title: task.name,
+          summary: task.description,
+          color: color
+        };
+        return eventObject
+  };
+
+  const eventList = {
+    events: {},
+  };
+  
+  // Iterate over each task and convert it to an event
+  tasks.forEach((task) => {
+    //get Project of Task
+    const currentProject = data.projectData.find(project =>project.projectId == task.projectId);
+    // get corresponding color
+    const color = colorHandler(currentProject.color).secondary;
+    // convert Task to event
+    const event = taskToEvent(task,color);
+    const eventName = formatDate(task.date);
+    // Check if the eventName already exists in eventList.events
+    if (eventList.events[eventName]) {
+      eventList.events[eventName].push(event);
+    } else {
+      eventList.events[eventName] = [event];
+    }
+  });
+
+  return eventList;
+};
+  // create events from taskData
+  const events = tasksToEvents(data.taskData);
 
   function FocusAwareStatusBar(props) {
     const isFocused = useIsFocused();
@@ -36,15 +82,14 @@ export default CalendarScreen = () => {
   return (
     <View style={styles.mainContainer}>
       <FocusAwareStatusBar barStyle="light-content" backgroundColor={Colors.backgroundHeader} />
-
       <CalendarProvider
-        date='2023-06-06'
+        date='2023-06-05'
         showTodayButton
       >
         <ExpandableCalendar
           style={styles.calendar} />
         <TimelineList
-          events={dummyEvents.events}
+          events={events.events}
 
           showNowIndicator
           timelineProps={{
