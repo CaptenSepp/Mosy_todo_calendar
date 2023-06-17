@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard, StatusBar, Alert } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -42,17 +42,28 @@ const NewEditTaskScreen = ({route,navigation}) => {
         return isFocused ? <StatusBar {...props} /> : null;
     }
 
-    React.useEffect(() => {
-    // Prevent going back 
-    const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-    e.preventDefault();
-    Alert.alert('Discard changes?', 'You have unsaved changes. Are you sure to discard them and leave the screen?',
-                [{text: 'Cancel', style: 'cancel', onPress: () => {e.preventDefault();}},
-                {text: 'Discard', style: 'destructive', onPress: () => navigation.dispatch(e.data.action)}])
-    });
+    // prevent going back if there are unsaved changes
+    const [isSaved, setIsSaved] = useState(false);
 
-    return unsubscribe;
-    }, [navigation]);  
+    useEffect(() => {
+        if(isSaved){
+            navigation.goBack();   // when data is saved, go back
+        }
+    }, [isSaved]);
+
+    useEffect(() => {
+        const beforeRemoveListener = navigation.addListener('beforeRemove', (e) => {
+          if (!isSaved) {
+            e.preventDefault(); // Prevent the default behavior of the back button
+            Alert.alert( 'Unsaved Changes', 'Are you sure you want to leave without saving?',
+              [{ text: 'Cancel', onPress: () => {}, style: 'cancel' },
+                { text: 'Leave', onPress: () => navigation.dispatch(e.data.action), },],
+              { cancelable: false }
+            );}
+        });
+    
+        return () => beforeRemoveListener(); // Cleanup the event listener on unmount
+      }, [isSaved, navigation]);
 
     const {isEdit} = route.params;
     const {taskId} = route.params;
@@ -81,7 +92,8 @@ const NewEditTaskScreen = ({route,navigation}) => {
                 taskData: newTasks, 
                 taskIdCounter: newIdCounter,
                 projectIdCounter: data.projectIdCounter}));
-            navigation.goBack();
+            
+            setIsSaved(true);  // navigation.goBack() in useEffect, because of async handling
         }else{
             const updatedTasks = data.taskData; 
             // find index of data you want to edit
@@ -96,7 +108,8 @@ const NewEditTaskScreen = ({route,navigation}) => {
                 taskData:updatedTasks,
                 taskIdCounter: data.taskIdCounter,
                 projectIdCounter: data.projectIdCounter}));
-            navigation.goBack();
+            
+            setIsSaved(true);  // navigation.goBack() in useEffect, because of async handling
         }
     };
 
