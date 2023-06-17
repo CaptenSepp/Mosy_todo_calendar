@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState , useEffect} from "react";
 import { FlatList, StyleSheet, View, StatusBar } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { Colors } from "../../styles/Colors";
@@ -17,6 +17,13 @@ import Timer from "../../components/timerComponent";
 export default TaskScreen = ({navigation}) => {
   const [data,setData] = useContext(DataContext);
   const [selectedProject, setSelectedProject] = useState("c1");
+  
+  // set selectedProject when every project was deleted to first newProject
+  useEffect(() => {
+    if (data.projectData.length == 1) {
+      setSelectedProject(data.projectData[0].projectId);
+    }
+  }, [data]);
 
   // get Tasks from the selected Project
   const shownTasks = data.taskData.filter(task => task.projectId === selectedProject);
@@ -43,7 +50,13 @@ export default TaskScreen = ({navigation}) => {
   };
 
   const deleteTaskHandler = (id ) => {
-    console.log('Delete Task: '+id);
+    // delete Task
+    const updatedTasks = data.taskData.filter(task => task.id != id);
+    setData(data => ({
+      projectData: data.projectData, 
+      taskData:updatedTasks,
+      taskIdCounter: data.taskIdCounter,
+      projectIdCounter: data.projectIdCounter}));
   };
 
   const checkHandler = (id) =>{

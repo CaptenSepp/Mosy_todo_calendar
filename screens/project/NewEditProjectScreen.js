@@ -111,14 +111,14 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
             let newIdCounter = data.projectIdCounter + 1;
             let newProjects = data.projectData;
             // put new data at the end of array
-            newProjects.push(new Project(newIdCounter, title, description,color));
+            newProjects.push(new Project('c'+ newIdCounter, title, description,color));
             // save the data in Context
             setData(data => ({
                 projectData: newProjects, 
                 taskData: data.taskData, 
                 taskIdCounter: data.taskIdCounter,
                 projectIdCounter: newIdCounter}));
-            
+
             setIsSaved(true);   // navigation.goBack() in useEffect, because of async handling
         }else{
             const updatedProjects = data.projectData; 

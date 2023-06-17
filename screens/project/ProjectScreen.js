@@ -18,9 +18,19 @@ export default ProjectScreen = ({ navigation }) => {
 
   const [data,setData] = useContext(DataContext);
   
-  const deleteHandler = (title, id ) => {
-    alert("Delete: " + title + ' (ID: ' + id + ')');
+  const deleteHandler = (id) => {
+    // delete project
+    const updatedProjects = data.projectData.filter(project => project.projectId != id);
+    // delete all tasks of selected project
+    const updatedTasks = data.projectData.filter(task => task.projectId != id);
+    
+    setData(data => ({
+      projectData: updatedProjects, 
+      taskData:updatedTasks,
+      taskIdCounter: data.taskIdCounter,
+      projectIdCounter: data.projectIdCounter}));
   };
+  
 
   const editHandler = ( projectId ) => {
     navigation.navigate('EditProject', {isEdit: true,projectId: projectId});
@@ -44,7 +54,7 @@ export default ProjectScreen = ({ navigation }) => {
           title={item.name}
           color={item.color}
           description={item.description} 
-          onDelete={() => deleteHandler(item.name, item.projectId)}
+          onDelete={() => deleteHandler(item.projectId)}
           onEdit={() => editHandler(item.projectId)}
         />)
       ;}
