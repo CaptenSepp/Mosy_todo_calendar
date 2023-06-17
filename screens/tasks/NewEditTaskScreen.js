@@ -171,6 +171,8 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         marginBottom: 10,
+        alignItems: 'stretch'
+        
     },
     input: {
         backgroundColor: '#E9E9E9',
@@ -179,6 +181,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 10,
         fontSize: 16,
+    
+        textAlignVertical: 'top'
     
     },
     input2: { 

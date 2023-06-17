@@ -1,6 +1,6 @@
 import {Task} from "./Classes";
 
-export const TASKIDCOUNTER = 5;
+export const TASKIDCOUNTER = 11;
 
 export const taskData = [
     new Task(1,'Buy Apples','c2', '5 Stück','01.01.2003','10:00','11:00' , false),

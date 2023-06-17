@@ -176,6 +176,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 10,
         fontSize: 16,
+        
+        textAlignVertical: 'top'
     
     },
     input2: { 
