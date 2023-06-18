@@ -20,7 +20,7 @@ export default function App() {
     taskData: taskData, 
     taskIdCounter: TASKIDCOUNTER,
     projectIdCounter: PROJECTIDCOUNTER,
-    isSaved: false,
+    isSaved: true,
   });
 
   return (
