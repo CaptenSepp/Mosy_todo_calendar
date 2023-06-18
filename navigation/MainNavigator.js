@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Colors } from '../styles/Colors';
@@ -9,6 +9,8 @@ import TaskNavigator from './TaskNavigator';
 import CalendarNavigator from './CalendarNavigator';
 import ProjectNavigator from "./ProjectNavigator";
 
+import { DataContext } from '../data/DataContext';
+
 
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -18,6 +20,9 @@ const Tab = createBottomTabNavigator();
 const iconSize = 26;
 
 export default MainNavigator = () => {
+
+    const [data,setData] = useContext(DataContext);
+
     return (
         <NavigationContainer>
             <Tab.Navigator
@@ -39,7 +44,16 @@ export default MainNavigator = () => {
                         tabBarIcon: ({ color, size }) => (
                             <FontAwesome5 style={{ alignSelf: 'center' }} name={'tasks'} size={iconSize} color={color} />
                         ),
-                    }} />
+                    }}
+                    listeners={({ navigation, route }) => ({
+                        tabPress: e => {
+                            // Prevent default action
+                            if (!data.isSaved) {
+                                console.log('preventDefault, due to unsaved data');
+                                e.preventDefault();
+                            }
+                        }})}
+                />
                 {/*<Tab.Screen name="NewTask" component={NewEditTaskScreen} /*/}
 
                 {/* Calendar Screen */}
@@ -52,7 +66,16 @@ export default MainNavigator = () => {
                         tabBarIcon: ({ color, size }) => (
                             <FontAwesome5 style={{ alignSelf: 'center' }} name={'calendar-check'} size={iconSize} color={color} />
                         ),
-                    }} />
+                    }}
+                    listeners={({ navigation, route }) => ({
+                        tabPress: e => {
+                            // Prevent default action
+                            if (!data.isSaved) {
+                                console.log('preventDefault, due to unsaved data');
+                                e.preventDefault();
+                            }
+                        }})}
+                />
 
                 {/* Project Screen */}
                 <Tab.Screen
@@ -64,7 +87,16 @@ export default MainNavigator = () => {
                         tabBarIcon: ({ color, size }) => (
                             <MaterialCommunityIcons style={{ alignSelf: 'center', paddingBottom: 0 }} name={'bookshelf'} size={iconSize + 8} color={color} />
                         ),
-                    }} />
+                    }} 
+                    listeners={({ navigation, route }) => ({
+                        tabPress: e => {
+                            // Prevent default action
+                            if (!data.isSaved) {
+                                console.log('preventDefault, due to unsaved data');
+                                e.preventDefault();
+                            }
+                        }})}
+                />
 
             </Tab.Navigator>
         </NavigationContainer>
