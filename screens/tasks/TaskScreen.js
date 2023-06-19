@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.backgroundBody,
     borderBottomColor: Colors.light,
-    borderBottomWidth: .5,
+    borderBottomWidth: 1,
     paddingVertical: 3,
   },
   listContainer: {
