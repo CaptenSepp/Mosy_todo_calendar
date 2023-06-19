@@ -6,6 +6,8 @@ import { Colors } from "../../styles/Colors";
 import { DataContext } from "../../data/DataContext";
 import { tasksToEvents } from "../../functions";
 import { colorHandler } from "../../functions";
+import moment from "moment";
+
 
 
 const dummyEvents = {
@@ -22,25 +24,31 @@ const dummyEvents = {
 };
 
 export default CalendarScreen = () => {
-
+  
   const [data] = useContext(DataContext);
 
   const tasksToEvents = (tasks) =>{
-  
+
     const formatDate = (date) =>{
-      //format date from dd-mm-yyyy to yyyy-mm-dd
-      const parts = date.split("-");
-      const formattedDate = parts[2] + "-" + parts[1] + "-" + parts[0];
-      return formattedDate
+      //format date  to yyyy-mm-dd
+      
+      return moment(date).format('YYYY-MM-DD');
     };
 
+    const formatTime = (time,task) => {
+      // add right date to time Data
+      const hours = moment(time).format('HH:mm:ss');
+      const date = formatDate(task);
+      const formattedTime = `${date} ${hours}`
+      return formattedTime;
+    };
     const taskToEvent = (task,color) => {
-      const formattedDate = formatDate(task.date);
+      const date = task.date;
       // Assigning properties to the eventObject
       const eventObject = {
           id: task.id,
-          start: formattedDate + ' ' + task.starttime,
-          end: formattedDate + ' ' + task.endtime,
+          start: formatTime(task.starttime,date),
+          end: formatTime(task.endtime,date),
           title: task.name,
           summary: task.description,
           color: color
@@ -61,6 +69,7 @@ export default CalendarScreen = () => {
     // convert Task to event
     const event = taskToEvent(task,color);
     const eventName = formatDate(task.date);
+    
     // Check if the eventName already exists in eventList.events
     if (eventList.events[eventName]) {
       eventList.events[eventName].push(event);
@@ -68,7 +77,6 @@ export default CalendarScreen = () => {
       eventList.events[eventName] = [event];
     }
   });
-
   return eventList;
 };
   // create events from taskData

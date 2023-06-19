@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard, StatusBar, Alert } from 'react-native';
+import {Button, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard, StatusBar, Alert } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { Colors } from "../../styles/Colors";
 import {Task}  from "../../data/Classes";
@@ -41,7 +42,7 @@ const NewEditTaskScreen = ({route,navigation}) => {
         const isFocused = useIsFocused();
         return isFocused ? <StatusBar {...props} /> : null;
     }
-
+    
     // prevent going back if there are unsaved changes
     const [isSaved, setIsSaved] = useState(false);
 
@@ -68,20 +69,42 @@ const NewEditTaskScreen = ({route,navigation}) => {
         return () => beforeRemoveListener(); // Cleanup the event listener on unmount
       }, [isSaved, navigation]);
 
+    // data from Taskscreen 
     const {isEdit} = route.params;
     const {taskId} = route.params;
     const {projectId} = route.params;
+    // Context data
     const [data,setData] = useContext(DataContext);
+
+    // set currentDate to today
+    let currentDate = new Date();
+    useEffect(() => {
+        currentDate = new Date(Date.now);
+        
+      }, []);
+    // 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [date, setDate] = useState('');
-    const [startTime, setStartTime] = useState('');
-    const [stopTime, setStopTime] = useState('');
+    const [date, setDate] = useState(new Date(currentDate));
+    const [startTime, setStartTime] = useState(new Date());
+    const [stopTime, setStopTime] = useState(new Date());
     
-    // get data you want to edit
+    // get existing data you want to edit for EditScreen
     const currentData = data.taskData.find(task => task.id === taskId);
     const [editedData, setEditedData] = useState(currentData);
-
+    
+    // set new Date
+    const dateChangeHandler = (event, selectedDate)=>{
+        setDate(currentDate);
+    };
+    // set new Starttime
+    const startTimeChangeHandler = (event, selectedTime)=>{
+        setStartTime(newTime);
+    };
+    // set new Stoptime
+    const stopTimeChangeHandler = (event, selectedTime)=>{
+        setStopTime(newTime);
+    };
     const addHandler = (title,description,projectId,date,startTime,endTime) =>{
         // check for EditScreen or NewScreen
         if(!isEdit ){
@@ -118,9 +141,7 @@ const NewEditTaskScreen = ({route,navigation}) => {
             setData(data => ({...data, isSaved: true}));   // update isSaved in Context (global state) to prevent tab navigation
         }
     };
-
     
-
     return (
         <TouchableWithoutFeedback onPress ={() => Keyboard.dismiss()}>
         <View style={styles.container}>
@@ -146,29 +167,35 @@ const NewEditTaskScreen = ({route,navigation}) => {
                 <View style={styles.columnContainer}>
                     <View style={styles.rowContainer}>
                         <Text style={styles.labelText}>Date:</Text>
-                        <Picker style={[styles.input2,{minWidth: 80}]} 
-                            placeholder="01.01.2000"
-                            value={isEdit == true? editedData.date: date}
-                            onChangeText={isEdit == true? (text) => setEditedData({...editedData,date: text}): setDate}/>
-                        
+                        <DateTimePicker
+                            value={isEdit? editedData.date: date}
+                            onChange={isEdit? (event,newDate) => {setEditedData({...editedData,date:newDate})}:dateChangeHandler}
+                            mode = {'date'}
+                            is24Hour={true}
+                            />
+                       
                     </View>
                     <View style={styles.rowContainer}>
                         <Text style={styles.labelText}>Start-Time:</Text>
-                        <Picker
-                            style={styles.input2}
-                            placeholder="00:00"
-                            value={isEdit == true? editedData.starttime: startTime}
-                            onChangeText={isEdit == true? (text) => setEditedData({...editedData,starttime: text}): setStartTime}
+                        <DateTimePicker
+                            value={isEdit? editedData.starttime: startTime}
+                            onChange={isEdit? (event,newStartTime) => setEditedData({...editedData,starttime: newStartTime}):startTimeChangeHandler}
+                            mode = {'time'}
+                            is24Hour={true}
+                    
                             />
+                 
                     </View>
                     <View style={styles.rowContainer}>
                         <Text style={styles.labelText}>Stop-Time:</Text>
-                       <Picker 
-                            style={styles.input2}
-                            placeholder="00:00"
-                            value={isEdit == true? editedData.endtime: stopTime}
-                            onChangeText={isEdit == true? (text) => setEditedData({...editedData,endtime: text}): setStopTime}
+                        <DateTimePicker
+                            value={isEdit? editedData.endtime: stopTime}
+                            onChange={isEdit? (event,newEndTime) => setEditedData({...editedData,endtime: newEndTime}): stopTimeChangeHandler}
+                            mode = {'time'}
+                            is24Hour={true}
+                            
                             />
+                       
                     </View>
                 </View>
             </View>

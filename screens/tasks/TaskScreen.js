@@ -12,12 +12,28 @@ import { addLastElement, colorHandler } from "../../functions";
 import { DataContext } from "../../data/DataContext";
 import { Task } from "../../data/Classes";
 import Timer from "../../components/timerComponent";
+import moment from "moment";
+
 
 
 export default TaskScreen = ({navigation}) => {
   const [data,setData] = useContext(DataContext);
   const [selectedProject, setSelectedProject] = useState("c1");
-  
+
+
+  const formatTime= (time)=>{
+    return moment(time).format('HH:mm');
+  };
+
+  const formatDate = (date) =>{
+    const day = date.getDate().toString().padStart(2, '0'); // Get day and pad with leading zero if necessary
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Get month (months are zero-based) and pad with leading zero if necessary
+    const year = date.getFullYear().toString(); // Get full year
+    const formattedDate = `${day}.${month}.${year}`;
+    //return moment(date).format('MMMM Do YYYY');
+    return formattedDate;
+  }
+
   // set selectedProject when every project was deleted to first newProject
   useEffect(() => {
     if (data.projectData.length == 1) {
@@ -60,7 +76,6 @@ export default TaskScreen = ({navigation}) => {
   };
 
   const checkHandler = (id) =>{
-
     const updatedTasks = data.taskData; 
     // find index of data you want to edit
     const taskIndex = data.taskData.findIndex(task => task.id === id);
@@ -90,16 +105,18 @@ export default TaskScreen = ({navigation}) => {
     }else{
     // get colors of current Project
     const currentProject = data.projectData.find(project =>project.projectId == item.projectId);
-    const colors = colorHandler(currentProject.color);
-
+    const colors = colorHandler(currentProject.color); //get project colors
+    const starttime = formatTime(item.starttime); // format Time from Date to HH:mm
+    const endtime = formatTime(item.endtime);
+    const date = formatDate(item.date); // format date from Date to dd.mm.yyyy
       return (
         <TaskComponent
           id = {item.id}
           title={item.name}
           description={item.description}
-          date = {item.date}
-          starttime={item.starttime}
-          stoptime={item.endtime}
+          date = {date}
+          starttime={starttime}
+          stoptime={endtime}
           isFinished={item.isFinished}
           colors = {colors}
           editHandler = {editTaskHandler}
