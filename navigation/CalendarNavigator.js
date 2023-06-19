@@ -23,7 +23,7 @@ export default TaskNavigator = () => {
                 },
             }}>
 
-            <CalendarStack.Screen name="Calendar" component={CalendarScreen}
+            <CalendarStack.Screen name="CalendarScreen" component={CalendarScreen}
                 options={{
                     headerShown: true,
                     headerTitle: "Calendar",

@@ -22,7 +22,7 @@ export default ProjectScreen = ({ navigation }) => {
     // delete project
     const updatedProjects = data.projectData.filter(project => project.projectId != id);
     // delete all tasks of selected project
-    const updatedTasks = data.projectData.filter(task => task.projectId != id);
+    const updatedTasks = data.taskData.filter(task => task.projectId != id);
     
     setData(data => ({
       projectData: updatedProjects, 
