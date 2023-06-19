@@ -85,24 +85,28 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
     const [isSaved, setIsSaved] = useState(false);
 
     useEffect(() => {
+        setData(data => ({...data, isSaved: isSaved}));   // update isSaved in Context (global state) to prevent tab navigation
         if(isSaved){
             navigation.goBack();   // when data is saved, go back
         }
     }, [isSaved]);
 
     useEffect(() => {
-        const beforeRemoveListener = navigation.addListener('beforeRemove', (e) => {
+        const beforeRemoveListener = navigation.addListener('beforeRemove', (e) => {   // event listener, before leaving the screen
           if (!isSaved) {
-            e.preventDefault(); // Prevent the default behavior of the back button
+            e.preventDefault();   // Prevent the default behavior of the back button
             Alert.alert( 'Unsaved Changes', 'Are you sure you want to leave without saving?',
-              [{ text: 'Cancel', onPress: () => {}, style: 'cancel' },
-                { text: 'Leave', onPress: () => navigation.dispatch(e.data.action), },],
+              [{ text: 'Cancel', onPress: () => setData(data => ({...data, isSaved: isSaved})), style: 'cancel' },   // stay on screen
+                { text: 'Leave', onPress: () => {
+                    navigation.dispatch(e.data.action);   // go back
+                    setData(data => ({...data, isSaved: true}));   // reset to enable tab navigation
+                }, },],
               { cancelable: false }
             );}
         });
-    
         return () => beforeRemoveListener(); // Cleanup the event listener on unmount
       }, [isSaved, navigation]);
+
 
 
     const addHandler = (title, description, color) =>{
@@ -120,6 +124,8 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
                 projectIdCounter: newIdCounter}));
 
             setIsSaved(true);   // navigation.goBack() in useEffect, because of async handling
+            setData(data => ({...data, isSaved: true}));   // update isSaved in Context (global state) to prevent tab navigation
+
         }else{
             const updatedProjects = data.projectData; 
             // find index of data you want to edit
@@ -136,6 +142,7 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
                 projectIdCounter: data.projectIdCounter}));
             
             setIsSaved(true);   // navigation.goBack() in useEffect, because of async handling
+            setData(data => ({...data, isSaved: true}));   // update isSaved in Context (global state) to prevent tab navigation
         }
 
     };

@@ -19,7 +19,10 @@ export default function App() {
     projectData: projectData, 
     taskData: taskData, 
     taskIdCounter: TASKIDCOUNTER,
-    projectIdCounter: PROJECTIDCOUNTER});
+    projectIdCounter: PROJECTIDCOUNTER,
+    isSaved: false,
+  });
+
   return (
     <DataContext.Provider value = {[data,setData]}>
       <MainNavigator />
