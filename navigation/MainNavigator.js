@@ -47,9 +47,14 @@ export default MainNavigator = () => {
                     }}
                     listeners={({ navigation, route }) => ({
                         tabPress: e => {
-                            // Prevent default action
-                            if (!data.isSaved) {
-                                console.log('preventDefault, due to unsaved data');
+                            // if no changes, just navigate
+                            if (!data.hasChanged) {
+                                navigation.navigate('ProjectList');
+                                navigation.navigate('TaskList');
+                            }
+                            // if unsaved changes, prevent default action
+                            if (!data.isSaved && data.hasChanged) {
+                                console.log('prevent Navigation, due to unsaved data');
                                 e.preventDefault();
                             }
                         }})}
@@ -69,9 +74,15 @@ export default MainNavigator = () => {
                     }}
                     listeners={({ navigation, route }) => ({
                         tabPress: e => {
-                            // Prevent default action
-                            if (!data.isSaved) {
-                                console.log('preventDefault, due to unsaved data');
+                            // if no changes, just navigate
+                            if (!data.hasChanged) {
+                                navigation.navigate('ProjectList');
+                                navigation.navigate('TaskList');
+                                navigation.navigate('CalendarScreen');
+                            }
+                            // if unsaved changes, prevent default action
+                            if (!data.isSaved && data.hasChanged) {
+                                console.log('prevent Navigation, due to unsaved data');
                                 e.preventDefault();
                             }
                         }})}
@@ -90,12 +101,19 @@ export default MainNavigator = () => {
                     }} 
                     listeners={({ navigation, route }) => ({
                         tabPress: e => {
-                            // Prevent default action
-                            if (!data.isSaved) {
-                                console.log('preventDefault, due to unsaved data');
+                            // if no changes, just navigate
+                            if (!data.hasChanged) {
+                                navigation.navigate('TaskList');
+                                navigation.navigate('ProjectList');
+                            }
+                            // if unsaved changes, prevent default action
+                            if (!data.isSaved && data.hasChanged) {
+                                console.log('prevent Navigation, due to unsaved data');
                                 e.preventDefault();
                             }
                         }})}
+                    
+
                 />
 
             </Tab.Navigator>

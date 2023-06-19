@@ -21,6 +21,7 @@ export default function App() {
     taskIdCounter: TASKIDCOUNTER,
     projectIdCounter: PROJECTIDCOUNTER,
     isSaved: true,
+    hasChanged: false,
   });
 
   return (

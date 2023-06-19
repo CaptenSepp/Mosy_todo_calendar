@@ -81,9 +81,26 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
         return isFocused ? <StatusBar {...props} /> : null;
     }
 
+    // === NAVIGATION ===
     // prevent going back if there are unsaved changes
     const [isSaved, setIsSaved] = useState(false);
+    const [hasChanged, setHasChanged] = useState(false);
 
+    // check if data has changed
+    useEffect(() => {
+        if (editedData !== currentData && !hasChanged) {
+            setHasChanged(true);   // update hasChanged in local state to prevent going back
+            setData(data => ({...data, hasChanged: true}));   // update hasChanged in Context (global state) to prevent tab navigation
+        }
+    }
+    , [editedData]);
+
+    // update global state when data has changed
+    useEffect(() => {
+        setData(data => ({...data, hasChanged: hasChanged}));   // update hasChanged in Context (global state) to prevent tab navigation
+    }, [hasChanged]);
+
+    // check if data is saved
     useEffect(() => {
         setData(data => ({...data, isSaved: isSaved}));   // update isSaved in Context (global state) to prevent tab navigation
         if(isSaved){
@@ -91,9 +108,10 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
         }
     }, [isSaved]);
 
+    // prevent going back if there are unsaved changes
     useEffect(() => {
         const beforeRemoveListener = navigation.addListener('beforeRemove', (e) => {   // event listener, before leaving the screen
-          if (!isSaved) {
+        if (!isSaved && hasChanged) {
             e.preventDefault();   // Prevent the default behavior of the back button
             Alert.alert( 'Unsaved Changes', 'Are you sure you want to leave without saving?',
               [{ text: 'Cancel', onPress: () => setData(data => ({...data, isSaved: isSaved})), style: 'cancel' },   // stay on screen
@@ -105,8 +123,8 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
             );}
         });
         return () => beforeRemoveListener(); // Cleanup the event listener on unmount
-      }, [isSaved, navigation]);
-
+      }, [isSaved, hasChanged, navigation]);
+    // === END NAVIGATION ===
 
 
     const addHandler = (title, description, color) =>{

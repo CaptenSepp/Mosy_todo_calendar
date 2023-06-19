@@ -42,32 +42,6 @@ const NewEditTaskScreen = ({route,navigation}) => {
         return isFocused ? <StatusBar {...props} /> : null;
     }
 
-    // prevent going back if there are unsaved changes
-    const [isSaved, setIsSaved] = useState(false);
-
-    useEffect(() => {
-        setData(data => ({...data, isSaved: isSaved}));   // update isSaved in Context (global state) to prevent tab navigation
-        if(isSaved){
-            navigation.goBack();   // when data is saved, go back
-        }
-    }, [isSaved]);
-
-    useEffect(() => {
-        const beforeRemoveListener = navigation.addListener('beforeRemove', (e) => {   // event listener, before leaving the screen
-          if (!isSaved) {
-            e.preventDefault();   // Prevent the default behavior of the back button
-            Alert.alert( 'Unsaved Changes', 'Are you sure you want to leave without saving?',
-              [{ text: 'Cancel', onPress: () => setData(data => ({...data, isSaved: isSaved})), style: 'cancel' },   // stay on screen
-                { text: 'Leave', onPress: () => {
-                    navigation.dispatch(e.data.action);   // go back
-                    setData(data => ({...data, isSaved: true}));   // reset to enable tab navigation
-                }, },],
-              { cancelable: false }
-            );}
-        });
-        return () => beforeRemoveListener(); // Cleanup the event listener on unmount
-      }, [isSaved, navigation]);
-
     const {isEdit} = route.params;
     const {taskId} = route.params;
     const {projectId} = route.params;
@@ -81,6 +55,52 @@ const NewEditTaskScreen = ({route,navigation}) => {
     // get data you want to edit
     const currentData = data.taskData.find(task => task.id === taskId);
     const [editedData, setEditedData] = useState(currentData);
+
+
+    // === NAVIGATION ===
+    // prevent going back if there are unsaved changes
+    const [isSaved, setIsSaved] = useState(false);
+    const [hasChanged, setHasChanged] = useState(false);
+
+    // check if data has changed
+    useEffect(() => {
+        if (editedData !== currentData && !hasChanged) {
+            setHasChanged(true);   // update hasChanged in local state to prevent going back
+            setData(data => ({...data, hasChanged: true}));   // update hasChanged in Context (global state) to prevent tab navigation
+        }
+    }
+    , [editedData]);
+
+    // update global state when data has changed
+    useEffect(() => {
+        setData(data => ({...data, hasChanged: hasChanged}));   // update hasChanged in Context (global state) to prevent tab navigation
+    }, [hasChanged]);
+
+    // check if data is saved
+    useEffect(() => {
+        setData(data => ({...data, isSaved: isSaved}));   // update isSaved in Context (global state) to prevent tab navigation
+        if(isSaved){
+            navigation.goBack();   // when data is saved, go back
+        }
+    }, [isSaved]);
+
+    // prevent going back if there are unsaved changes
+    useEffect(() => {
+        const beforeRemoveListener = navigation.addListener('beforeRemove', (e) => {   // event listener, before leaving the screen
+        if (!isSaved && hasChanged) {
+            e.preventDefault();   // Prevent the default behavior of the back button
+            Alert.alert( 'Unsaved Changes', 'Are you sure you want to leave without saving?',
+              [{ text: 'Cancel', onPress: () => setData(data => ({...data, isSaved: isSaved})), style: 'cancel' },   // stay on screen
+                { text: 'Leave', onPress: () => {
+                    navigation.dispatch(e.data.action);   // go back
+                    setData(data => ({...data, isSaved: true}));   // reset to enable tab navigation
+                }, },],
+              { cancelable: false }
+            );}
+        });
+        return () => beforeRemoveListener(); // Cleanup the event listener on unmount
+      }, [isSaved, hasChanged, navigation]);
+    // === END NAVIGATION ===
 
     const addHandler = (title,description,projectId,date,startTime,endTime) =>{
         // check for EditScreen or NewScreen

@@ -11,7 +11,7 @@ const TaskStack = createStackNavigator();
 export default TaskNavigator = () => {
     return (
         <TaskStack.Navigator
-            initialRouteName="Task"
+            initialRouteName="TaskList"
             screenOptions={{
                 headerShown: true,
                 headerStyle: DefaultStyles.header,
