@@ -1,7 +1,8 @@
-import React, { useContext, useRef } from "react";
-import { StyleSheet, View, StatusBar } from 'react-native';
+import React, { useContext, useState, useRef } from "react";
+import { StyleSheet, View, StatusBar, Text, Animated } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { CalendarProvider, ExpandableCalendar, TimelineEventProps, TimelineList } from "react-native-calendars";
+import  Timer  from "../../components/timerComponent";
 
 import { Colors } from "../../styles/Colors";
 import { DataContext } from "../../data/DataContext";
@@ -9,13 +10,37 @@ import { tasksToEvents } from "../../functions";
 import { colorHandler } from "../../functions";
 import moment from "moment";
 
-
 import {timelineEvents, getDate} from '../../functions';
 import { getTheme } from "../../styles/CalendarTheme";
 
-
 export default CalendarScreen = () => {
-  
+
+  const [expanded, setExpanded] = useState(false);
+  const animatedHeight = useState(new Animated.Value(0))[0];
+
+  const toggleExpand = () => {
+    if (expanded) {
+      // Collapse animation
+      Animated.parallel([
+        Animated.timing(animatedHeight, {
+          toValue: 0,
+          duration: 200,
+          useNativeDriver: false,
+        }),
+      ]).start(() => setExpanded(false));
+    } else {
+      // Expand animation
+      setExpanded(true);
+      Animated.parallel([
+        Animated.timing(animatedHeight, {
+          toValue: 160, // Adjust the expanded height as needed
+          duration: 200,
+          useNativeDriver: false,
+        }),
+      ]).start();
+    }
+  };
+    
   const [data] = useContext(DataContext);
 
   // === Task to Event ===
@@ -92,6 +117,7 @@ export default CalendarScreen = () => {
   // == Event Handlers ==
   const onEventPressHandler = (event) => {
     console.log('Event selected: (ID:', event.id, ') ', event.title, event.start, event.end);
+    toggleExpand();
   };
 
   const onBackgroundLongPressHandler = (event) => {
@@ -136,6 +162,13 @@ export default CalendarScreen = () => {
             rightEdgeSpacing: 24,
           }} />
       </CalendarProvider>
+      <Animated.View style={{ height: animatedHeight }}>
+        <View style={styles.timerContainer}>
+          <Timer
+            initialValue1={'42'}
+            initialValue2={'21'} />
+        </View>
+      </Animated.View>
     </View>
   );
 };
@@ -148,29 +181,11 @@ const styles = StyleSheet.create({
   calendar: {
     backgroundColor: 'white',
   },
-  calendarTheme: {
-    backgroundColor: 'red',
-    calendarBackground: 'green',
-    textSectionTitleColor: '#b6c1cd',
-    selectedDayBackgroundColor: '#cc00f5',
-    selectedDayTextColor: '#ffffff',
-    todayTextColor: '#d62020',
-    dayTextColor: '#07f342',
-    textDisabledColor: '#d9e1e8',
-    dotColor: '#00adf5',
-    selectedDotColor: '#ffffff',
-    arrowColor: 'orange',
-    monthTextColor: 'blue',
-    indicatorColor: 'blue',
-    textDayFontFamily: 'monospace',
-    textMonthFontFamily: 'monospace',
-    textDayHeaderFontFamily: 'monospace',
-    textDayFontWeight: '300',
-    textMonthFontWeight: 'bold',
-    textDayHeaderFontWeight: '300',
-    textDayFontSize: 16,
-    textMonthFontSize: 16,
-    textDayHeaderFontSize: 16
+  timerContainer: {
+    height: '100%',
+    backgroundColor: 'lightblue',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   renderItem: {
     height: 50,
