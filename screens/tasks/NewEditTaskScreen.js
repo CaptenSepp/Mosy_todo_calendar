@@ -22,20 +22,6 @@ const InputBox = props =>{
     );
 }
 
-const Picker = props =>{
-    return(
-        <View style = {styles.pickerContainer}>
-            <TextInput
-                style={props.style} 
-                placeholder = {props.placeholder}
-                value={props.value}
-                onChangeText={props.onChangeText}
-            />
-        </View>
-    );
-}
-
-
 const NewEditTaskScreen = ({route,navigation}) => {
 
     function FocusAwareStatusBar(props) {
@@ -113,14 +99,17 @@ const NewEditTaskScreen = ({route,navigation}) => {
     
     // set new Date
     const dateChangeHandler = (event, selectedDate)=>{
-        setDate(currentDate);
+        const newDate = selectedDate || date;
+        setDate(selectedDate);
     };
     // set new Starttime
     const startTimeChangeHandler = (event, selectedTime)=>{
+        const newTime = selectedTime || startTime;
         setStartTime(newTime);
     };
     // set new Stoptime
     const stopTimeChangeHandler = (event, selectedTime)=>{
+        const newTime = selectedTime || stopTime;
         setStopTime(newTime);
     };
     const addHandler = (title,description,projectId,date,startTime,endTime) =>{
