@@ -30,7 +30,7 @@ const FoldOutComponent = props => {
       setExpanded(true);
       Animated.parallel([
         Animated.timing(animatedHeight, {
-          toValue: 265, // Adjust the expanded height as needed
+          toValue: 275, // Adjust the expanded height as needed
           duration: 200,
           useNativeDriver: false,
         }),
