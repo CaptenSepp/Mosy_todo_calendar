@@ -13,12 +13,12 @@ import { DataContext } from '../data/DataContext';
 
 
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Alert } from 'react-native';
+import { Alert,  Platform  } from 'react-native';
 
 
 const Tab = createBottomTabNavigator();
 
-const iconSize = 26;
+const iconSize = Platform.OS === 'android'? 26:24;
 
 export default MainNavigator = () => {
 
@@ -31,8 +31,8 @@ export default MainNavigator = () => {
                     headerShown: true,
                     tabBarActiveTintColor: Colors.tabbarActive,
                     tabBarInactiveTintColor: Colors.tabbarInactive,
-                    tabBarStyle: { height: 65, backgroundColor: Colors.backgroundTabbar },
-                    tabBarLabelStyle: { fontSize: 12, marginBottom: 10, fontWeight: 'bold' },
+                    tabBarStyle: { height: Platform.OS === 'android'? 65: 80, backgroundColor: Colors.backgroundTabbar },
+                    tabBarLabelStyle: { fontSize: 12, marginBottom: Platform.OS === 'android'?10: 0, fontWeight: 'bold' },
                     tabBarIconStyle: { marginTop: 5 },
                 })}>
                 {/* Task Screen */}
