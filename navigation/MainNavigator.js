@@ -13,6 +13,7 @@ import { DataContext } from '../data/DataContext';
 
 
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Alert } from 'react-native';
 
 
 const Tab = createBottomTabNavigator();
@@ -54,8 +55,9 @@ export default MainNavigator = () => {
                             }
                             // if unsaved changes, prevent default action
                             if (!data.isSaved && data.hasChanged) {
-                                console.log('prevent Navigation, due to unsaved data');
                                 e.preventDefault();
+                                console.log('prevent Navigation, due to unsaved data');
+                                Alert.alert('Unsaved Changes', 'You have unsaved changes. Please save or discard them before navigating away from this screen.');
                             }
                         }})}
                 />
@@ -82,8 +84,9 @@ export default MainNavigator = () => {
                             }
                             // if unsaved changes, prevent default action
                             if (!data.isSaved && data.hasChanged) {
-                                console.log('prevent Navigation, due to unsaved data');
                                 e.preventDefault();
+                                console.log('prevent Navigation, due to unsaved data');
+                                Alert.alert('Unsaved Changes', 'You have unsaved changes. Please save or discard them before navigating away from this screen.');
                             }
                         }})}
                 />
@@ -108,8 +111,9 @@ export default MainNavigator = () => {
                             }
                             // if unsaved changes, prevent default action
                             if (!data.isSaved && data.hasChanged) {
-                                console.log('prevent Navigation, due to unsaved data');
                                 e.preventDefault();
+                                console.log('prevent Navigation, due to unsaved data');
+                                Alert.alert('Unsaved Changes', 'You have unsaved changes. Please save or discard them before navigating away from this screen.');
                             }
                         }})}
                     
