@@ -1,7 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef } from "react";
 import { StyleSheet, View, StatusBar } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { CalendarProvider, ExpandableCalendar, TimelineEventProps, TimelineList } from "react-native-calendars";
+
 import { Colors } from "../../styles/Colors";
 import { DataContext } from "../../data/DataContext";
 import { tasksToEvents } from "../../functions";
@@ -9,24 +10,15 @@ import { colorHandler } from "../../functions";
 import moment from "moment";
 
 
+import {timelineEvents, getDate} from '../../functions';
+import { getTheme } from "../../styles/CalendarTheme";
 
-const dummyEvents = {
-  events: {
-    '2023-06-01': [
-      {
-        start: '2023-06-01 09:20:00',
-        end: '2023-06-01 12:00:00',
-        title: 'Merge Request to React Native Calendars',
-        summary: 'Merge Timeline Calendar to React Native Calendars',
-      },
-    ],
-  },
-};
 
 export default CalendarScreen = () => {
   
   const [data] = useContext(DataContext);
 
+  // === Task to Event ===
   const tasksToEvents = (tasks) =>{
 
     const formatDate = (date) =>{
@@ -78,9 +70,35 @@ export default CalendarScreen = () => {
     }
   });
   return eventList;
-};
+  };
+  // === End Task to Event ===
+
   // create events from taskData
   const events = tasksToEvents(data.taskData);
+  const theme = useRef(getTheme());
+
+  // create state for timeline
+  const timelineState = {
+    currentDate: getDate(),
+    events: events.events,
+    markedDates: {},
+  };
+
+  // create marked dates for expandable Calender
+  Object.keys(events.events).forEach((key) => {
+    timelineState.markedDates[key] = { marked: true };
+  });
+
+  // == Event Handlers ==
+  const onEventPressHandler = (event) => {
+    console.log('Event selected: (ID:', event.id, ') ', event.title, event.start, event.end);
+  };
+
+  const onBackgroundLongPressHandler = (event) => {
+    console.log('background event: ', event);
+  };
+  // == End Event Handlers ==
+
 
   function FocusAwareStatusBar(props) {
     const isFocused = useIsFocused();
@@ -91,17 +109,25 @@ export default CalendarScreen = () => {
     <View style={styles.mainContainer}>
       <FocusAwareStatusBar barStyle="light-content" backgroundColor={Colors.backgroundHeader} />
       <CalendarProvider
-        date='2023-06-05'
+        date={timelineState.currentDate}
         showTodayButton
       >
         <ExpandableCalendar
-          style={styles.calendar} />
+          style={styles.calendar}
+          markedDates={timelineState.markedDates}
+          closeOnDayPress={true}
+          
+          theme={theme.current}
+           />
         <TimelineList
-          events={events.events}
-
+          events={timelineState.events}
           showNowIndicator
+          scrollToNow
           timelineProps={{
             format24h: true,
+            onBackgroundLongPress: onBackgroundLongPressHandler,
+            //onBackgroundLongPressOut: () => console.log('Timeline BackgroundLongPressOut'),
+            onEventPress: onEventPressHandler,
             unavailableHours: [
               { start: 0, end: 6 },
               { start: 22, end: 24 },
@@ -123,13 +149,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   calendarTheme: {
-    backgroundColor: 'gray',
-    calendarBackground: 'gray',
+    backgroundColor: 'red',
+    calendarBackground: 'green',
     textSectionTitleColor: '#b6c1cd',
-    selectedDayBackgroundColor: '#00adf5',
+    selectedDayBackgroundColor: '#cc00f5',
     selectedDayTextColor: '#ffffff',
-    todayTextColor: '#00adf5',
-    dayTextColor: '#2d4150',
+    todayTextColor: '#d62020',
+    dayTextColor: '#07f342',
     textDisabledColor: '#d9e1e8',
     dotColor: '#00adf5',
     selectedDotColor: '#ffffff',
