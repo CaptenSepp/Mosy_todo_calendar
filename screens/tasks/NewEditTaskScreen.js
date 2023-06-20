@@ -54,6 +54,8 @@ const NewEditTaskScreen = ({route,navigation}) => {
     // get existing data you want to edit for EditScreen
     const currentData = data.taskData.find(task => task.id === taskId);
     const [editedData, setEditedData] = useState(currentData);
+
+    // === NAVIGATION ===
     // prevent going back if there are unsaved changes
     const [isSaved, setIsSaved] = useState(false);
     const [hasChanged, setHasChanged] = useState(false);
@@ -83,19 +85,20 @@ const NewEditTaskScreen = ({route,navigation}) => {
     // prevent going back if there are unsaved changes
     useEffect(() => {
         const beforeRemoveListener = navigation.addListener('beforeRemove', (e) => {   // event listener, before leaving the screen
-        if (!isSaved && hasChanged) {
-            e.preventDefault();   // Prevent the default behavior of the back button
-            Alert.alert( 'Unsaved Changes', 'Are you sure you want to leave without saving?',
-              [{ text: 'Cancel', onPress: () => setData(data => ({...data, isSaved: isSaved})), style: 'cancel' },   // stay on screen
-                { text: 'Leave', onPress: () => {
-                    navigation.dispatch(e.data.action);   // go back
-                    setData(data => ({...data, isSaved: true}));   // reset to enable tab navigation
-                }, },],
-              { cancelable: false }
-            );}
-        });
+            if (!isSaved && hasChanged) {
+                e.preventDefault();   // Prevent the default behavior of the back button
+                Alert.alert( 'Unsaved Changes', 'Are you sure you want to leave without saving?',
+                [{ text: 'Cancel', onPress: () => setData(data => ({...data, isSaved: isSaved})), style: 'cancel' },   // stay on screen
+                    { text: 'Leave', onPress: () => {
+                        navigation.dispatch(e.data.action);   // go back
+                        setData(data => ({...data, isSaved: true}));   // reset to enable tab navigation
+                    }, },],
+                { cancelable: false }
+                );}
+            });
         return () => beforeRemoveListener(); // Cleanup the event listener on unmount
-      }, [isSaved, navigation]);
+    }, [isSaved, hasChanged, navigation]);
+    // === END NAVIGATION ===
 
 
     const [showDatePicker, setShowDatePicker] = useState(false);
