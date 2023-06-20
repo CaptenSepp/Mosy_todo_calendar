@@ -13,16 +13,16 @@ import { DataContext } from '../data/DataContext';
 
 
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Alert,  Platform  } from 'react-native';
+import { Alert, Platform } from 'react-native';
 
 
 const Tab = createBottomTabNavigator();
 
-const iconSize = Platform.OS === 'android'? 26:24;
+const iconSize = Platform.OS === 'android' ? 26 : 24;
 
 export default MainNavigator = () => {
 
-    const [data,setData] = useContext(DataContext);
+    const [data, setData] = useContext(DataContext);
 
     return (
         <NavigationContainer>
@@ -31,8 +31,8 @@ export default MainNavigator = () => {
                     headerShown: true,
                     tabBarActiveTintColor: Colors.tabbarActive,
                     tabBarInactiveTintColor: Colors.tabbarInactive,
-                    tabBarStyle: { height: Platform.OS === 'android'? 65: 80, backgroundColor: Colors.backgroundTabbar },
-                    tabBarLabelStyle: { fontSize: 12, marginBottom: Platform.OS === 'android'?10: 0, fontWeight: 'bold' },
+                    tabBarStyle: { height: Platform.OS === 'android' ? 65 : 80, backgroundColor: Colors.backgroundTabbar },
+                    tabBarLabelStyle: { fontSize: 12, marginBottom: Platform.OS === 'android' ? 10 : 0, fontWeight: 'bold' },
                     tabBarIconStyle: { marginTop: 5 },
                 })}>
                 {/* Task Screen */}
@@ -59,7 +59,8 @@ export default MainNavigator = () => {
                                 console.log('prevent Navigation, due to unsaved data');
                                 Alert.alert('Unsaved Changes', 'You have unsaved changes. Please save or discard them before navigating away from this screen.');
                             }
-                        }})}
+                        }
+                    })}
                 />
                 {/*<Tab.Screen name="NewTask" component={NewEditTaskScreen} /*/}
 
@@ -88,7 +89,8 @@ export default MainNavigator = () => {
                                 console.log('prevent Navigation, due to unsaved data');
                                 Alert.alert('Unsaved Changes', 'You have unsaved changes. Please save or discard them before navigating away from this screen.');
                             }
-                        }})}
+                        }
+                    })}
                 />
 
                 {/* Project Screen */}
@@ -101,7 +103,7 @@ export default MainNavigator = () => {
                         tabBarIcon: ({ color, size }) => (
                             <MaterialCommunityIcons style={{ alignSelf: 'center', paddingBottom: 0 }} name={'bookshelf'} size={iconSize + 8} color={color} />
                         ),
-                    }} 
+                    }}
                     listeners={({ navigation, route }) => ({
                         tabPress: e => {
                             // if no changes, just navigate
@@ -115,8 +117,9 @@ export default MainNavigator = () => {
                                 console.log('prevent Navigation, due to unsaved data');
                                 Alert.alert('Unsaved Changes', 'You have unsaved changes. Please save or discard them before navigating away from this screen.');
                             }
-                        }})}
-                    
+                        }
+                    })}
+
 
                 />
 

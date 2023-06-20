@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import MainNavigator from "./navigation/MainNavigator";
 
 import { DataContext } from "./data/DataContext";
-import {projectData, PROJECTIDCOUNTER} from "./data/ProjectData";
-import {taskData,TASKIDCOUNTER } from "./data/TaskData";
+import { projectData, PROJECTIDCOUNTER } from "./data/ProjectData";
+import { taskData, TASKIDCOUNTER } from "./data/TaskData";
 
 
 const Empty = () => {
@@ -16,8 +16,8 @@ const Empty = () => {
 export default function App() {
   // set initial data for Context use
   const [data, setData] = useState({
-    projectData: projectData, 
-    taskData: taskData, 
+    projectData: projectData,
+    taskData: taskData,
     taskIdCounter: TASKIDCOUNTER,
     projectIdCounter: PROJECTIDCOUNTER,
     isSaved: true,
@@ -25,7 +25,7 @@ export default function App() {
   });
 
   return (
-    <DataContext.Provider value = {[data,setData]}>
+    <DataContext.Provider value={[data, setData]}>
       <MainNavigator />
     </DataContext.Provider>
   );
