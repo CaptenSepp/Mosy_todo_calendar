@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard, StatusBar, Alert } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -85,15 +85,18 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
     // prevent going back if there are unsaved changes
     const [isSaved, setIsSaved] = useState(false);
     const [hasChanged, setHasChanged] = useState(false);
+    const isFirstRun = useRef(true);
 
     // check if data has changed
     useEffect(() => {
-        if (editedData !== currentData && !hasChanged) {
+        if (isFirstRun.current){
+            isFirstRun.current = false;
+        } else if (!isEdit || (editedData !== currentData && !hasChanged)) {
             setHasChanged(true);   // update hasChanged in local state to prevent going back
             setData(data => ({...data, hasChanged: true}));   // update hasChanged in Context (global state) to prevent tab navigation
         }
     }
-    , [editedData]);
+    , [editedData, title, description, selectedColor]);
 
     // update global state when data has changed
     useEffect(() => {
