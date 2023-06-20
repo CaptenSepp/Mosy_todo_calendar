@@ -37,7 +37,7 @@ export default MainNavigator = () => {
                 })}>
                 {/* Task Screen */}
                 <Tab.Screen
-                    name="TaskScreen"
+                    name="TaskTab"
                     component={TaskNavigator}
                     options={{
                         tabBarLabel: 'Tasks',
@@ -50,8 +50,8 @@ export default MainNavigator = () => {
                         tabPress: e => {
                             // if no changes, just navigate
                             if (!data.hasChanged) {
-                                navigation.navigate('ProjectList');
-                                navigation.navigate('TaskList');
+                                navigation.navigate('ProjectTab', { screen: 'ProjectList' })
+                                navigation.navigate('TaskTab', { screen: 'TaskList' })
                             }
                             // if unsaved changes, prevent default action
                             if (!data.isSaved && data.hasChanged) {
@@ -65,7 +65,7 @@ export default MainNavigator = () => {
 
                 {/* Calendar Screen */}
                 <Tab.Screen
-                    name="Calendar"
+                    name="CalendarTab"
                     component={CalendarNavigator}
                     options={{
                         tabBarLabel: 'Calendar',
@@ -78,9 +78,9 @@ export default MainNavigator = () => {
                         tabPress: e => {
                             // if no changes, just navigate
                             if (!data.hasChanged) {
-                                navigation.navigate('ProjectList');
-                                navigation.navigate('TaskList');
-                                navigation.navigate('CalendarScreen');
+                                navigation.navigate('TaskTab', { screen: 'TaskList' })
+                                navigation.navigate('ProjectTab', { screen: 'ProjectList' })
+                                navigation.navigate('CalendarTab', { screen: 'CalendarScreen' })
                             }
                             // if unsaved changes, prevent default action
                             if (!data.isSaved && data.hasChanged) {
@@ -106,8 +106,8 @@ export default MainNavigator = () => {
                         tabPress: e => {
                             // if no changes, just navigate
                             if (!data.hasChanged) {
-                                navigation.navigate('TaskList');
-                                navigation.navigate('ProjectList');
+                                navigation.navigate('TaskTab', { screen: 'TaskList' })
+                                navigation.navigate('ProjectTab', { screen: 'ProjectList' })
                             }
                             // if unsaved changes, prevent default action
                             if (!data.isSaved && data.hasChanged) {
