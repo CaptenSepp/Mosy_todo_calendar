@@ -30,7 +30,7 @@ const FoldOutComponent = props => {
       setExpanded(true);
       Animated.parallel([
         Animated.timing(animatedHeight, {
-          toValue: 150, // Adjust the expanded height as needed
+          toValue: 155, // Adjust the expanded height as needed
           duration: 200,
           useNativeDriver: false,
         }),
@@ -121,12 +121,14 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontSize: 18,
     fontWeight: 'bold',
+    color: Colors.textdarker,
 
   },
   innerHeaderText: {
     fontSize: 15,
     fontWeight: 'bold',
     paddingVertical: 3,
+    color: Colors.textdarker,
 
   },
   innerNormalText: {
@@ -143,6 +145,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontWeight: 'bold',
-    fontSize: 15
+    fontSize: 15,
+    color: Colors.textdarker,
   }
 });

@@ -14,11 +14,16 @@ const Empty = () => {
 };
 
 export default function App() {
+  // set initial data for Context use
   const [data, setData] = useState({
     projectData: projectData, 
     taskData: taskData, 
     taskIdCounter: TASKIDCOUNTER,
-    projectIdCounter: PROJECTIDCOUNTER});
+    projectIdCounter: PROJECTIDCOUNTER,
+    isSaved: true,
+    hasChanged: false,
+  });
+
   return (
     <DataContext.Provider value = {[data,setData]}>
       <MainNavigator />

@@ -15,26 +15,33 @@ export default ProjectScreen = ({ navigation }) => {
     const isFocused = useIsFocused();
     return isFocused ? <StatusBar {...props} /> : null;
   }
-  
+
   const [data,setData] = useContext(DataContext);
   
-  const deleteHandler = (title, id ) => {
-    console.log("Delete: " + title + ' (ID: ' + id + ')');
-    alert("Delete: " + title + ' (ID: ' + id + ')');
+  const deleteHandler = (id) => {
+    // delete project
+    const updatedProjects = data.projectData.filter(project => project.projectId != id);
+    // delete all tasks of selected project
+    const updatedTasks = data.taskData.filter(task => task.projectId != id);
+    
+    setData(data => ({
+      projectData: updatedProjects, 
+      taskData:updatedTasks,
+      taskIdCounter: data.taskIdCounter,
+      projectIdCounter: data.projectIdCounter}));
   };
+  
 
-  const editHandler = (title, projectId ) => {
-    console.log("Edit: " + title + ' (ID: ' + projectId + ')' );
-    navigation.navigate('EditProject', {id: projectId});
+  const editHandler = ( projectId ) => {
+    navigation.navigate('EditProject', {isEdit: true,projectId: projectId});
   };
 
   const addHandler = () => {
-    console.log("Add Project");
-    navigation.navigate('AddProject');
+    navigation.navigate('AddProject', {isEdit: false});
     
   };
 
-
+  // add plus button to the end  
   modifiedProjectData = addLastElement(data.projectData); 
 
   const renderProjectItem = ({ item }) => {
@@ -47,8 +54,8 @@ export default ProjectScreen = ({ navigation }) => {
           title={item.name}
           color={item.color}
           description={item.description} 
-          onDelete={() => deleteHandler(item.name, item.projectId)}
-          onEdit={() => editHandler( item.name, item.projectId)}
+          onDelete={() => deleteHandler(item.projectId)}
+          onEdit={() => editHandler(item.projectId)}
         />)
       ;}
   };
@@ -72,10 +79,8 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 8,
     paddingVertical: 3,
-
     alignItems: 'center',
     backgroundColor: Colors.backgroundBody,
-
   },
   list: {
     width: '90%',

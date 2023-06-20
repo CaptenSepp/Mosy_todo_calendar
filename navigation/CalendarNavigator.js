@@ -7,10 +7,10 @@ import { DefaultStyles } from "../styles/DefaultStyles";
 
 const CalendarStack = createStackNavigator();
 
-export default TaskNavigator = () => {
+export default CalendarNavigator = () => {
     return (
         <CalendarStack.Navigator
-            initialRouteName="Task"
+            initialRouteName="CalendarScreen"
             screenOptions={{
                 headerShown: true,
                 headerStyle: DefaultStyles.header,
@@ -23,7 +23,7 @@ export default TaskNavigator = () => {
                 },
             }}>
 
-            <CalendarStack.Screen name="Calendar" component={CalendarScreen}
+            <CalendarStack.Screen name="CalendarScreen" component={CalendarScreen}
                 options={{
                     headerShown: true,
                     headerTitle: "Calendar",

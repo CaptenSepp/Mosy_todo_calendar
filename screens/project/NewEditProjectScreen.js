@@ -1,9 +1,11 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard, StatusBar } from 'react-native';
+import React, { useContext, useState, useEffect, useRef } from "react";
+import { StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard, StatusBar, Alert } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
 import {projectData} from "../../data/ProjectData";
 import { Colors } from "../../styles/Colors";
+import { Project } from "../../data/Classes";
+import { DataContext } from "../../data/DataContext";
 
 
 const InputBox = props =>{
@@ -22,7 +24,7 @@ const InputBox = props =>{
 };
 
 const ColorPicker = props => {
-    
+    //get all projectColors from Colors.js  
     const filteredColors = Object.entries(Colors).reduce((acc, [colorName, color]) => {
         if (color.hasOwnProperty('primary') && color.hasOwnProperty('secondary') && color.hasOwnProperty('light')) {
           acc.push({
@@ -32,7 +34,7 @@ const ColorPicker = props => {
         }
         return acc;
       }, []);
-      
+    // split array in two to display it in two rows  
     const firstRow = filteredColors.slice(0,filteredColors.length/2);
     const secondRow = filteredColors.slice(filteredColors.length/2);
     
@@ -40,7 +42,8 @@ const ColorPicker = props => {
         <View style={styles.thirdContainer}>
             <Text style ={styles.headerText}>Pick Color</Text>
             <View style = {{flexDirection: 'row',justifyContent: 'flex-start'}}>
-            {firstRow.map((color, index) => (
+            {//display static list of colors (circle Color if it is selected)
+            firstRow.map((color, index) => (
                 <TouchableOpacity key={index} onPress = {() =>props.onPress(color.name)}>
                 <View  style= {[styles.colorCircle,{backgroundColor: color.primary,borderWidth: props.selectedColor === color.name ? 4 : 0}]}/>  
                 </TouchableOpacity> 
@@ -60,56 +63,138 @@ const ColorPicker = props => {
 
 
 export default NewEditProjectScreen =  ({ route, navigation }) => {
+
+    const [data,setData] = useContext(DataContext);
+    const {isEdit} = route.params;
+    const {projectId} = route.params;
+
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [selectedColor,setSelectedColor] = useState('blue');
+
+    // get data to edit
+    const currentData = data.projectData.find(project => project.projectId === projectId);
+    const [editedData, setEditedData] = useState(currentData);
     
     function FocusAwareStatusBar(props) {
         const isFocused = useIsFocused();
         return isFocused ? <StatusBar {...props} /> : null;
     }
 
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [selectedColor,setSelectedColor] = useState('blue');
-    
- 
-    // if params are passed, it is an edit, otherwise it is a new project
-    if (route.params != null) {
-        const { id } = route.params;
-        const isEdit = id != null;
-        console.log("isEdit: " + isEdit);
-        
-        const project = projectData.find((project) => project.projectId === id);
-        console.log("project: " + project.name, project.description);
+    // === NAVIGATION ===
+    // prevent going back if there are unsaved changes
+    const [isSaved, setIsSaved] = useState(false);
+    const [hasChanged, setHasChanged] = useState(false);
+    const isFirstRun = useRef(true);
 
-        //setTitle(project.name);
-    } else {
-        console.log("isEdit: false");
+    // check if data has changed
+    useEffect(() => {
+        if (isFirstRun.current){
+            isFirstRun.current = false;
+        } else if (!isEdit || (editedData !== currentData && !hasChanged)) {
+            setHasChanged(true);   // update hasChanged in local state to prevent going back
+            setData(data => ({...data, hasChanged: true}));   // update hasChanged in Context (global state) to prevent tab navigation
+        }
     }
+    , [editedData, title, description, selectedColor]);
+
+    // update global state when data has changed
+    useEffect(() => {
+        setData(data => ({...data, hasChanged: hasChanged}));   // update hasChanged in Context (global state) to prevent tab navigation
+    }, [hasChanged]);
+
+    // check if data is saved
+    useEffect(() => {
+        setData(data => ({...data, isSaved: isSaved}));   // update isSaved in Context (global state) to prevent tab navigation
+        if(isSaved){
+            navigation.goBack();   // when data is saved, go back
+        }
+    }, [isSaved]);
+
+    // prevent going back if there are unsaved changes
+    useEffect(() => {
+        const beforeRemoveListener = navigation.addListener('beforeRemove', (e) => {   // event listener, before leaving the screen
+        if (!isSaved && hasChanged) {
+            e.preventDefault();   // Prevent the default behavior of the back button
+            Alert.alert( 'Unsaved Changes', 'Are you sure you want to leave without saving?',
+              [{ text: 'Cancel', onPress: () => setData(data => ({...data, isSaved: isSaved})), style: 'cancel' },   // stay on screen
+                { text: 'Leave', onPress: () => {
+                    navigation.dispatch(e.data.action);   // go back
+                    setData(data => ({...data, isSaved: true}));   // reset to enable tab navigation
+                }, },],
+              { cancelable: false }
+            );}
+        });
+        return () => beforeRemoveListener(); // Cleanup the event listener on unmount
+      }, [isSaved, hasChanged, navigation]);
+    // === END NAVIGATION ===
+
+
+    const addHandler = (title, description, color) =>{
+        // check if Edit or NewScreen
+        if(!isEdit ){
+            let newIdCounter = data.projectIdCounter + 1;
+            let newProjects = data.projectData;
+            // put new data at the end of array
+            newProjects.push(new Project('c'+ newIdCounter, title, description,color));
+            // save the data in Context
+            setData(data => ({
+                projectData: newProjects, 
+                taskData: data.taskData, 
+                taskIdCounter: data.taskIdCounter,
+                projectIdCounter: newIdCounter}));
+
+            setIsSaved(true);   // navigation.goBack() in useEffect, because of async handling
+            setData(data => ({...data, isSaved: true}));   // update isSaved in Context (global state) to prevent tab navigation
+
+        }else{
+            const updatedProjects = data.projectData; 
+            // find index of data you want to edit
+            const projectIndex = data.projectData.findIndex(project => project.projectId === projectId);
+            // overwrite Task with new data
+            if (projectIndex !== -1) {
+                updatedProjects[projectIndex] = new Project(projectId, editedData.name, editedData.description, editedData.color);
+              }
+              // save data in Context
+            setData(data => ({
+                projectData: updatedProjects, 
+                taskData: data.taskData,
+                taskIdCounter: data.taskIdCounter,
+                projectIdCounter: data.projectIdCounter}));
+            
+            setIsSaved(true);   // navigation.goBack() in useEffect, because of async handling
+            setData(data => ({...data, isSaved: true}));   // update isSaved in Context (global state) to prevent tab navigation
+        }
+
+    };
+    
+    
 
     return (
         <TouchableWithoutFeedback onPress ={() => Keyboard.dismiss()}>
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle="light-content" backgroundColor = { Colors.backgroundHeader } />
             <InputBox 
-                value = {title}
-                onChangeText = {setTitle}
+                value={isEdit? editedData.name: title}
+                onChangeText={isEdit? (text) => setEditedData({...editedData,name: text}): setTitle}
                 placeholder = 'Enter title...'
                 inputStyle = {styles.input}
                 />
             <InputBox
-                value = {description}
-                onChangeText = {setDescription}
+                value = {isEdit? editedData.description:description}
+                onChangeText = {isEdit?(text) => setEditedData({...editedData,description: text}): setDescription}
                 placeholder = 'Enter Description...'
                 inputStyle = {[styles.input,{minHeight: 150, paddingTop:10}]}
                 editable
                 multiline
                 />
             <ColorPicker 
-                selectedColor = {selectedColor}
-                onPress = {setSelectedColor}
+                selectedColor = {isEdit? editedData.color: selectedColor}
+                onPress = {isEdit?(text) => setEditedData({...editedData,color: text}): setSelectedColor}
                 />
             <View style = {styles.bottomContainer}>
-            <TouchableOpacity style={styles.addButton}>
-                <Text style = {styles.addText}> Add</Text>
+            <TouchableOpacity style={styles.addButton} onPress = {() => addHandler(title,description,selectedColor)}>
+                <Text style = {styles.addText} > {isEdit? "Save" : "Add"}</Text>
             </TouchableOpacity>
             </View>
         </View>
@@ -133,6 +218,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 10,
         fontSize: 16,
+        
+        textAlignVertical: 'top'
     
     },
     input2: { 

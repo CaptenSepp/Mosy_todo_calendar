@@ -11,7 +11,7 @@ const ProjectStack = createStackNavigator();
 export default ProjectNavigator = () => {
     return (
         <ProjectStack.Navigator
-            initialRouteName="Project"
+            initialRouteName="ProjectList"
             screenOptions={{
                 headerShown: true,
                 headerStyle:  DefaultStyles.header ,

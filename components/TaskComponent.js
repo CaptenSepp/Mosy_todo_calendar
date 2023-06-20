@@ -30,7 +30,7 @@ const FoldOutComponent = props => {
       setExpanded(true);
       Animated.parallel([
         Animated.timing(animatedHeight, {
-          toValue: 265, // Adjust the expanded height as needed
+          toValue: 275, // Adjust the expanded height as needed
           duration: 200,
           useNativeDriver: false,
         }),
@@ -49,7 +49,7 @@ const FoldOutComponent = props => {
         <View style={styles.topContainer}>
 
           <Text style={[styles.headerText, props.isFinished ? { textDecorationLine: 'line-through' } : null]}>{props.title}</Text>
-          <TouchableOpacity style={{ justifyContent: 'center' }}>
+          <TouchableOpacity style={{ justifyContent: 'center' }} onPress={() => props.checkHandler(props.id)}>
             {props.isFinished === false ? <Ionicons style={{ alignSelf: 'center' }} name={'ellipse-outline'} size={32} color={'black'} /> : <Ionicons style={{ alignSelf: 'center' }} name={'checkmark-circle-outline'} size={32} color={'black'} />}
           </TouchableOpacity>
         </View>
@@ -105,6 +105,8 @@ export default TaskComponent = props => {
       title={props.title}
       isFinished={props.isFinished}
       colors = {props.colors}
+      id = {props.id}
+      checkHandler = {props.checkHandler}
       foldedOutContent={<InnerContainer
         id = {props.id}
         content={'Content'}
@@ -147,18 +149,20 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontSize: 18,
     fontWeight: 'bold',
+    color: Colors.textdarker
 
   },
   innerHeaderText: {
     fontSize: 15,
     fontWeight: 'bold',
     paddingVertical: 3,
+    color: Colors.textdark
 
   },
   innerNormalText: {
     fontSize: 15,
     paddingVertical: 3,
-    color: 'gray'
+    color: Colors.textdark
   },
   bottomButtonContainer: {
     flexDirection: 'row',
@@ -169,6 +173,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontWeight: 'bold',
-    fontSize: 15
+    fontSize: 15,
+    color: Colors.textdarker,
   }
 });

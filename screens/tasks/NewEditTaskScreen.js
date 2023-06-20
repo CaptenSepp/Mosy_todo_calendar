@@ -1,10 +1,13 @@
-import React, { useContext, useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard, StatusBar } from 'react-native';
+import React, { useContext, useState, useEffect, useRef } from "react";
+import {Button, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard, StatusBar, Alert } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { Colors } from "../../styles/Colors";
 import {Task}  from "../../data/Classes";
 import { DataContext } from "../../data/DataContext";
+
+import moment from "moment";
 
 const InputBox = props =>{
     return(
@@ -21,77 +24,180 @@ const InputBox = props =>{
     );
 }
 
-const Picker = props =>{
-    return(
-        <View style = {styles.pickerContainer}>
-            <TextInput
-                style={props.style} 
-                placeholder = {props.placeholder}
-                value={props.value}
-                onChangeText={props.onChangeText}
-            />
-        </View>
-    );
-}
-
-
 const NewEditTaskScreen = ({route,navigation}) => {
 
     function FocusAwareStatusBar(props) {
         const isFocused = useIsFocused();
         return isFocused ? <StatusBar {...props} /> : null;
-      }
+    }
 
+    // data from Taskscreen 
     const {isEdit} = route.params;
     const {taskId} = route.params;
     const {projectId} = route.params;
+    // Context data
     const [data,setData] = useContext(DataContext);
+
+    // set currentDate to today
+    let currentDate = new Date();
+    useEffect(() => {
+        currentDate = new Date(Date.now);
+        
+      }, []);
+    // 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [date, setDate] = useState('');
-    const [startTime, setStartTime] = useState('');
-    const [stopTime, setStopTime] = useState('');
+    const [date, setDate] = useState(new Date(currentDate));
+    const [startTime, setStartTime] = useState(new Date());
+    const [stopTime, setStopTime] = useState(new Date());
     
+    // get existing data you want to edit for EditScreen
     const currentData = data.taskData.find(task => task.id === taskId);
-
     const [editedData, setEditedData] = useState(currentData);
 
+    // === NAVIGATION ===
+    // prevent going back if there are unsaved changes
+    const [isSaved, setIsSaved] = useState(false);
+    const [hasChanged, setHasChanged] = useState(false);
+    const isFirstRun = useRef(true);
+
+    // check if data has changed
+    useEffect(() => {
+        if (isFirstRun.current){
+            isFirstRun.current = false;
+        } else if (!isEdit || (editedData !== currentData && !hasChanged)) {
+            setHasChanged(true);   // update hasChanged in local state to prevent going back
+            setData(data => ({...data, hasChanged: true}));   // update hasChanged in Context (global state) to prevent tab navigation
+        }
+    }
+    , [editedData, title, description, date, startTime, stopTime]);
+
+    // update global state when data has changed
+    useEffect(() => {
+        setData(data => ({...data, hasChanged: hasChanged}));   // update hasChanged in Context (global state) to prevent tab navigation
+    }, [hasChanged]);
+
+    // check if data is saved
+    useEffect(() => {
+        setData(data => ({...data, isSaved: isSaved}));   // update isSaved in Context (global state) to prevent tab navigation
+        if(isSaved){
+            navigation.goBack();   // when data is saved, go back
+        }
+    }, [isSaved]);
+
+    // prevent going back if there are unsaved changes
+    useEffect(() => {
+        const beforeRemoveListener = navigation.addListener('beforeRemove', (e) => {   // event listener, before leaving the screen
+            if (!isSaved && hasChanged) {
+                e.preventDefault();   // Prevent the default behavior of the back button
+                Alert.alert( 'Unsaved Changes', 'Are you sure you want to leave without saving?',
+                [{ text: 'Cancel', onPress: () => setData(data => ({...data, isSaved: isSaved})), style: 'cancel' },   // stay on screen
+                    { text: 'Leave', onPress: () => {
+                        navigation.dispatch(e.data.action);   // go back
+                        setData(data => ({...data, isSaved: true}));   // reset to enable tab navigation
+                    }, },],
+                { cancelable: false }
+                );}
+            });
+        return () => beforeRemoveListener(); // Cleanup the event listener on unmount
+    }, [isSaved, hasChanged, navigation]);
+    // === END NAVIGATION ===
+
+
+    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [showStartTimePicker, setShowStartTimePicker] = useState(false);
+    const [showStopTimePicker, setShowStopTimePicker] = useState(false);
+
+    // set new Date
+    const dateChangeHandler = (event, selectedDate)=>{
+        setShowDatePicker(false);
+        if (isEdit) {
+            setEditedData({...editedData,date:selectedDate});
+        } else {
+            const newDate = selectedDate || date;
+            setDate(selectedDate);
+        }
+    };
+    // set new Starttime
+    const startTimeChangeHandler = (event, selectedTime)=>{
+        setShowStartTimePicker(false);
+        if (isEdit) {
+            setEditedData({...editedData,starttime:selectedTime});
+        } else {
+            const newTime = selectedTime || startTime;
+            setStartTime(newTime);
+        }
+    };
+    // set new Stoptime
+    const stopTimeChangeHandler = (event, selectedTime)=>{
+        setShowStopTimePicker(false);
+        if (isEdit) {
+            setEditedData({...editedData,endtime:selectedTime});
+        } else {
+            const newTime = selectedTime || stopTime;
+            setStopTime(newTime);
+        }
+    };
     const addHandler = (title,description,projectId,date,startTime,endTime) =>{
-        console.log(data.taskIdCounter);
+        // check for EditScreen or NewScreen
         if(!isEdit ){
             let newIdCounter = data.taskIdCounter + 1;
             let newTasks = data.taskData;
+            // put new data at the end of array
             newTasks.push(new Task(newIdCounter, title, projectId, description,date ,startTime,endTime,false));
+            // save the data in Context
             setData(data => ({
                 projectData: data.projectData, 
                 taskData: newTasks, 
                 taskIdCounter: newIdCounter,
                 projectIdCounter: data.projectIdCounter}));
-            navigation.goBack();
+            
+            setIsSaved(true);   // navigation.goBack() in useEffect, because of async handling
+            setData(data => ({...data, isSaved: true}));   // update isSaved in Context (global state) to prevent tab navigation
+    
         }else{
             const updatedTasks = data.taskData; 
+            // find index of data you want to edit
             const taskIndex = data.taskData.findIndex(task => task.id === taskId);
+            // overwrite Task with new data
             if (taskIndex !== -1) {
                 updatedTasks[taskIndex] = new Task(taskId, editedData.name, editedData.projectId, editedData.description, editedData.date, editedData.starttime, editedData.endtime, editedData.isFinished);
               }
+              // save data in Context
             setData(data => ({
                 projectData: data.projectData, 
                 taskData:updatedTasks,
                 taskIdCounter: data.taskIdCounter,
                 projectIdCounter: data.projectIdCounter}));
-            navigation.goBack();
+            
+            setIsSaved(true);   // navigation.goBack() in useEffect, because of async handling
+            setData(data => ({...data, isSaved: true}));   // update isSaved in Context (global state) to prevent tab navigation
         }
     };
 
+    const formatDate = (date) =>{
+        const day = date.getDate().toString().padStart(2, '0'); // Get day and pad with leading zero if necessary
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Get month (months are zero-based) and pad with leading zero if necessary
+        const year = date.getFullYear().toString(); // Get full year
+        const formattedDate = `${day}.${month}.${year}`;
+        //return moment(date).format('MMMM Do YYYY');
+        return formattedDate;
+      };
     
+    const formatTime= (time)=>{
+        return moment(time).format('HH:mm');
+    };
 
     return (
         <TouchableWithoutFeedback onPress ={() => Keyboard.dismiss()}>
         <View style={styles.container}>
             <FocusAwareStatusBar barStyle="light-content" backgroundColor = { Colors.backgroundHeader } />
             <InputBox 
-                value = {isEdit == true? editedData.name : title }
-                onChangeText = {isEdit == true?(text) => setEditedData({ ...editedData, name: text }): setTitle}
+                
+                value = {/* check if the screen isEdit: if yes fill in the existing data*/
+                        isEdit == true? editedData.name : title }
+                onChangeText = {/* check if the screen isEdit: if yes set editedData to existing Data*/
+                                isEdit == true?(text) => setEditedData({ ...editedData, name: text }): setTitle}
                 placeholder = 'Enter title...'
                 inputStyle = {styles.input}
                 />
@@ -105,31 +211,64 @@ const NewEditTaskScreen = ({route,navigation}) => {
                 />
             <View style={styles.thirdContainer}>
                 <View style={styles.columnContainer}>
+                    {/* Date */}
                     <View style={styles.rowContainer}>
                         <Text style={styles.labelText}>Date:</Text>
-                        <Picker style={[styles.input2,{minWidth: 80}]} 
-                            placeholder="01.01.2000"
-                            value={isEdit == true? editedData.date: date}
-                            onChangeText={isEdit == true? (text) => setEditedData({...editedData,date: text}): setDate}/>
-                        
+                        <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+                            <Text style={styles.input2}> {isEdit? formatDate(editedData.date): formatDate(date)}</Text>
+                        </TouchableOpacity>
+
+                        {showDatePicker && (
+                        <DateTimePicker
+                            value={isEdit? editedData.date: date}
+                            //onChange={isEdit? (event,newDate) => {setEditedData({...editedData,date:newDate})}:dateChangeHandler}
+                            onChange={dateChangeHandler}
+                            mode = {'date'}
+                            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                            is24Hour={true}
+                            />
+                        )}
+                       
                     </View>
+                    {/* Starttime */}
                     <View style={styles.rowContainer}>
                         <Text style={styles.labelText}>Start-Time:</Text>
-                        <Picker
-                            style={styles.input2}
-                            placeholder="00:00"
-                            value={isEdit == true? editedData.starttime: startTime}
-                            onChangeText={isEdit == true? (text) => setEditedData({...editedData,starttime: text}): setStartTime}
+                        <TouchableOpacity onPress={() => setShowStartTimePicker(true)}>
+                            <Text style={styles.input2} > {isEdit? formatTime(editedData.starttime): formatTime(startTime)}</Text>
+                        </TouchableOpacity>
+                        
+                        {showStartTimePicker && (
+                        <DateTimePicker
+                            value={isEdit? editedData.starttime: startTime}
+                            //onChange={isEdit? (event,newStartTime) => setEditedData({...editedData,starttime: newStartTime}):startTimeChangeHandler}
+                            onChange={startTimeChangeHandler}
+                            mode = {'time'}
+                            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                            is24Hour={true}
+                    
                             />
+                        )}
+                 
                     </View>
+                    {/* Stoptime */}
                     <View style={styles.rowContainer}>
                         <Text style={styles.labelText}>Stop-Time:</Text>
-                       <Picker 
-                            style={styles.input2}
-                            placeholder="00:00"
-                            value={isEdit == true? editedData.endtime: stopTime}
-                            onChangeText={isEdit == true? (text) => setEditedData({...editedData,endtime: text}): setStopTime}
+                        <TouchableOpacity onPress={() => setShowStopTimePicker(true)}>
+                            <Text style={styles.input2} > {isEdit? formatTime(editedData.endtime): formatTime(stopTime)}</Text>
+                        </TouchableOpacity>
+
+                        {showStopTimePicker && (
+                        <DateTimePicker
+                            value={isEdit? editedData.endtime: stopTime}
+                            //onChange={isEdit? (event,newEndTime) => setEditedData({...editedData,endtime: newEndTime}): stopTimeChangeHandler}
+                            onChange={stopTimeChangeHandler}
+                            mode = {'time'}
+                            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                            is24Hour={true}
+                            
                             />
+                        )}
+                       
                     </View>
                 </View>
             </View>
@@ -151,6 +290,8 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         marginBottom: 10,
+        alignItems: 'stretch'
+        
     },
     input: {
         backgroundColor: '#E9E9E9',
@@ -160,10 +301,17 @@ const styles = StyleSheet.create({
         padding: 10,
         fontSize: 16,
     
+        textAlignVertical: 'top'
+    
     },
     input2: { 
         fontSize: 16,
         minWidth: 43,
+        borderWidth: 1,
+        borderRadius: 10,
+        borderColor: "#ACACAC",
+        backgroundColor: '#b6b6b6',
+        padding: 5,
     },
     thirdContainer: {
         backgroundColor: '#E9E9E9',
