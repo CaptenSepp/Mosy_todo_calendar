@@ -66,7 +66,6 @@ const NewEditTaskScreen = ({route,navigation}) => {
         if (isFirstRun.current){
             isFirstRun.current = false;
         } else if (!isEdit || (editedData !== currentData && !hasChanged)) {
-            console.log('changed')
             setHasChanged(true);   // update hasChanged in local state to prevent going back
             setData(data => ({...data, hasChanged: true}));   // update hasChanged in Context (global state) to prevent tab navigation
         }
@@ -108,35 +107,36 @@ const NewEditTaskScreen = ({route,navigation}) => {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showStartTimePicker, setShowStartTimePicker] = useState(false);
     const [showStopTimePicker, setShowStopTimePicker] = useState(false);
+
     // set new Date
     const dateChangeHandler = (event, selectedDate)=>{
+        setShowDatePicker(false);
         if (isEdit) {
             setEditedData({...editedData,date:selectedDate});
         } else {
             const newDate = selectedDate || date;
             setDate(selectedDate);
         }
-        setShowDatePicker(false);
     };
     // set new Starttime
     const startTimeChangeHandler = (event, selectedTime)=>{
+        setShowStartTimePicker(false);
         if (isEdit) {
             setEditedData({...editedData,starttime:selectedTime});
         } else {
             const newTime = selectedTime || startTime;
             setStartTime(newTime);
         }
-        setShowStartTimePicker(false);
     };
     // set new Stoptime
     const stopTimeChangeHandler = (event, selectedTime)=>{
+        setShowStopTimePicker(false);
         if (isEdit) {
             setEditedData({...editedData,endtime:selectedTime});
         } else {
             const newTime = selectedTime || stopTime;
             setStopTime(newTime);
         }
-        setShowStopTimePicker(false);
     };
     const addHandler = (title,description,projectId,date,startTime,endTime) =>{
         // check for EditScreen or NewScreen
@@ -214,14 +214,17 @@ const NewEditTaskScreen = ({route,navigation}) => {
                     {/* Date */}
                     <View style={styles.rowContainer}>
                         <Text style={styles.labelText}>Date:</Text>
-                        <Text style={styles.input2} onPress={() => setShowDatePicker(true)}> {isEdit? formatDate(editedData.date): formatDate(date)}</Text>
-                        
+                        <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+                            <Text style={styles.input2}> {isEdit? formatDate(editedData.date): formatDate(date)}</Text>
+                        </TouchableOpacity>
+
                         {showDatePicker && (
                         <DateTimePicker
                             value={isEdit? editedData.date: date}
                             //onChange={isEdit? (event,newDate) => {setEditedData({...editedData,date:newDate})}:dateChangeHandler}
                             onChange={dateChangeHandler}
                             mode = {'date'}
+                            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                             is24Hour={true}
                             />
                         )}
@@ -230,14 +233,17 @@ const NewEditTaskScreen = ({route,navigation}) => {
                     {/* Starttime */}
                     <View style={styles.rowContainer}>
                         <Text style={styles.labelText}>Start-Time:</Text>
-                        <Text style={styles.input2} onPress={() => setShowStartTimePicker(true)}> {isEdit? formatTime(editedData.starttime): formatTime(startTime)}</Text>
-                       
+                        <TouchableOpacity onPress={() => setShowStartTimePicker(true)}>
+                            <Text style={styles.input2} > {isEdit? formatTime(editedData.starttime): formatTime(startTime)}</Text>
+                        </TouchableOpacity>
+                        
                         {showStartTimePicker && (
                         <DateTimePicker
                             value={isEdit? editedData.starttime: startTime}
                             //onChange={isEdit? (event,newStartTime) => setEditedData({...editedData,starttime: newStartTime}):startTimeChangeHandler}
                             onChange={startTimeChangeHandler}
                             mode = {'time'}
+                            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                             is24Hour={true}
                     
                             />
@@ -247,14 +253,17 @@ const NewEditTaskScreen = ({route,navigation}) => {
                     {/* Stoptime */}
                     <View style={styles.rowContainer}>
                         <Text style={styles.labelText}>Stop-Time:</Text>
-                        <Text style={styles.input2} onPress={() => setShowStopTimePicker(true)}> {isEdit? formatTime(editedData.endtime): formatTime(stopTime)}</Text>
-                        
+                        <TouchableOpacity onPress={() => setShowStopTimePicker(true)}>
+                            <Text style={styles.input2} > {isEdit? formatTime(editedData.endtime): formatTime(stopTime)}</Text>
+                        </TouchableOpacity>
+
                         {showStopTimePicker && (
                         <DateTimePicker
                             value={isEdit? editedData.endtime: stopTime}
                             //onChange={isEdit? (event,newEndTime) => setEditedData({...editedData,endtime: newEndTime}): stopTimeChangeHandler}
                             onChange={stopTimeChangeHandler}
                             mode = {'time'}
+                            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                             is24Hour={true}
                             
                             />
