@@ -220,7 +220,7 @@ const NewEditTaskScreen = ({route,navigation}) => {
                         </TouchableOpacity>
                         )}
 
-                        {showDatePicker || Platform.OS === 'ios' && (
+                        {(showDatePicker || Platform.OS === 'ios') && (
                         <DateTimePicker
                             value={isEdit? editedData.date: date}
                             //onChange={isEdit? (event,newDate) => {setEditedData({...editedData,date:newDate})}:dateChangeHandler}
@@ -241,7 +241,7 @@ const NewEditTaskScreen = ({route,navigation}) => {
                         </TouchableOpacity>
                         )}
                         
-                        {showStartTimePicker || Platform.OS === 'ios' && (
+                        {(showStartTimePicker || Platform.OS === 'ios') && (
                         <DateTimePicker
                             value={isEdit? editedData.starttime: startTime}
                             //onChange={isEdit? (event,newStartTime) => setEditedData({...editedData,starttime: newStartTime}):startTimeChangeHandler}
@@ -264,7 +264,7 @@ const NewEditTaskScreen = ({route,navigation}) => {
                             </TouchableOpacity>
                             )}
 
-                            {showStopTimePicker || Platform.OS === 'ios' && (
+                            {(showStopTimePicker || Platform.OS === 'ios') && (
                             <DateTimePicker
                                 value={isEdit? editedData.endtime: stopTime}
                                 //onChange={isEdit? (event,newEndTime) => setEditedData({...editedData,endtime: newEndTime}): stopTimeChangeHandler}
