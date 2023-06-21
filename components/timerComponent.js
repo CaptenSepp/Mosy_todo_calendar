@@ -47,51 +47,54 @@ const TimerComponent = () => {
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <View
-        style={{
-          flexDirection: 'row',
-          marginBottom: 20,
-          backgroundColor: 'lightsalmon',
-          paddingHorizontal: 10,
-          paddingVertical: 25,
-          borderRadius: 10,
-        }}>
-        {/* Button to set timer to 25 minutes */}
-        <TouchableOpacity
-          style={{
-            paddingHorizontal: 10,
-            paddingVertical: 5,
-            backgroundColor: 'orangered',
-            marginRight: 15,
-          }}
-          onPress={handleLeftButtonClick}>
-          <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18 }}>
-            Work 25:00
-          </Text>
+    <View style={styles.container}>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={handleLeftButtonClick}>
+          <Text style={styles.buttonText}>Work 25:00</Text>
         </TouchableOpacity>
-        {/* Timer display */}
         <TouchableOpacity onPress={handleTimerClick}>
-          <Text style={{ fontSize: 34, marginBottom: 20, fontWeight: 'bold' }}>
-            {formatTime(timerValue)}
-          </Text>
+          <Text style={styles.timerText}>{formatTime(timerValue)}</Text>
         </TouchableOpacity>
-        {/* Button to set timer to 5 minutes */}
-        <TouchableOpacity
-          style={{
-            paddingHorizontal: 10,
-            paddingVertical: 5,
-            backgroundColor: 'orangered',
-            marginLeft: 15,
-          }}
-          onPress={handleRightButtonClick}>
-          <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18 }}>
-            Break 05:00
-          </Text>
+        <TouchableOpacity style={styles.button} onPress={handleRightButtonClick}>
+          <Text style={styles.buttonText}>Break 05:00</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
+};
+
+const styles = {
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    marginBottom: 20,
+    backgroundColor: 'lightsalmon',
+    paddingHorizontal: 10,
+    paddingVertical: 25,
+    borderRadius: 15,
+  },
+  button: {
+    paddingHorizontal: 10,
+    paddingVertical: 15,
+    backgroundColor: 'orangered',
+    marginRight: 15,
+    marginLeft: 15,
+    borderRadius: 15,
+  },
+  buttonText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  timerText: {
+    fontSize: 34,
+    marginBottom: 20,
+    fontWeight: 'bold',
+  },
 };
 
 export default TimerComponent;
