@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { scheduleNotification, registerNotificationHandler, addNotificationListener } from './timerNotifier';
 
-const TimerComponent = () => {
+const TimerComponent = ({ color }) => {
   const [timerValue, setTimerValue] = useState(1500); // Initial timer value is set to 25 minutes
   const [isRunning, setIsRunning] = useState(false); // Indicates whether the timer is running or not
 
@@ -47,7 +47,7 @@ const TimerComponent = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: color }]}>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={handleLeftButtonClick}>
           <Text style={styles.buttonText}>Work 25:00</Text>
@@ -72,7 +72,7 @@ const styles = {
   buttonContainer: {
     flexDirection: 'row',
     marginBottom: 20,
-    backgroundColor: 'lightsalmon',
+    backgroundColor: 'grey',
     paddingHorizontal: 10,
     paddingVertical: 25,
     borderRadius: 15,
@@ -80,7 +80,7 @@ const styles = {
   button: {
     paddingHorizontal: 10,
     paddingVertical: 15,
-    backgroundColor: 'orangered',
+    backgroundColor: 'white',
     marginRight: 15,
     marginLeft: 15,
     borderRadius: 15,

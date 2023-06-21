@@ -112,6 +112,7 @@ export default CalendarScreen = () => {
   // create events from taskData
   const events = tasksToEvents(data.taskData);
   const theme = useRef(getTheme());
+  // const color = colorHandler(currentProject.color).secondary;
 
   // create state for timeline
   const timelineState = {
@@ -175,7 +176,8 @@ export default CalendarScreen = () => {
       </CalendarProvider>
       <Animated.View style={[{ height: animatedHeight, opacity: animatedOpacity }, styles.timerContainer]}>
         <View style={styles.timerWrapper}>
-          <Timer />
+          {/* <Timer /> */}
+          <Timer color={eventObject.color} />
         </View>
       </Animated.View>
     </View>
