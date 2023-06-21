@@ -19,14 +19,14 @@ const TimerComponent = () => {
       scheduleNotification('Timer Expired', 'The timer has reached 00:00');
       setIsRunning(false);
     }
-    
+
     return () => clearInterval(timerInterval);
   }, [isRunning, timerValue]);
 
   const handleTimerClick = () => {
     setIsRunning(!isRunning);
   };
-  
+
   const handleLeftButtonClick = () => {
     setTimerValue(1500); // 25 minutes in seconds
     setIsRunning(false);
