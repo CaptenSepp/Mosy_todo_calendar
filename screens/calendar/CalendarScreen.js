@@ -2,7 +2,7 @@ import React, { useContext, useState, useRef } from "react";
 import { StyleSheet, View, StatusBar, Text, Animated } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { CalendarProvider, ExpandableCalendar, TimelineEventProps, TimelineList } from "react-native-calendars";
-import  Timer  from "../../components/timerComponent";
+import Timer from "../../components/timerComponent";
 
 import { Colors } from "../../styles/Colors";
 import { DataContext } from "../../data/DataContext";
@@ -10,7 +10,7 @@ import { tasksToEvents } from "../../functions";
 import { colorHandler } from "../../functions";
 import moment from "moment";
 
-import {timelineEvents, getDate} from '../../functions';
+import { timelineEvents, getDate } from '../../functions';
 import { getTheme } from "../../styles/CalendarTheme";
 
 export default CalendarScreen = () => {
@@ -51,61 +51,61 @@ export default CalendarScreen = () => {
       ]).start();
     }
   };
-    
+
   const [data] = useContext(DataContext);
 
   // === Task to Event ===
-  const tasksToEvents = (tasks) =>{
+  const tasksToEvents = (tasks) => {
 
-    const formatDate = (date) =>{
+    const formatDate = (date) => {
       //format date  to yyyy-mm-dd
-      
+
       return moment(date).format('YYYY-MM-DD');
     };
 
-    const formatTime = (time,task) => {
+    const formatTime = (time, task) => {
       // add right date to time Data
       const hours = moment(time).format('HH:mm:ss');
       const date = formatDate(task);
       const formattedTime = `${date} ${hours}`
       return formattedTime;
     };
-    const taskToEvent = (task,color) => {
+    const taskToEvent = (task, color) => {
       const date = task.date;
       // Assigning properties to the eventObject
       const eventObject = {
-          id: task.id,
-          start: formatTime(task.starttime,date),
-          end: formatTime(task.endtime,date),
-          title: task.name,
-          summary: task.description,
-          color: color
-        };
-        return eventObject
-  };
+        id: task.id,
+        start: formatTime(task.starttime, date),
+        end: formatTime(task.endtime, date),
+        title: task.name,
+        summary: task.description,
+        color: color
+      };
+      return eventObject
+    };
 
-  const eventList = {
-    events: {},
-  };
-  
-  // Iterate over each task and convert it to an event
-  tasks.forEach((task) => {
-    //get Project of Task
-    const currentProject = data.projectData.find(project =>project.projectId == task.projectId);
-    // get corresponding color
-    const color = colorHandler(currentProject.color).secondary;
-    // convert Task to event
-    const event = taskToEvent(task,color);
-    const eventName = formatDate(task.date);
-    
-    // Check if the eventName already exists in eventList.events
-    if (eventList.events[eventName]) {
-      eventList.events[eventName].push(event);
-    } else {
-      eventList.events[eventName] = [event];
-    }
-  });
-  return eventList;
+    const eventList = {
+      events: {},
+    };
+
+    // Iterate over each task and convert it to an event
+    tasks.forEach((task) => {
+      //get Project of Task
+      const currentProject = data.projectData.find(project => project.projectId == task.projectId);
+      // get corresponding color
+      const color = colorHandler(currentProject.color).secondary;
+      // convert Task to event
+      const event = taskToEvent(task, color);
+      const eventName = formatDate(task.date);
+
+      // Check if the eventName already exists in eventList.events
+      if (eventList.events[eventName]) {
+        eventList.events[eventName].push(event);
+      } else {
+        eventList.events[eventName] = [event];
+      }
+    });
+    return eventList;
   };
   // === End Task to Event ===
 
@@ -153,9 +153,9 @@ export default CalendarScreen = () => {
           style={styles.calendar}
           markedDates={timelineState.markedDates}
           closeOnDayPress={true}
-          
+
           theme={theme.current}
-           />
+        />
         <TimelineList
           events={timelineState.events}
           showNowIndicator
@@ -173,7 +173,7 @@ export default CalendarScreen = () => {
             rightEdgeSpacing: 24,
           }} />
       </CalendarProvider>
-      <Animated.View style={ [{height: animatedHeight, opacity: animatedOpacity}, styles.timerContainer] }>
+      <Animated.View style={[{ height: animatedHeight, opacity: animatedOpacity }, styles.timerContainer]}>
         <View style={styles.timerWrapper}>
           <Timer />
         </View>
