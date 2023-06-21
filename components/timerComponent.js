@@ -51,14 +51,15 @@ const TimerComponent = () => {
           marginBottom: 20,
           backgroundColor: 'lightsalmon',
           paddingHorizontal: 10,
-          paddingVertical: 30,
+          paddingVertical: 25,
+          borderRadius: 10,
         }}>
         <TouchableOpacity
           style={{
             paddingHorizontal: 10,
             paddingVertical: 5,
             backgroundColor: 'orangered',
-            marginRight: 30,
+            marginRight: 15,
           }}
           onPress={handleSetTimerValue.bind(null, 1500)}>
           <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18 }}>
@@ -75,7 +76,7 @@ const TimerComponent = () => {
             paddingHorizontal: 10,
             paddingVertical: 5,
             backgroundColor: 'orangered',
-            marginLeft: 30,
+            marginLeft: 15,
           }}
           onPress={handleSetTimerValue.bind(null, 300)}>
           <Text style={{ color: 'black', fontWeight: 'bold', fontSize: 18 }}>

@@ -17,6 +17,7 @@ export default CalendarScreen = () => {
 
   const [expanded, setExpanded] = useState(false);
   const animatedHeight = useState(new Animated.Value(0))[0];
+  const animatedOpacity = useState(new Animated.Value(0))[0];
 
   const toggleExpand = () => {
     if (expanded) {
@@ -27,6 +28,11 @@ export default CalendarScreen = () => {
           duration: 200,
           useNativeDriver: false,
         }),
+        Animated.timing(animatedOpacity, {
+          toValue: 0,
+          duration: 150,
+          useNativeDriver: false,
+        }),
       ]).start(() => setExpanded(false));
     } else {
       // Expand animation
@@ -35,6 +41,11 @@ export default CalendarScreen = () => {
         Animated.timing(animatedHeight, {
           toValue: 160, // Adjust the expanded height as needed
           duration: 200,
+          useNativeDriver: false,
+        }),
+        Animated.timing(animatedOpacity, {
+          toValue: 1,
+          duration: 150,
           useNativeDriver: false,
         }),
       ]).start();
@@ -162,11 +173,9 @@ export default CalendarScreen = () => {
             rightEdgeSpacing: 24,
           }} />
       </CalendarProvider>
-      <Animated.View style={{ height: animatedHeight }}>
-        <View style={styles.timerContainer}>
-          <Timer
-            initialValue1={'42'}
-            initialValue2={'21'} />
+      <Animated.View style={ [{height: animatedHeight, opacity: animatedOpacity}, styles.timerContainer] }>
+        <View style={styles.timerWrapper}>
+          <Timer />
         </View>
       </Animated.View>
     </View>
@@ -182,10 +191,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   timerContainer: {
-    height: '100%',
-    backgroundColor: 'lightblue',
+    width: '100%',
+    backgroundColor: 'lightgray',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  timerWrapper: {
+    width: '90%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 15,
   },
   renderItem: {
     height: 50,
