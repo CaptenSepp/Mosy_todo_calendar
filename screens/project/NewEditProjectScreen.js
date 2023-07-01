@@ -6,6 +6,7 @@ import {projectData} from "../../data/ProjectData";
 import { Colors } from "../../styles/Colors";
 import { Project } from "../../data/Classes";
 import { DataContext } from "../../data/DataContext";
+import { storeData } from "../../data/AppStorage";
 
 
 const InputBox = props =>{
@@ -132,21 +133,24 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
 
     const addHandler = (title, description, color) =>{
         // check if Edit or NewScreen
+        let newData;
         if(!isEdit ){
             let newIdCounter = data.projectIdCounter + 1;
             let newProjects = data.projectData;
             // put new data at the end of array
             newProjects.push(new Project('c'+ newIdCounter, title, description,color));
-            // save the data in Context
-            setData(data => ({
+            newData = {
                 projectData: newProjects, 
                 taskData: data.taskData, 
                 taskIdCounter: data.taskIdCounter,
-                projectIdCounter: newIdCounter}));
+                projectIdCounter: newIdCounter,
+                isSaved: true};
+            // save the data in Context
+            setData(newData);
 
             setIsSaved(true);   // navigation.goBack() in useEffect, because of async handling
-            setData(data => ({...data, isSaved: true}));   // update isSaved in Context (global state) to prevent tab navigation
-
+            //setData(data => ({...data, isSaved: true}));   // update isSaved in Context (global state) to prevent tab navigation
+            
         }else{
             const updatedProjects = data.projectData; 
             // find index of data you want to edit
@@ -155,16 +159,20 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
             if (projectIndex !== -1) {
                 updatedProjects[projectIndex] = new Project(projectId, editedData.name, editedData.description, editedData.color);
               }
-              // save data in Context
-            setData(data => ({
+            newData = {
                 projectData: updatedProjects, 
                 taskData: data.taskData,
                 taskIdCounter: data.taskIdCounter,
-                projectIdCounter: data.projectIdCounter}));
+                projectIdCounter: data.projectIdCounter,
+                isSaved: true};
+              // save data in Context
+            setData(newData);
             
             setIsSaved(true);   // navigation.goBack() in useEffect, because of async handling
-            setData(data => ({...data, isSaved: true}));   // update isSaved in Context (global state) to prevent tab navigation
+            //setData(data => ({...data, isSaved: true}));   // update isSaved in Context (global state) to prevent tab navigation
+            
         }
+        storeData(newData);
 
     };
     
