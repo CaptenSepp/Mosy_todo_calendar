@@ -1,5 +1,3 @@
-// ModalAlert.js
-
 import React from 'react';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import { Colors } from '../styles/Colors';

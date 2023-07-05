@@ -2,28 +2,31 @@ import React, { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View, Alert } from 'react-native';
 
 import ModalAlert from './ModalAlert';
+import { Audio } from 'expo-av';
 
 const TimerComponent = () => {
+  // Timer
+  const [breakDuration, setBreakDuration] = useState(300); // Initial break duration is set to 5 minutes
+  const [workDuration, setWorkDuration] = useState(1500); // Initial work duration is set to 25 minutes
   const [timerValue, setTimerValue] = useState(1500); // Initial timer value is set to 25 minutes
   const [isRunning, setIsRunning] = useState(false); // Indicates whether the timer is running or not
-
+  const [lastMode, setLastMode] = useState('work'); // Indicates the last mode of the timer ['work', 'break'
+  // ModalAlert
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
 
+  // Timer
   useEffect(() => {
     let timerInterval;
-
     if (isRunning) {
       // Start the timer if it is running
       timerInterval = setInterval(() => {
         setTimerValue((prevValue) => prevValue - 1);
       }, 1000);
     }
-
     if (timerValue === 0) {
       setIsRunning(false); // Stop the timer
     }
-
     // Clean up the timer interval on component unmount or when the dependencies change
     return () => clearInterval(timerInterval);
   }, [isRunning, timerValue]);
@@ -33,21 +36,52 @@ const TimerComponent = () => {
   };
 
   // Work button click handler
-  const handleLeftButtonClick = () => {
-    setTimerValue(1500); // Reset the timer value to 25 minutes
-    setIsRunning(true); // Stop the timer
+  const handleLeftButtonClick = shallRun => {
+    setTimerValue(workDuration); // Reset the timer value to 25 minutes
+    setIsRunning(shallRun); // eventually start the timer
+    setLastMode('work'); // Set the last mode to 'work'
+
     setModalTitle("Time's Up!"); // Set the modal title
     setModalMessage("Your work session has ended. Take a break and recharge."); // Set the modal message
   };
 
   // Break button click handler
-  const handleRightButtonClick = () => {
-    setTimerValue(300); // Set the timer value to 5 minutes
-    setIsRunning(true); // Stop the timer
+  const handleRightButtonClick = shallRun => {
+    setTimerValue(breakDuration); // Set the timer value to 5 minutes
+    setIsRunning(shallRun); // eventually start the timer
+    setLastMode('break'); // Set the last mode to 'break'
+
     setModalTitle("Break's Over!"); // Set the modal title
     setModalMessage("Your break time has ended. It's time to get back to work."); // Set the modal message
   };
 
+  // ModalAlert Play Sound
+  const [sound, setSound] = React.useState();
+  async function playSound() {
+    console.log('Loading Sound');
+    // maximize volume
+    const { sound } = await Audio.Sound.createAsync(
+        require('../assets/sounds/notification.mp3'),
+    );
+    setSound(sound);
+    console.log('Playing Sound');
+    await sound.playAsync(); 
+  }
+  React.useEffect(() => {
+    return sound
+      ? () => {
+          console.log('Unloading Sound');
+          sound.unloadAsync(); }
+      : undefined;
+  }, [sound]);
+  React.useEffect(() => {
+        // if isRunning is false and timerValue is 0, play sound
+        if (timerValue === 0  && !isRunning) {
+          playSound();
+        }
+  }, [isRunning, timerValue]);
+
+  // Format the time in MM:SS format
   const formatTime = (timeInSeconds) => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = timeInSeconds % 60;
@@ -58,18 +92,18 @@ const TimerComponent = () => {
     <View style={styles.container}>
       <ModalAlert 
         visible={timerValue === 0}
-        onClose={() => setTimerValue(1500)}
+        onClose={() => lastMode === 'work' ? handleRightButtonClick(shallRun=false) : handleLeftButtonClick(shallRun=false)}
         title={modalTitle}
         message={modalMessage}
       />
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={handleLeftButtonClick}>
+        <TouchableOpacity style={styles.button} onPress={() => handleLeftButtonClick(shallRun=true)}>
           <Text style={styles.buttonText}>Work 25:00</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleTimerClick}>
           <Text style={styles.timerText}>{formatTime(timerValue)}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleRightButtonClick}>
+        <TouchableOpacity style={styles.button} onPress={() => handleRightButtonClick(shallRun=true)}>
           <Text style={styles.buttonText}>Break 05:00</Text>
         </TouchableOpacity>
       </View>
