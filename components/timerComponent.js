@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View, Alert } from 'react-native';
+import { Text, TouchableOpacity, View, Animated } from 'react-native';
 
 import ModalAlert from './ModalAlert';
 import { Audio } from 'expo-av';
+
+
+const animatedOpacity = new Animated.Value(0.5);
 
 const TimerComponent = () => {
   // Timer
@@ -14,6 +17,41 @@ const TimerComponent = () => {
   // ModalAlert
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
+
+  // pause opacity animation
+  const [paused, setPaused] = useState(true);
+  
+  useEffect(() => {
+    if (paused) {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(animatedOpacity, {
+            toValue: 0.5,
+            duration: 750,
+            useNativeDriver: true,
+          }),
+          Animated.timing(animatedOpacity, {
+            toValue: 1,
+            duration: 750,
+            useNativeDriver: true,
+          }),
+          Animated.timing(animatedOpacity, {
+            toValue: 0.5,
+            duration: 750,
+            useNativeDriver: true,
+          }),
+          
+        ])
+      ).start();
+    } else {
+      Animated.timing(animatedOpacity, {
+        toValue: 1,
+        duration: 750,
+        useNativeDriver: true,
+      }).start();
+  }
+}), [paused];
+    
 
   // Timer
   useEffect(() => {
@@ -33,6 +71,7 @@ const TimerComponent = () => {
 
   const handleTimerClick = () => {
     setIsRunning(!isRunning); // Toggle the timer state (start/stop)
+    setPaused(!paused);
   };
 
   // Work button click handler
@@ -98,10 +137,12 @@ const TimerComponent = () => {
       />
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={() => handleLeftButtonClick(shallRun=true)}>
-          <Text style={styles.buttonText}>Work 25:00</Text>
+            <Text style={styles.buttonText}>Work 25:00</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleTimerClick}>
-          <Text style={styles.timerText}>{formatTime(timerValue)}</Text>
+          <Animated.View style={{opacity: animatedOpacity}}>
+            <Text style={styles.timerText}>{formatTime(timerValue)}</Text>
+          </Animated.View>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => handleRightButtonClick(shallRun=true)}>
           <Text style={styles.buttonText}>Break 05:00</Text>
