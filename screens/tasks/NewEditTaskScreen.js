@@ -9,6 +9,7 @@ import { DataContext } from "../../data/DataContext";
 
 import moment from "moment";
 import { storeData } from "../../data/AppStorage";
+import ModalAlertTwoButton from "../../components/ModalAlertTwoButton";
 
 const InputBox = props =>{
     return(
@@ -86,19 +87,21 @@ const NewEditTaskScreen = ({route,navigation}) => {
         }
     }, [isSaved]);
 
+    const [modalAlertVisible, setModalAlertVisible] = useState(false);
+    const [modalTitle, setModalTitle] = useState('');
+    const [modalMessage, setModalMessage] = useState('');
+    const [navigationEvent, setNavigationEvent] = useState('');
+
     // prevent going back if there are unsaved changes
     useEffect(() => {
         const beforeRemoveListener = navigation.addListener('beforeRemove', (e) => {   // event listener, before leaving the screen
             if (!isSaved && hasChanged) {
                 e.preventDefault();   // Prevent the default behavior of the back button
-                Alert.alert( 'Unsaved Changes', 'Are you sure you want to leave without saving?',
-                [{ text: 'Cancel', onPress: () => setData(data => ({...data, isSaved: isSaved})), style: 'cancel' },   // stay on screen
-                    { text: 'Leave', onPress: () => {
-                        navigation.dispatch(e.data.action);   // go back
-                        setData(data => ({...data, isSaved: true}));   // reset to enable tab navigation
-                    }, },],
-                { cancelable: false }
-                );}
+                setNavigationEvent(e);
+                setModalTitle('Unsaved Changes');
+                setModalMessage('Are you sure you want to leave without saving?');
+                setModalAlertVisible(true);
+                ;}
             });
         return () => beforeRemoveListener(); // Cleanup the event listener on unmount
     }, [isSaved, hasChanged, navigation]);
@@ -197,9 +200,21 @@ const NewEditTaskScreen = ({route,navigation}) => {
         return moment(time).format('HH:mm');
     };
 
-    return (
+    return (            
         <TouchableWithoutFeedback onPress ={() => Keyboard.dismiss()}>
         <View style={styles.container}>
+        <ModalAlertTwoButton 
+            visible={modalAlertVisible}
+            onCancel={() => setModalAlertVisible(false)}
+            onLeave={() => {
+                setModalAlertVisible(false);
+                const action = navigationEvent.data.action;
+                navigation.dispatch(action);   // go back
+                setData(data => ({...data, isSaved: true}));   // reset to enable tab navigation
+            }}
+            title={modalTitle}
+            message={modalMessage}
+        />
             <FocusAwareStatusBar barStyle="light-content" backgroundColor = { Colors.backgroundHeader } />
             <InputBox 
                 
