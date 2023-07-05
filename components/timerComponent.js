@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
-import { scheduleNotification, registerNotificationHandler, addNotificationListener } from './timerNotifier';
+import { Text, TouchableOpacity, View, Alert } from 'react-native';
+
+import ModalAlert from './ModalAlert';
 
 const TimerComponent = () => {
   const [timerValue, setTimerValue] = useState(1500); // Initial timer value is set to 25 minutes
   const [isRunning, setIsRunning] = useState(false); // Indicates whether the timer is running or not
+
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
 
   useEffect(() => {
     let timerInterval;
@@ -17,8 +21,6 @@ const TimerComponent = () => {
     }
 
     if (timerValue === 0) {
-      // Timer has reached 00:00, schedule a notification
-      scheduleNotification('Timer Expired', 'The timer has reached 00:00');
       setIsRunning(false); // Stop the timer
     }
 
@@ -30,14 +32,20 @@ const TimerComponent = () => {
     setIsRunning(!isRunning); // Toggle the timer state (start/stop)
   };
 
+  // Work button click handler
   const handleLeftButtonClick = () => {
     setTimerValue(1500); // Reset the timer value to 25 minutes
-    setIsRunning(false); // Stop the timer
+    setIsRunning(true); // Stop the timer
+    setModalTitle("Time's Up!"); // Set the modal title
+    setModalMessage("Your work session has ended. Take a break and recharge."); // Set the modal message
   };
 
+  // Break button click handler
   const handleRightButtonClick = () => {
     setTimerValue(300); // Set the timer value to 5 minutes
-    setIsRunning(false); // Stop the timer
+    setIsRunning(true); // Stop the timer
+    setModalTitle("Break's Over!"); // Set the modal title
+    setModalMessage("Your break time has ended. It's time to get back to work."); // Set the modal message
   };
 
   const formatTime = (timeInSeconds) => {
@@ -48,6 +56,12 @@ const TimerComponent = () => {
 
   return (
     <View style={styles.container}>
+      <ModalAlert 
+        visible={timerValue === 0}
+        onClose={() => setTimerValue(1500)}
+        title={modalTitle}
+        message={modalMessage}
+      />
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.button} onPress={handleLeftButtonClick}>
           <Text style={styles.buttonText}>Work 25:00</Text>
