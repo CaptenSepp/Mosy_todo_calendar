@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View, Animated } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import ModalAlert from './ModalAlert';
 import { Audio } from 'expo-av';
+import TaskComponent from './TaskComponent';
+import { Colors } from '../styles/Colors';
 
 
 const animatedOpacity = new Animated.Value(0.5);
 
-const TimerComponent = () => {
+const TimerComponent = (props) => {
   // Timer
   const [breakDuration, setBreakDuration] = useState(300); // Initial break duration is set to 5 minutes
   const [workDuration, setWorkDuration] = useState(1500); // Initial work duration is set to 25 minutes
@@ -135,18 +138,29 @@ const TimerComponent = () => {
         title={modalTitle}
         message={modalMessage}
       />
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => handleLeftButtonClick(shallRun=true)}>
-            <Text style={styles.buttonText}>Work 25:00</Text>
+      <View style={[styles.taskConatiner, {backgroundColor: props.colors.primary}]}>
+      <View style={styles.taskTopContainer}>
+       <Text style={[styles.title, props.isFinished ? { textDecorationLine: 'line-through' } : null]}>{props.title}</Text>
+        <TouchableOpacity style={{ justifyContent: 'center' }} >
+          {props.isFinished === false ? <Ionicons style={{ alignSelf: 'center' }} name={'ellipse-outline'} size={32} color={'black'} /> : <Ionicons style={{ alignSelf: 'center' }} name={'checkmark-circle-outline'} size={32} color={'black'} />}
         </TouchableOpacity>
-        <TouchableOpacity onPress={handleTimerClick}>
-          <Animated.View style={{opacity: animatedOpacity}}>
-            <Text style={styles.timerText}>{formatTime(timerValue)}</Text>
-          </Animated.View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => handleRightButtonClick(shallRun=true)}>
-          <Text style={styles.buttonText}>Break 05:00</Text>
-        </TouchableOpacity>
+      </View>
+        <View style={[styles.descriptionContainer, { minHeight: 80 , backgroundColor: props.colors.light}]}>
+          <Text style={styles.innerNormalText}> {props.description}</Text>
+        </View>
+        <View style={[styles.timerContainer, {backgroundColor: props.colors.light}]}>
+          <TouchableOpacity style={[styles.button, {backgroundColor: props.colors.primary}]} onPress={() => handleLeftButtonClick(shallRun=true)}>
+              <Text style={styles.buttonText}>Work{'\n'}{formatTime(workDuration)}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.timerTimeWrap} onPress={handleTimerClick}>
+            <Animated.View style={{opacity: animatedOpacity}}>
+              <Text style={styles.timerText}>{formatTime(timerValue)}</Text>
+            </Animated.View>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.button, {backgroundColor: props.colors.primary}]} onPress={() => handleRightButtonClick(shallRun=true)}>
+            <Text style={styles.buttonText}>Break{'\n'}{formatTime(breakDuration)}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -157,31 +171,73 @@ const styles = {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    width: '100%',
+    marginHorizontal: 0,
   },
-  buttonContainer: {
-    flexDirection: 'row',
+  taskConatiner: {
+    flexDirection: 'column',
+    width: '100%',
+    //alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 20,
-    backgroundColor: 'lightsalmon',
-    paddingHorizontal: 10,
-    paddingVertical: 25,
+    marginHorizontal: 10,
+    marginVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 15,
+  },
+  taskTopContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: Colors.textdarker,
+  },
+  descriptionContainer: {
+    backgroundColor: Colors.blue.light,
+    borderRadius: 15,
+    padding: 10,
+    marginVertical: 10,
+    justifyContent: 'space-between',
+    alignItems: 'flex-start'
+
+  },
+
+  timerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 25,
+    paddingHorizontal: 0,
+    paddingVertical: 10,
     borderRadius: 15,
   },
   button: {
-    paddingHorizontal: 10,
-    paddingVertical: 15,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
     backgroundColor: 'orangered',
     marginRight: 15,
     marginLeft: 15,
     borderRadius: 15,
+    width: 90,
   },
   buttonText: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 20,
+    textAlign: 'center',
+  },
+  timerTimeWrap: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   timerText: {
     fontSize: 34,
-    marginBottom: 20,
+    marginBottom: 8,
     fontWeight: 'bold',
   },
 };

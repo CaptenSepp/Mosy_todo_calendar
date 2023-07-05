@@ -39,7 +39,7 @@ export default CalendarScreen = () => {
       setExpanded(true);
       Animated.parallel([
         Animated.timing(animatedHeight, {
-          toValue: 160, // Adjust the expanded height as needed
+          toValue: 280, // Adjust the expanded height as needed
           duration: 200,
           useNativeDriver: false,
         }),
@@ -126,8 +126,23 @@ export default CalendarScreen = () => {
   });
 
   // == Event Handlers ==
+  const [timerTitle, setTimerTitle] = useState('No Event selected');
+  const [timerDescription, setTimerDescription] = useState('No Event selected');
+  const [timerColors, setTimerColors] = useState(Colors.blue);
+  const [timerTaskIsFinished, setTimerTaskIsFinished] = useState();
+  
+
   const onEventPressHandler = (event) => {
-    console.log('Event selected: (ID:', event.id, ') ', event.title, event.start, event.end);
+    const task = data.taskData.find(task => task.id === event.id);
+    const currentProject = data.projectData.find(project =>project.projectId == task.projectId);
+    const colors = colorHandler(currentProject.color);
+    //console.log('task: ', task);
+
+    setTimerTitle(task.name);
+    setTimerDescription(task.description);
+    setTimerColors(colors);
+    setTimerTaskIsFinished(task.isFinished);
+
     toggleExpand();
   };
 
@@ -175,7 +190,12 @@ export default CalendarScreen = () => {
       </CalendarProvider>
       <Animated.View style={[{ height: animatedHeight, opacity: animatedOpacity }, styles.timerContainer]}>
         <View style={styles.timerWrapper}>
-          <Timer />
+          <Timer 
+            title={timerTitle}
+            description={timerDescription}
+            colors={timerColors}
+            isFinished={timerTaskIsFinished}
+            />
         </View>
       </Animated.View>
     </View>
