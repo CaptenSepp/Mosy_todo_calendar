@@ -13,6 +13,7 @@ import { DataContext } from "../../data/DataContext";
 import { Task } from "../../data/Classes";
 import Timer from "../../components/timerComponent";
 import moment from "moment";
+import { storeData } from "../../data/AppStorage";
 
 
 
@@ -26,13 +27,17 @@ export default TaskScreen = ({navigation}) => {
   };
 
   const formatDate = (date) =>{
+    if (date != undefined){
+    
     const day = date.getDate().toString().padStart(2, '0'); // Get day and pad with leading zero if necessary
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Get month (months are zero-based) and pad with leading zero if necessary
     const year = date.getFullYear().toString(); // Get full year
     const formattedDate = `${day}.${month}.${year}`;
     //return moment(date).format('MMMM Do YYYY');
     return formattedDate;
-  }
+  } else{
+    
+  }};
 
   // set selectedProject when every project was deleted to first newProject
   useEffect(() => {
@@ -68,11 +73,13 @@ export default TaskScreen = ({navigation}) => {
   const deleteTaskHandler = (id ) => {
     // delete Task
     const updatedTasks = data.taskData.filter(task => task.id != id);
-    setData(data => ({
+    let newData = {
       projectData: data.projectData, 
       taskData:updatedTasks,
       taskIdCounter: data.taskIdCounter,
-      projectIdCounter: data.projectIdCounter}));
+      projectIdCounter: data.projectIdCounter};
+    setData(newData);
+    storeData(newData);
   };
 
   const checkHandler = (id) =>{
@@ -89,12 +96,15 @@ export default TaskScreen = ({navigation}) => {
       };  
       
       updatedTasks[taskIndex] = updatedTask;
-    // save data in Context
-    setData(data => ({
+    let newData = {
       projectData: data.projectData, 
       taskData:updatedTasks,
       taskIdCounter: data.taskIdCounter,
-      projectIdCounter: data.projectIdCounter}))
+      projectIdCounter: data.projectIdCounter};
+    // save data in Context
+    setData(newData);
+    // save Data persistent
+    storeData(newData);
 
   };
 

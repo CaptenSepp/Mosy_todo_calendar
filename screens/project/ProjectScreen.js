@@ -8,6 +8,7 @@ import PlusButton from "../../components/PlusButton";
 
 import { DataContext } from "../../data/DataContext";
 import { addLastElement } from "../../functions";
+import { storeData } from "../../data/AppStorage";
 
 export default ProjectScreen = ({ navigation }) => {
 
@@ -23,12 +24,14 @@ export default ProjectScreen = ({ navigation }) => {
     const updatedProjects = data.projectData.filter(project => project.projectId != id);
     // delete all tasks of selected project
     const updatedTasks = data.taskData.filter(task => task.projectId != id);
-    
-    setData(data => ({
+    let newData = {
       projectData: updatedProjects, 
       taskData:updatedTasks,
       taskIdCounter: data.taskIdCounter,
-      projectIdCounter: data.projectIdCounter}));
+      projectIdCounter: data.projectIdCounter}
+    setData(newData);
+    // save data persistent
+    storeData(newData);
   };
   
 

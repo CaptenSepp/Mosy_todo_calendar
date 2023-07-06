@@ -6,6 +6,7 @@ import {projectData} from "../../data/ProjectData";
 import { Colors } from "../../styles/Colors";
 import { Project } from "../../data/Classes";
 import { DataContext } from "../../data/DataContext";
+import { storeData } from "../../data/AppStorage";
 
 
 const InputBox = props =>{
@@ -111,19 +112,21 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
         }
     }, [isSaved]);
 
+    const [modalAlertVisible, setModalAlertVisible] = useState(false);
+    const [modalTitle, setModalTitle] = useState('');
+    const [modalMessage, setModalMessage] = useState('');
+    const [navigationEvent, setNavigationEvent] = useState('');
+
     // prevent going back if there are unsaved changes
     useEffect(() => {
         const beforeRemoveListener = navigation.addListener('beforeRemove', (e) => {   // event listener, before leaving the screen
         if (!isSaved && hasChanged) {
             e.preventDefault();   // Prevent the default behavior of the back button
-            Alert.alert( 'Unsaved Changes', 'Are you sure you want to leave without saving?',
-              [{ text: 'Cancel', onPress: () => setData(data => ({...data, isSaved: isSaved})), style: 'cancel' },   // stay on screen
-                { text: 'Leave', onPress: () => {
-                    navigation.dispatch(e.data.action);   // go back
-                    setData(data => ({...data, isSaved: true}));   // reset to enable tab navigation
-                }, },],
-              { cancelable: false }
-            );}
+            setNavigationEvent(e);
+            setModalTitle('Unsaved Changes');
+            setModalMessage('Are you sure you want to leave without saving?');
+            setModalAlertVisible(true);
+            ;}
         });
         return () => beforeRemoveListener(); // Cleanup the event listener on unmount
       }, [isSaved, hasChanged, navigation]);
@@ -132,21 +135,24 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
 
     const addHandler = (title, description, color) =>{
         // check if Edit or NewScreen
+        let newData;
         if(!isEdit ){
             let newIdCounter = data.projectIdCounter + 1;
             let newProjects = data.projectData;
             // put new data at the end of array
             newProjects.push(new Project('c'+ newIdCounter, title, description,color));
-            // save the data in Context
-            setData(data => ({
+            newData = {
                 projectData: newProjects, 
                 taskData: data.taskData, 
                 taskIdCounter: data.taskIdCounter,
-                projectIdCounter: newIdCounter}));
+                projectIdCounter: newIdCounter,
+                isSaved: true};
+            // save the data in Context
+            setData(newData);
 
             setIsSaved(true);   // navigation.goBack() in useEffect, because of async handling
-            setData(data => ({...data, isSaved: true}));   // update isSaved in Context (global state) to prevent tab navigation
-
+            //setData(data => ({...data, isSaved: true}));   // update isSaved in Context (global state) to prevent tab navigation
+            
         }else{
             const updatedProjects = data.projectData; 
             // find index of data you want to edit
@@ -155,16 +161,20 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
             if (projectIndex !== -1) {
                 updatedProjects[projectIndex] = new Project(projectId, editedData.name, editedData.description, editedData.color);
               }
-              // save data in Context
-            setData(data => ({
+            newData = {
                 projectData: updatedProjects, 
                 taskData: data.taskData,
                 taskIdCounter: data.taskIdCounter,
-                projectIdCounter: data.projectIdCounter}));
+                projectIdCounter: data.projectIdCounter,
+                isSaved: true};
+              // save data in Context
+            setData(newData);
             
             setIsSaved(true);   // navigation.goBack() in useEffect, because of async handling
-            setData(data => ({...data, isSaved: true}));   // update isSaved in Context (global state) to prevent tab navigation
+            //setData(data => ({...data, isSaved: true}));   // update isSaved in Context (global state) to prevent tab navigation
+            
         }
+        storeData(newData);
 
     };
     
@@ -173,6 +183,18 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
     return (
         <TouchableWithoutFeedback onPress ={() => Keyboard.dismiss()}>
         <View style={styles.container}>
+        <ModalAlertTwoButton 
+            visible={modalAlertVisible}
+            onCancel={() => setModalAlertVisible(false)}
+            onLeave={() => {
+                setModalAlertVisible(false);
+                const action = navigationEvent.data.action;
+                navigation.dispatch(action);   // go back
+                setData(data => ({...data, isSaved: true}));   // reset to enable tab navigation
+            }}
+            title={modalTitle}
+            message={modalMessage}
+        />
             <FocusAwareStatusBar barStyle="light-content" backgroundColor = { Colors.backgroundHeader } />
             <InputBox 
                 value={isEdit? editedData.name: title}

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useRef } from "react";
-import { StyleSheet, View, StatusBar, Text, Animated } from 'react-native';
+import { StyleSheet, View, StatusBar, Text, Animated, Modal } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { CalendarProvider, ExpandableCalendar, TimelineEventProps, TimelineList } from "react-native-calendars";
 import Timer from "../../components/timerComponent";
@@ -39,7 +39,7 @@ export default CalendarScreen = () => {
       setExpanded(true);
       Animated.parallel([
         Animated.timing(animatedHeight, {
-          toValue: 160, // Adjust the expanded height as needed
+          toValue: 280, // Adjust the expanded height as needed
           duration: 200,
           useNativeDriver: false,
         }),
@@ -112,7 +112,6 @@ export default CalendarScreen = () => {
   // create events from taskData
   const events = tasksToEvents(data.taskData);
   const theme = useRef(getTheme());
-  // const color = colorHandler(currentProject.color).secondary;
 
   // create state for timeline
   const timelineState = {
@@ -127,8 +126,23 @@ export default CalendarScreen = () => {
   });
 
   // == Event Handlers ==
+  const [timerTitle, setTimerTitle] = useState('No Event selected');
+  const [timerDescription, setTimerDescription] = useState('No Event selected');
+  const [timerColors, setTimerColors] = useState(Colors.blue);
+  const [timerTaskIsFinished, setTimerTaskIsFinished] = useState();
+  
+
   const onEventPressHandler = (event) => {
-    console.log('Event selected: (ID:', event.id, ') ', event.title, event.start, event.end);
+    const task = data.taskData.find(task => task.id === event.id);
+    const currentProject = data.projectData.find(project =>project.projectId == task.projectId);
+    const colors = colorHandler(currentProject.color);
+    //console.log('task: ', task);
+
+    setTimerTitle(task.name);
+    setTimerDescription(task.description);
+    setTimerColors(colors);
+    setTimerTaskIsFinished(task.isFinished);
+
     toggleExpand();
   };
 
@@ -176,8 +190,12 @@ export default CalendarScreen = () => {
       </CalendarProvider>
       <Animated.View style={[{ height: animatedHeight, opacity: animatedOpacity }, styles.timerContainer]}>
         <View style={styles.timerWrapper}>
-          {/* <Timer /> */}
-          <Timer color={eventObject.color} />
+          <Timer 
+            title={timerTitle}
+            description={timerDescription}
+            colors={timerColors}
+            isFinished={timerTaskIsFinished}
+            />
         </View>
       </Animated.View>
     </View>

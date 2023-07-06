@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Colors } from '../styles/Colors';
@@ -14,6 +14,7 @@ import { DataContext } from '../data/DataContext';
 
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Alert, Platform } from 'react-native';
+import ModalAlert from '../components/ModalAlert';
 
 
 const Tab = createBottomTabNavigator();
@@ -24,8 +25,18 @@ export default MainNavigator = () => {
 
     const [data, setData] = useContext(DataContext);
 
+    const [modalAlertVisible, setModalAlertVisible] = useState(false);
+    const [modalTitle, setModalTitle] = useState('');
+    const [modalMessage, setModalMessage] = useState('');
+
     return (
         <NavigationContainer>
+            <ModalAlert 
+                visible={modalAlertVisible}
+                onClose={() => setModalAlertVisible(false)}
+                title={modalTitle}
+                message={modalMessage}
+            />
             <Tab.Navigator
                 screenOptions={({ route }) => ({
                     headerShown: true,
@@ -57,7 +68,10 @@ export default MainNavigator = () => {
                             if (!data.isSaved && data.hasChanged) {
                                 e.preventDefault();
                                 console.log('prevent Navigation, due to unsaved data');
-                                Alert.alert('Unsaved Changes', 'You have unsaved changes. Please save or discard them before navigating away from this screen.');
+                                
+                                setModalTitle('Unsaved Changes');
+                                setModalMessage('You have unsaved changes. Please save or discard them before navigating away from this screen.');
+                                setModalAlertVisible(true);
                             }
                         }
                     })}
@@ -87,7 +101,10 @@ export default MainNavigator = () => {
                             if (!data.isSaved && data.hasChanged) {
                                 e.preventDefault();
                                 console.log('prevent Navigation, due to unsaved data');
-                                Alert.alert('Unsaved Changes', 'You have unsaved changes. Please save or discard them before navigating away from this screen.');
+
+                                setModalTitle('Unsaved Changes');
+                                setModalMessage('You have unsaved changes. Please save or discard them before navigating away from this screen.');
+                                setModalAlertVisible(true);
                             }
                         }
                     })}
@@ -115,7 +132,10 @@ export default MainNavigator = () => {
                             if (!data.isSaved && data.hasChanged) {
                                 e.preventDefault();
                                 console.log('prevent Navigation, due to unsaved data');
-                                Alert.alert('Unsaved Changes', 'You have unsaved changes. Please save or discard them before navigating away from this screen.');
+
+                                setModalTitle('Unsaved Changes');
+                                setModalMessage('You have unsaved changes. Please save or discard them before navigating away from this screen.');
+                                setModalAlertVisible(true);
                             }
                         }
                     })}
