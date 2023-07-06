@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, Animated } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Animated, Platform } from 'react-native';
 import { Colors } from '../styles/Colors';
 import { NavigationContainer } from "@react-navigation/native";
 
@@ -30,7 +30,7 @@ const FoldOutComponent = props => {
       setExpanded(true);
       Animated.parallel([
         Animated.timing(animatedHeight, {
-          toValue: 155, // Adjust the expanded height as needed
+          toValue: Platform.OS === 'ios'? 150 : 155, // Adjust the expanded height as needed
           duration: 200,
           useNativeDriver: false,
         }),

@@ -138,18 +138,18 @@ const TimerComponent = (props) => {
         title={modalTitle}
         message={modalMessage}
       />
-      <View style={[styles.taskConatiner, {backgroundColor: props.colors.primary}]}>
+      <View style={[styles.taskConatiner, {backgroundColor: props.colors.secondary}]}>
       <View style={styles.taskTopContainer}>
        <Text style={[styles.title, props.isFinished ? { textDecorationLine: 'line-through' } : null]}>{props.title}</Text>
         <TouchableOpacity style={{ justifyContent: 'center' }} >
-          {props.isFinished === false ? <Ionicons style={{ alignSelf: 'center' }} name={'ellipse-outline'} size={32} color={'black'} /> : <Ionicons style={{ alignSelf: 'center' }} name={'checkmark-circle-outline'} size={32} color={'black'} />}
+          {props.isFinished === false ? <Ionicons style={styles.icon} name={'ellipse-outline'} size={32} color={'black'} /> : <Ionicons style={styles.icon} name={'checkmark-circle-outline'} size={32} color={'black'} />}
         </TouchableOpacity>
       </View>
         <View style={[styles.descriptionContainer, { minHeight: 80 , backgroundColor: props.colors.light}]}>
           <Text style={styles.innerNormalText}> {props.description}</Text>
         </View>
         <View style={[styles.timerContainer, {backgroundColor: props.colors.light}]}>
-          <TouchableOpacity style={[styles.button, {backgroundColor: props.colors.primary}]} onPress={() => handleLeftButtonClick(shallRun=true)}>
+          <TouchableOpacity style={[styles.button, {backgroundColor: props.colors.secondary}]} onPress={() => handleLeftButtonClick(shallRun=true)}>
               <Text style={styles.buttonText}>Work{'\n'}{formatTime(workDuration)}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.timerTimeWrap} onPress={handleTimerClick}>
@@ -157,7 +157,7 @@ const TimerComponent = (props) => {
               <Text style={styles.timerText}>{formatTime(timerValue)}</Text>
             </Animated.View>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: props.colors.primary}]} onPress={() => handleRightButtonClick(shallRun=true)}>
+          <TouchableOpacity style={[styles.button, {backgroundColor: props.colors.secondary}]} onPress={() => handleRightButtonClick(shallRun=true)}>
             <Text style={styles.buttonText}>Break{'\n'}{formatTime(breakDuration)}</Text>
           </TouchableOpacity>
         </View>
@@ -192,9 +192,16 @@ const styles = {
 
   },
   title: {
-    fontSize: 24,
+    fontSize: 20,
+    marginTop: 15,
+    
     fontWeight: 'bold',
     color: Colors.textdarker,
+  },
+  icon: {
+    alignSelf: 'center',
+    marginTop: 10
+
   },
   descriptionContainer: {
     backgroundColor: Colors.blue.light,
@@ -205,7 +212,6 @@ const styles = {
     alignItems: 'flex-start'
 
   },
-
   timerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

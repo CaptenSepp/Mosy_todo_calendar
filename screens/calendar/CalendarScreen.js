@@ -1,5 +1,5 @@
 import React, { useContext, useState, useRef } from "react";
-import { StyleSheet, View, StatusBar, Text, Animated } from 'react-native';
+import { StyleSheet, View, StatusBar, Text, Animated, Modal } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { CalendarProvider, ExpandableCalendar, TimelineEventProps, TimelineList } from "react-native-calendars";
 import Timer from "../../components/timerComponent";
