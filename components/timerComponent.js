@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect, useState } from 'react';
+import { Animated, Text, TouchableOpacity, View } from 'react-native';
 
-import ModalAlert from './ModalAlert';
 import { Audio } from 'expo-av';
-import TaskComponent from './TaskComponent';
 import { Colors } from '../styles/Colors';
+import ModalAlert from './ModalAlert';
 
 
 const animatedOpacity = new Animated.Value(0.5);
@@ -23,7 +22,7 @@ const TimerComponent = (props) => {
 
   // pause opacity animation
   const [paused, setPaused] = useState(true);
-  
+
   useEffect(() => {
     if (paused) {
       Animated.loop(
@@ -43,7 +42,7 @@ const TimerComponent = (props) => {
             duration: 750,
             useNativeDriver: true,
           }),
-          
+
         ])
       ).start();
     } else {
@@ -52,9 +51,9 @@ const TimerComponent = (props) => {
         duration: 750,
         useNativeDriver: true,
       }).start();
-  }
-}), [paused];
-    
+    }
+  }), [paused];
+
 
   // Timer
   useEffect(() => {
@@ -103,24 +102,25 @@ const TimerComponent = (props) => {
     console.log('Loading Sound');
     // maximize volume
     const { sound } = await Audio.Sound.createAsync(
-        require('../assets/sounds/notification.mp3'),
+      require('../assets/sounds/notification.mp3'),
     );
     setSound(sound);
     console.log('Playing Sound');
-    await sound.playAsync(); 
+    await sound.playAsync();
   }
   React.useEffect(() => {
     return sound
       ? () => {
-          console.log('Unloading Sound');
-          sound.unloadAsync(); }
+        console.log('Unloading Sound');
+        sound.unloadAsync();
+      }
       : undefined;
   }, [sound]);
   React.useEffect(() => {
-        // if isRunning is false and timerValue is 0, play sound
-        if (timerValue === 0  && !isRunning) {
-          playSound();
-        }
+    // if isRunning is false and timerValue is 0, play sound
+    if (timerValue === 0 && !isRunning) {
+      playSound();
+    }
   }, [isRunning, timerValue]);
 
   // Format the time in MM:SS format
@@ -132,32 +132,32 @@ const TimerComponent = (props) => {
 
   return (
     <View style={styles.container}>
-      <ModalAlert 
+      <ModalAlert
         visible={timerValue === 0}
-        onClose={() => lastMode === 'work' ? handleRightButtonClick(shallRun=false) : handleLeftButtonClick(shallRun=false)}
+        onClose={() => lastMode === 'work' ? handleRightButtonClick(shallRun = false) : handleLeftButtonClick(shallRun = false)}
         title={modalTitle}
         message={modalMessage}
       />
-      <View style={[styles.taskConatiner, {backgroundColor: props.colors.secondary}]}>
-      <View style={styles.taskTopContainer}>
-       <Text style={[styles.title, props.isFinished ? { textDecorationLine: 'line-through' } : null]}>{props.title}</Text>
-        <TouchableOpacity style={{ justifyContent: 'center' }} >
-          {props.isFinished === false ? <Ionicons style={styles.icon} name={'ellipse-outline'} size={32} color={'black'} /> : <Ionicons style={styles.icon} name={'checkmark-circle-outline'} size={32} color={'black'} />}
-        </TouchableOpacity>
-      </View>
-        <View style={[styles.descriptionContainer, { minHeight: 80 , backgroundColor: props.colors.light}]}>
+      <View style={[styles.taskConatiner, { backgroundColor: props.colors.secondary }]}>
+        <View style={styles.taskTopContainer}>
+          <Text style={[styles.title, props.isFinished ? { textDecorationLine: 'line-through' } : null]}>{props.title}</Text>
+          <TouchableOpacity style={{ justifyContent: 'center' }} >
+            {props.isFinished === false ? <Ionicons style={styles.icon} name={'ellipse-outline'} size={32} color={'black'} /> : <Ionicons style={styles.icon} name={'checkmark-circle-outline'} size={32} color={'black'} />}
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.descriptionContainer, { minHeight: 80, backgroundColor: props.colors.light }]}>
           <Text style={styles.innerNormalText}> {props.description}</Text>
         </View>
-        <View style={[styles.timerContainer, {backgroundColor: props.colors.light}]}>
-          <TouchableOpacity style={[styles.button, {backgroundColor: props.colors.secondary}]} onPress={() => handleLeftButtonClick(shallRun=true)}>
-              <Text style={styles.buttonText}>Work{'\n'}{formatTime(workDuration)}</Text>
+        <View style={[styles.timerContainer, { backgroundColor: props.colors.light }]}>
+          <TouchableOpacity style={[styles.button, { backgroundColor: props.colors.secondary }]} onPress={() => handleLeftButtonClick(shallRun = true)}>
+            <Text style={styles.buttonText}>Work{'\n'}{formatTime(workDuration)}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.timerTimeWrap} onPress={handleTimerClick}>
-            <Animated.View style={{opacity: animatedOpacity}}>
+            <Animated.View style={{ opacity: animatedOpacity }}>
               <Text style={styles.timerText}>{formatTime(timerValue)}</Text>
             </Animated.View>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.button, {backgroundColor: props.colors.secondary}]} onPress={() => handleRightButtonClick(shallRun=true)}>
+          <TouchableOpacity style={[styles.button, { backgroundColor: props.colors.secondary }]} onPress={() => handleRightButtonClick(shallRun = true)}>
             <Text style={styles.buttonText}>Break{'\n'}{formatTime(breakDuration)}</Text>
           </TouchableOpacity>
         </View>
@@ -194,7 +194,7 @@ const styles = {
   title: {
     fontSize: 20,
     marginTop: 15,
-    
+
     fontWeight: 'bold',
     color: Colors.textdarker,
   },

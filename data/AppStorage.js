@@ -4,22 +4,22 @@ import { taskData, TASKIDCOUNTER } from "../data/TaskData";
 
 export const storeData = (data) => {
     try {
-        AsyncStorage.setItem('APPDATA', JSON.stringify(data)).catch(e => {console.log(e)});
+        AsyncStorage.setItem('APPDATA', JSON.stringify(data)).catch(e => { console.log(e) });
     } catch (e) {
         throw e;
     }
 };
 
-export const getData = () =>{
-    return new Promise((resolve,reject) => {
+export const getData = () => {
+    return new Promise((resolve, reject) => {
         AsyncStorage.getItem('APPDATA').then(value => {
-            if (value != null){
+            if (value != null) {
                 parsedData = JSON.parse(value);
-                let {taskData} = parsedData;
+                let { taskData } = parsedData;
                 taskData.forEach(task => {
                     task.date = new Date(task.date);
                     task.starttime = new Date(task.starttime);
-                    task.endtime = new Date(task.endtime); 
+                    task.endtime = new Date(task.endtime);
                 });
                 resolve(parsedData);
             } else {
@@ -30,9 +30,9 @@ export const getData = () =>{
                     projectIdCounter: PROJECTIDCOUNTER,
                     isSaved: true,
                     hasChanged: false,
-                  }
+                }
                 resolve(initialData);
             }
-        }).catch((e) =>{ console.log(e)})
+        }).catch((e) => { console.log(e) })
     });
 };

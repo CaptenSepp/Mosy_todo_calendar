@@ -1,7 +1,7 @@
-import React, { useState, useContext } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, Animated, Platform } from 'react-native';
-import { Colors } from '../styles/Colors';
 import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from "react";
+import { Animated, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Colors } from '../styles/Colors';
 
 
 
@@ -30,7 +30,7 @@ const FoldOutComponent = props => {
       setExpanded(true);
       Animated.parallel([
         Animated.timing(animatedHeight, {
-          toValue: Platform.OS === 'ios'? 265 :  275, // Adjust the expanded height as needed
+          toValue: Platform.OS === 'ios' ? 265 : 275, // Adjust the expanded height as needed
           duration: 200,
           useNativeDriver: false,
         }),
@@ -44,7 +44,7 @@ const FoldOutComponent = props => {
   };
 
   return (
-    <View style={[styles.taskContainer,{backgroundColor: props.colors.secondary}]} >
+    <View style={[styles.taskContainer, { backgroundColor: props.colors.secondary }]} >
       <TouchableOpacity onPress={toggleExpand} >
         <View style={styles.topContainer}>
 
@@ -69,10 +69,10 @@ const FoldOutComponent = props => {
 const InnerContainer = props => {
   return (
     <View>
-      <View style={[styles.innerContainer, { minHeight: 100 , backgroundColor: props.colors.light}]}>
+      <View style={[styles.innerContainer, { minHeight: 100, backgroundColor: props.colors.light }]}>
         <Text style={styles.innerNormalText}> {props.description}</Text>
       </View>
-      <View style={[styles.innerContainer,{backgroundColor: props.colors.light}]}>
+      <View style={[styles.innerContainer, { backgroundColor: props.colors.light }]}>
         <View style={{ alignSelf: 'stretch', flexDirection: 'row', justifyContent: 'space-between' }}>
           <Text style={styles.innerHeaderText}>Date</Text>
           <Text style={styles.innerHeaderText}>{props.date}</Text>
@@ -87,10 +87,10 @@ const InnerContainer = props => {
         </View>
       </View>
       <View style={styles.bottomButtonContainer}>
-        <TouchableOpacity onPress = {() =>props.editHandler(props.id)}>
+        <TouchableOpacity onPress={() => props.editHandler(props.id)}>
           <Text style={styles.buttonText}>Edit</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress = {() =>props.deleteHandler(props.id)}>
+        <TouchableOpacity onPress={() => props.deleteHandler(props.id)}>
           <Text style={styles.buttonText}>Delete</Text>
         </TouchableOpacity>
       </View>
@@ -99,24 +99,24 @@ const InnerContainer = props => {
 };
 
 export default TaskComponent = props => {
-  
+
   return (
     <FoldOutComponent
       title={props.title}
       isFinished={props.isFinished}
-      colors = {props.colors}
-      id = {props.id}
-      checkHandler = {props.checkHandler}
+      colors={props.colors}
+      id={props.id}
+      checkHandler={props.checkHandler}
       foldedOutContent={<InnerContainer
-        id = {props.id}
+        id={props.id}
         content={'Content'}
         description={props.description}
         startTime={props.starttime}
         stopTime={props.stoptime}
-        date = {props.date}
-        colors = {props.colors} 
-        editHandler = {props.editHandler}
-        deleteHandler = {props.deleteHandler}/>} />
+        date={props.date}
+        colors={props.colors}
+        editHandler={props.editHandler}
+        deleteHandler={props.deleteHandler} />} />
   );
 };
 

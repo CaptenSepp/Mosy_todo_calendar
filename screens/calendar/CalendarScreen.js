@@ -1,16 +1,15 @@
-import React, { useContext, useState, useRef } from "react";
-import { StyleSheet, View, StatusBar, Text, Animated, Modal } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
-import { CalendarProvider, ExpandableCalendar, TimelineEventProps, TimelineList } from "react-native-calendars";
+import React, { useContext, useRef, useState } from "react";
+import { Animated, StatusBar, StyleSheet, View } from 'react-native';
+import { CalendarProvider, ExpandableCalendar, TimelineList } from "react-native-calendars";
 import Timer from "../../components/timerComponent";
 
-import { Colors } from "../../styles/Colors";
-import { DataContext } from "../../data/DataContext";
-import { tasksToEvents } from "../../functions";
-import { colorHandler } from "../../functions";
 import moment from "moment";
+import { DataContext } from "../../data/DataContext";
+import { colorHandler } from "../../functions";
+import { Colors } from "../../styles/Colors";
 
-import { timelineEvents, getDate } from '../../functions';
+import { getDate } from '../../functions';
 import { getTheme } from "../../styles/CalendarTheme";
 
 export default CalendarScreen = () => {
@@ -130,11 +129,11 @@ export default CalendarScreen = () => {
   const [timerDescription, setTimerDescription] = useState('No Event selected');
   const [timerColors, setTimerColors] = useState(Colors.blue);
   const [timerTaskIsFinished, setTimerTaskIsFinished] = useState();
-  
+
 
   const onEventPressHandler = (event) => {
     const task = data.taskData.find(task => task.id === event.id);
-    const currentProject = data.projectData.find(project =>project.projectId == task.projectId);
+    const currentProject = data.projectData.find(project => project.projectId == task.projectId);
     const colors = colorHandler(currentProject.color);
     //console.log('task: ', task);
 
@@ -190,12 +189,12 @@ export default CalendarScreen = () => {
       </CalendarProvider>
       <Animated.View style={[{ height: animatedHeight, opacity: animatedOpacity }, styles.timerContainer]}>
         <View style={styles.timerWrapper}>
-          <Timer 
+          <Timer
             title={timerTitle}
             description={timerDescription}
             colors={timerColors}
             isFinished={timerTaskIsFinished}
-            />
+          />
         </View>
       </Animated.View>
     </View>
