@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import { Colors } from '../styles/Colors';
 
-export default ModalAlert = ({ visible, onClose, title, message }) => {
+function ModalAlert({ visible, onClose, title, message }) {
   return (
     <Modal visible={visible} transparent>
       <View style={styles.modalContainer}>
@@ -16,7 +16,9 @@ export default ModalAlert = ({ visible, onClose, title, message }) => {
       </View>
     </Modal>
   );
-};
+}
+
+export default ModalAlert;
 
 const styles = {
   modalContainer: {

@@ -5,7 +5,7 @@ import { Colors } from "../styles/Colors";
 
 
 
-export default SmallProjectComponent = props => {
+const SmallProjectComponent = props => {
     const isSelected = props.selectedProject === props.id;
     return (
         <TouchableOpacity onPress={() => props.onPress(props.id)}>
@@ -21,6 +21,8 @@ export default SmallProjectComponent = props => {
         </TouchableOpacity>
     );
 }
+
+export default SmallProjectComponent;
 const styles = StyleSheet.create({
     projectItem: {
         minWidth: 100,

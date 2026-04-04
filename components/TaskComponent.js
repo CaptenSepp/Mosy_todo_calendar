@@ -98,7 +98,7 @@ const InnerContainer = props => {
   );
 };
 
-export default TaskComponent = props => {
+const TaskComponent = props => {
 
   return (
     <FoldOutComponent
@@ -119,6 +119,8 @@ export default TaskComponent = props => {
         deleteHandler={props.deleteHandler} />} />
   );
 };
+
+export default TaskComponent;
 
 const styles = StyleSheet.create({
   taskContainer: {

@@ -201,7 +201,6 @@ const NewEditTaskScreen = ({route,navigation}) => {
     };
 
     return (            
-        <TouchableWithoutFeedback onPress ={() => Keyboard.dismiss()}>
         <View style={styles.container}>
         <ModalAlertTwoButton 
             visible={modalAlertVisible}
@@ -310,7 +309,6 @@ const NewEditTaskScreen = ({route,navigation}) => {
             </TouchableOpacity>
             </View>
         </View>
-        </TouchableWithoutFeedback>
     );
 };
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import { Colors } from '../styles/Colors';
 
-export default ModalAlertTwoButton = ({ visible, onClose, title, message, onCancel, onLeave }) => {
+function ModalAlertTwoButton({ visible, onClose, title, message, onCancel, onLeave }) {
   return (
     <Modal visible={visible} transparent>
       <View style={styles.modalContainer}>
@@ -21,7 +21,9 @@ export default ModalAlertTwoButton = ({ visible, onClose, title, message, onCanc
       </View>
     </Modal>
   );
-};
+}
+
+export default ModalAlertTwoButton;
 
 const styles = {
   modalContainer: {

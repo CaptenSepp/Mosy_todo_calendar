@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { Colors } from '../styles/Colors';
 
-export default PlusButton = props => {
+const PlusButton = props => {
 
     return (
         
@@ -16,6 +16,8 @@ export default PlusButton = props => {
         
     );
 };
+
+export default PlusButton;
 
 const styles = StyleSheet.create({
     mainContainer:{

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard, StatusBar, Alert } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, StatusBar, Alert } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
 import {projectData} from "../../data/ProjectData";
@@ -7,6 +7,7 @@ import { Colors } from "../../styles/Colors";
 import { Project } from "../../data/Classes";
 import { DataContext } from "../../data/DataContext";
 import { storeData } from "../../data/AppStorage";
+import ModalAlertTwoButton from "../../components/ModalAlertTwoButton";
 
 
 const InputBox = props =>{
@@ -63,7 +64,7 @@ const ColorPicker = props => {
 
 
 
-export default NewEditProjectScreen =  ({ route, navigation }) => {
+const NewEditProjectScreen =  ({ route, navigation }) => {
 
     const [data,setData] = useContext(DataContext);
     const {isEdit} = route.params;
@@ -181,7 +182,6 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
     
 
     return (
-        <TouchableWithoutFeedback onPress ={() => Keyboard.dismiss()}>
         <View style={styles.container}>
         <ModalAlertTwoButton 
             visible={modalAlertVisible}
@@ -220,9 +220,10 @@ export default NewEditProjectScreen =  ({ route, navigation }) => {
             </TouchableOpacity>
             </View>
         </View>
-        </TouchableWithoutFeedback>
     );
 };
+
+export default NewEditProjectScreen;
 
 const styles = StyleSheet.create({
     container: {

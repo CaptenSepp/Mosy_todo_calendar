@@ -14,7 +14,7 @@ export const getData = () => {
     return new Promise((resolve, reject) => {
         AsyncStorage.getItem('APPDATA').then(value => {
             if (value != null) {
-                parsedData = JSON.parse(value);
+                const parsedData = JSON.parse(value);
                 let { taskData } = parsedData;
                 taskData.forEach(task => {
                     task.date = new Date(task.date);

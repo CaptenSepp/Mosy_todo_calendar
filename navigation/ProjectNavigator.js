@@ -8,7 +8,7 @@ import { DefaultStyles } from "../styles/DefaultStyles";
 
 const ProjectStack = createStackNavigator();
 
-export default ProjectNavigator = () => {
+const ProjectNavigator = () => {
     return (
         <ProjectStack.Navigator
             initialRouteName="ProjectList"
@@ -46,3 +46,5 @@ export default ProjectNavigator = () => {
         </ProjectStack.Navigator>
     );
 };
+
+export default ProjectNavigator;

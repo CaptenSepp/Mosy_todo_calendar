@@ -21,7 +21,7 @@ const Tab = createBottomTabNavigator();
 
 const iconSize = Platform.OS === 'android' ? 26 : 24;
 
-export default MainNavigator = () => {
+const MainNavigator = () => {
 
     const [data, setData] = useContext(DataContext);
 
@@ -147,3 +147,5 @@ export default MainNavigator = () => {
         </NavigationContainer>
     );
 };
+
+export default MainNavigator;

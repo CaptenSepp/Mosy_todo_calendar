@@ -12,7 +12,7 @@ import { Colors } from "../../styles/Colors";
 import { getDate } from '../../functions';
 import { getTheme } from "../../styles/CalendarTheme";
 
-export default CalendarScreen = () => {
+const CalendarScreen = () => {
 
   const [expanded, setExpanded] = useState(false);
   const animatedHeight = useState(new Animated.Value(0))[0];
@@ -200,6 +200,8 @@ export default CalendarScreen = () => {
     </View>
   );
 };
+
+export default CalendarScreen;
 
 const styles = StyleSheet.create({
   mainContainer: {

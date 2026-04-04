@@ -17,7 +17,7 @@ import { storeData } from "../../data/AppStorage";
 
 
 
-export default TaskScreen = ({navigation}) => {
+const TaskScreen = ({navigation}) => {
   const [data,setData] = useContext(DataContext);
   const [selectedProject, setSelectedProject] = useState("c1");
 
@@ -50,8 +50,8 @@ export default TaskScreen = ({navigation}) => {
   const shownTasks = data.taskData.filter(task => task.projectId === selectedProject);
 
   // add plus Button to the end of the data
-  modifiedTaskData = addLastElement(shownTasks); 
-  modifiedProjectData = addLastElement(data.projectData); 
+  const modifiedTaskData = addLastElement(shownTasks); 
+  const modifiedProjectData = addLastElement(data.projectData); 
   
   function FocusAwareStatusBar(props) {
     const isFocused = useIsFocused();
@@ -176,6 +176,8 @@ export default TaskScreen = ({navigation}) => {
     </View>
   );
 };
+
+export default TaskScreen;
 
 const styles = StyleSheet.create({
   mainContainer: {

@@ -8,7 +8,7 @@ import { DefaultStyles } from "../styles/DefaultStyles";
 
 const TaskStack = createStackNavigator();
 
-export default TaskNavigator = () => {
+const TaskNavigator = () => {
     return (
         <TaskStack.Navigator
             initialRouteName="TaskList"
@@ -45,3 +45,5 @@ export default TaskNavigator = () => {
         </TaskStack.Navigator>
     );
 };
+
+export default TaskNavigator;

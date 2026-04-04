@@ -10,7 +10,7 @@ import { DataContext } from "../../data/DataContext";
 import { addLastElement } from "../../functions";
 import { storeData } from "../../data/AppStorage";
 
-export default ProjectScreen = ({ navigation }) => {
+const ProjectScreen = ({ navigation }) => {
 
   function FocusAwareStatusBar(props) {
     const isFocused = useIsFocused();
@@ -45,7 +45,7 @@ export default ProjectScreen = ({ navigation }) => {
   };
 
   // add plus button to the end  
-  modifiedProjectData = addLastElement(data.projectData); 
+  const modifiedProjectData = addLastElement(data.projectData); 
 
   const renderProjectItem = ({ item }) => {
     if(item.projectId == "addButton"){
@@ -76,6 +76,8 @@ export default ProjectScreen = ({ navigation }) => {
 
   );
 };
+
+export default ProjectScreen;
 
 const styles = StyleSheet.create({
   listContainer: {

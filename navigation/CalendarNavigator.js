@@ -7,7 +7,7 @@ import { DefaultStyles } from "../styles/DefaultStyles";
 
 const CalendarStack = createStackNavigator();
 
-export default CalendarNavigator = () => {
+const CalendarNavigator = () => {
     return (
         <CalendarStack.Navigator
             initialRouteName="CalendarScreen"
@@ -32,3 +32,5 @@ export default CalendarNavigator = () => {
         </CalendarStack.Navigator>
     );
 };
+
+export default CalendarNavigator;

@@ -83,7 +83,7 @@ const InnerContainer = props => {
 };
 
 
-export default ProjectComponent = props => {
+const ProjectComponent = props => {
   return (
     <FoldOutComponent
       title={props.title}
@@ -96,6 +96,8 @@ export default ProjectComponent = props => {
         onEdit={() => props.onEdit(props.title)} />} />
   );
 };
+
+export default ProjectComponent;
 
 const styles = StyleSheet.create({
   ProjectContainer: {
