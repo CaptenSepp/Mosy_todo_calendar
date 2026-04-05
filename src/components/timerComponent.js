@@ -102,7 +102,7 @@ const TimerComponent = (props) => {
     console.log('Loading Sound');
     // maximize volume
     const { sound } = await Audio.Sound.createAsync(
-      require('../assets/sounds/notification.mp3'),
+      require('../../assets/sounds/notification.mp3'),
     );
     setSound(sound);
     console.log('Playing Sound');
