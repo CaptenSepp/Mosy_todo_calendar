@@ -2,18 +2,24 @@ import {Task} from "./Classes";
 
 export const TASKIDCOUNTER = 11;
 
+const createDate = (offsetDays, hours = 9, minutes = 0) => {
+    const date = new Date();
+    date.setDate(date.getDate() + offsetDays);
+    date.setHours(hours, minutes, 0, 0);
+    return date;
+};
+
 export const taskData = [
    
-    new Task(1, 'Buy Apples', 'c2', '5 Stück', new Date('2023-06-05'), new Date('2023-06-05T10:00:00'), new Date('2023-06-05T11:00:00'), false),
-    new Task(2, 'Buy Cars', 'c2', '1 Ferrari 1 Porsche', new Date('2023-06-05'), new Date('2023-06-05T12:00:00'), new Date('2023-06-05T15:00:00'), true),
-    new Task(3, 'Buy Fish', 'c2', '1 Karpfen', new Date('2023-06-08'), new Date('2023-06-08T13:00:00'), new Date('2023-06-08T19:00:00'), false),
-    new Task(4, 'Buy Books', 'c3', '1 Harry Potter, 1 Bibel', new Date('2023-06-09'), new Date('2023-06-09T13:00:00'), new Date('2023-06-09T19:00:00'), false),
-    new Task(5, 'Wash Dishes', 'c1', 'Description', new Date('2023-06-01'), new Date('2023-06-01T13:00:00'), new Date('2023-06-01T19:00:00'), false),
-    new Task(7, 'Go to the gym', 'c4', 'Description', new Date('2023-06-17'), new Date('2023-06-17T13:00:00'), new Date('2023-06-17T19:00:00'), false),
-    new Task(8, 'Italy', 'c5', 'Description', new Date('2023-06-03'), new Date('2023-06-03T13:00:00'), new Date('2023-06-03T19:00:00'), false),
-    new Task(9, 'Geburtstagsgeschenk', 'c6', 'Description', new Date('2023-06-19'), new Date('2023-06-19T13:00:00'), new Date('2023-06-19T19:00:00'), false),
-    new Task(10, 'Oma', 'c7', 'Description', new Date('2023-06-05'), new Date('2023-06-05T13:00:00'), new Date('2023-06-05T19:00:00'), false),
-    new Task(11, 'Lasagne', 'c8', 'Description', new Date('2023-06-17'), new Date('2023-06-17T13:00:00'), new Date('2023-06-17T19:00:00'), false)
+    new Task(1, 'Review lecture notes', 'c1', 'Check the main points from the last class.', createDate(0), createDate(0, 9, 0), createDate(0, 10, 0), false),
+    new Task(2, 'Update portfolio text', 'c2', 'Make the project description short and clear.', createDate(0), createDate(0, 11, 0), createDate(0, 12, 0), false),
+    new Task(3, 'Grocery shopping', 'c3', 'Buy food for the next few days.', createDate(1), createDate(1, 17, 0), createDate(1, 18, 0), false),
+    new Task(4, 'Gym session', 'c4', 'Simple training plan after work.', createDate(1), createDate(1, 19, 0), createDate(1, 20, 0), false),
+    new Task(5, 'Team meeting', 'c5', 'Prepare notes and questions before the call.', createDate(2), createDate(2, 10, 0), createDate(2, 11, 0), false),
+    new Task(7, 'Try calendar colors', 'c6', 'Check how different project colors look in the timeline.', createDate(2), createDate(2, 14, 0), createDate(2, 15, 0), true),
+    new Task(8, 'Birthday reminder', 'c7', 'Send a short message and prepare a small gift.', createDate(3), createDate(3, 12, 0), createDate(3, 12, 30), false),
+    new Task(9, 'Cook pasta', 'c8', 'Plan a quick dinner and save the idea for later.', createDate(3), createDate(3, 18, 0), createDate(3, 19, 0), false),
+    new Task(10, 'Clean task list', 'c1', 'Mark finished items and move open ones to the right project.', createDate(-1), createDate(-1, 16, 0), createDate(-1, 17, 0), true),
+    new Task(11, 'Focus timer test', 'c2', 'Open this task from the calendar and start the work timer.', createDate(4), createDate(4, 9, 30), createDate(4, 10, 30), false)
       
 ];
-

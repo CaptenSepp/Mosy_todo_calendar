@@ -91,6 +91,9 @@ const CalendarScreen = () => {
     tasks.forEach((task) => {
       //get Project of Task
       const currentProject = data.projectData.find(project => project.projectId == task.projectId);
+      if (!currentProject) {
+        return;
+      }
       // get corresponding color
       const color = colorHandler(currentProject.color).secondary;
       // convert Task to event

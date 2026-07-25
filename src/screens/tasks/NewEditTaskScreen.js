@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import {Button, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, Keyboard, StatusBar, Alert, Platform } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, StatusBar, Alert, Platform } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -40,16 +40,9 @@ const NewEditTaskScreen = ({route,navigation}) => {
     // Context data
     const [data,setData] = useContext(DataContext);
 
-    // set currentDate to today
-    let currentDate = new Date();
-    useEffect(() => {
-        currentDate = new Date(Date.now);
-        
-      }, []);
-    // 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [date, setDate] = useState(new Date(currentDate));
+    const [date, setDate] = useState(new Date());
     const [startTime, setStartTime] = useState(new Date());
     const [stopTime, setStopTime] = useState(new Date());
     
@@ -115,41 +108,71 @@ const NewEditTaskScreen = ({route,navigation}) => {
     // set new Date
     const dateChangeHandler = (event, selectedDate)=>{
         setShowDatePicker(false);
+        if (!selectedDate) {
+            return;
+        }
         if (isEdit) {
             setEditedData({...editedData,date:selectedDate});
         } else {
-            const newDate = selectedDate || date;
             setDate(selectedDate);
         }
     };
     // set new Starttime
     const startTimeChangeHandler = (event, selectedTime)=>{
         setShowStartTimePicker(false);
+        if (!selectedTime) {
+            return;
+        }
         if (isEdit) {
             setEditedData({...editedData,starttime:selectedTime});
         } else {
-            const newTime = selectedTime || startTime;
-            setStartTime(newTime);
+            setStartTime(selectedTime);
         }
     };
     // set new Stoptime
     const stopTimeChangeHandler = (event, selectedTime)=>{
         setShowStopTimePicker(false);
+        if (!selectedTime) {
+            return;
+        }
         if (isEdit) {
             setEditedData({...editedData,endtime:selectedTime});
         } else {
-            const newTime = selectedTime || stopTime;
-            setStopTime(newTime);
+            setStopTime(selectedTime);
         }
     };
     const addHandler = (title,description,projectId,date,startTime,endTime) =>{
+        const taskTitle = isEdit ? editedData?.name : title;
+        const taskDescription = isEdit ? editedData?.description : description;
+        const taskDate = isEdit ? editedData?.date : date;
+        const taskStartTime = isEdit ? editedData?.starttime : startTime;
+        const taskEndTime = isEdit ? editedData?.endtime : endTime;
+        const taskProjectId = isEdit ? editedData?.projectId : projectId;
+
+        if (!taskTitle || taskTitle.trim().length === 0) {
+            Alert.alert('Missing title', 'Please enter a task title.');
+            return;
+        }
+        if (!data.projectData.find(project => project.projectId === taskProjectId)) {
+            Alert.alert('Missing project', 'Please create or select a project before adding a task.');
+            return;
+        }
+        if (!taskDate || !taskStartTime || !taskEndTime) {
+            Alert.alert('Missing date or time', 'Please choose a date, start time, and stop time.');
+            return;
+        }
+        if (taskStartTime.getTime() >= taskEndTime.getTime()) {
+            Alert.alert('Invalid time', 'The stop time should be after the start time.');
+            return;
+        }
+
         // check for EditScreen or NewScreen
         let newData;
         if(!isEdit ){
             let newIdCounter = data.taskIdCounter + 1;
-            let newTasks = data.taskData;
+            let newTasks = [...data.taskData];
             // put new data at the end of array
-            newTasks.push(new Task(newIdCounter, title, projectId, description,date ,startTime,endTime,false));
+            newTasks.push(new Task(newIdCounter, taskTitle.trim(), taskProjectId, taskDescription, taskDate, taskStartTime, taskEndTime, false));
             // save the data in Context
             newData = {
                 projectData: data.projectData, 
@@ -163,12 +186,12 @@ const NewEditTaskScreen = ({route,navigation}) => {
             //setData(data => ({...data, isSaved: true}));   // update isSaved in Context (global state) to prevent tab navigation
             
         }else{
-            const updatedTasks = data.taskData; 
+            const updatedTasks = [...data.taskData]; 
             // find index of data you want to edit
             const taskIndex = data.taskData.findIndex(task => task.id === taskId);
             // overwrite Task with new data
             if (taskIndex !== -1) {
-                updatedTasks[taskIndex] = new Task(taskId, editedData.name, editedData.projectId, editedData.description, editedData.date, editedData.starttime, editedData.endtime, editedData.isFinished);
+                updatedTasks[taskIndex] = new Task(taskId, taskTitle.trim(), taskProjectId, taskDescription, taskDate, taskStartTime, taskEndTime, editedData.isFinished);
               }
             newData = {
                 projectData: data.projectData, 
