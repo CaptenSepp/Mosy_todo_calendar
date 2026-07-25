@@ -1,5 +1,5 @@
 import React, { useContext, useState , useEffect} from "react";
-import { FlatList, StyleSheet, View, StatusBar } from 'react-native';
+import { FlatList, StyleSheet, View, StatusBar, Alert } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { Colors } from "../../styles/Colors";
 
@@ -59,6 +59,10 @@ const TaskScreen = ({navigation}) => {
   }
   
   const addTaskHandler = () =>{
+    if (!data.projectData.find(project => project.projectId === selectedProject)) {
+      Alert.alert('Create a project first', 'Please add a project before creating a task.');
+      return;
+    }
     navigation.navigate('AddTask', {isEdit: false,projectId: selectedProject});
   };
 
@@ -83,7 +87,7 @@ const TaskScreen = ({navigation}) => {
   };
 
   const checkHandler = (id) =>{
-    const updatedTasks = data.taskData; 
+    const updatedTasks = [...data.taskData]; 
     // find index of data you want to edit
     const taskIndex = data.taskData.findIndex(task => task.id === id);
     // get Task at index

@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, StatusBar, Alert } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
-import {projectData} from "../../data/ProjectData";
 import { Colors } from "../../styles/Colors";
 import { Project } from "../../data/Classes";
 import { DataContext } from "../../data/DataContext";
@@ -135,13 +134,22 @@ const NewEditProjectScreen =  ({ route, navigation }) => {
 
 
     const addHandler = (title, description, color) =>{
+        const projectTitle = isEdit ? editedData?.name : title;
+        const projectDescription = isEdit ? editedData?.description : description;
+        const projectColor = isEdit ? editedData?.color : color;
+
+        if (!projectTitle || projectTitle.trim().length === 0) {
+            Alert.alert('Missing title', 'Please enter a project title.');
+            return;
+        }
+
         // check if Edit or NewScreen
         let newData;
         if(!isEdit ){
             let newIdCounter = data.projectIdCounter + 1;
-            let newProjects = data.projectData;
+            let newProjects = [...data.projectData];
             // put new data at the end of array
-            newProjects.push(new Project('c'+ newIdCounter, title, description,color));
+            newProjects.push(new Project('c'+ newIdCounter, projectTitle.trim(), projectDescription, projectColor));
             newData = {
                 projectData: newProjects, 
                 taskData: data.taskData, 
@@ -155,12 +163,12 @@ const NewEditProjectScreen =  ({ route, navigation }) => {
             //setData(data => ({...data, isSaved: true}));   // update isSaved in Context (global state) to prevent tab navigation
             
         }else{
-            const updatedProjects = data.projectData; 
+            const updatedProjects = [...data.projectData]; 
             // find index of data you want to edit
             const projectIndex = data.projectData.findIndex(project => project.projectId === projectId);
             // overwrite Task with new data
             if (projectIndex !== -1) {
-                updatedProjects[projectIndex] = new Project(projectId, editedData.name, editedData.description, editedData.color);
+                updatedProjects[projectIndex] = new Project(projectId, projectTitle.trim(), projectDescription, projectColor);
               }
             newData = {
                 projectData: updatedProjects, 

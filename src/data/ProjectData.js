@@ -2,14 +2,14 @@ import { Project } from "./Classes";
 export const PROJECTIDCOUNTER = 8;
 
 export const projectData = [
-    new Project('c1', 'Hausarbeiten', 'Welche Arbeiten muss ich machen', 'blue'),
-    new Project('c2', 'Einkauf', 'Was muss ich einkaufen', 'red'),
-    new Project('c3', 'Lernen', 'Was muss ich lernen', 'orange'),
-    new Project('c4', 'Sport', 'Welche Sportarten will ich machen', 'yellow'),
-    new Project('c5', 'Urlaub', 'Wohin will ich reisen', 'green'),
-    new Project('c6', 'Geschenke', 'Welche Geschenke will ich kaufen', 'seagreen'),
-    new Project('c7', 'Geburtstage', 'Welche Geburtstage stehen an', 'cyan'),
-    new Project('c8', 'Kochen', 'Was will ich kochen', 'pink'),
+    new Project('c1', 'Study', 'University and learning tasks', 'blue'),
+    new Project('c2', 'Portfolio', 'Small tasks for improving project demos', 'red'),
+    new Project('c3', 'Personal', 'Everyday errands and reminders', 'orange'),
+    new Project('c4', 'Fitness', 'Training and health routines', 'yellow'),
+    new Project('c5', 'Work', 'Meetings and focused work blocks', 'green'),
+    new Project('c6', 'Ideas', 'Notes for future improvements', 'seagreen'),
+    new Project('c7', 'Events', 'Birthdays and appointments', 'cyan'),
+    new Project('c8', 'Cooking', 'Meals to plan or prepare', 'pink'),
 
 
 ];
